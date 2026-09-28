@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://helper83.github.io/helpertom/sitemap.xml

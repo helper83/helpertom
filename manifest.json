@@ -1,0 +1,16 @@
+{
+  "name": "헬퍼탐 · 헬퍼손 산업직무 탐색기",
+  "short_name": "헬퍼탐",
+  "description": "대학생이 산업·직무·기업·공공기관을 탐색하고 진로진단과 최대 24개월 주차별 취업준비 로드맵을 만드는 진로·취업 탐색 앱",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#2B57C9",
+  "lang": "ko",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
