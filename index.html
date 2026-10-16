@@ -458,7 +458,7 @@ footer .btn{font-size:13px}
   .detail{margin-top:14px;padding-top:14px}.detail-head h2{font-size:20px}.lead{font-size:14px}.quick{grid-template-columns:1fr}.quick div{padding:10px}
   .likert{gap:4px}.likert span{min-height:54px;padding:4px 2px}.diag-bar{top:62px;padding:8px 10px;gap:8px}.diag-bar .btn{padding:5px 8px;font-size:12px;min-height:34px}
   .prep-step{padding:13px}.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .mobile-bottom{position:fixed;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));left:0;right:0;bottom:0;z-index:90;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px rgba(24,33,47,.08)}
+  .mobile-bottom{position:fixed;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));left:0;right:0;bottom:0;z-index:90;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px rgba(24,33,47,.08)}
   .mobile-bottom .stop{padding:4px 1px 2px;border:0;gap:1px;min-height:54px}.mobile-bottom .stop .dot{width:26px;height:26px;font-size:12px}.mobile-bottom .stop .lbl{font-size:11px}.mobile-bottom .stop .meta{display:none}.mobile-bottom .stop.active{color:var(--primary-ink)}
   footer{padding:12px 12px 88px}.toast{bottom:82px}
 }
@@ -525,7 +525,7 @@ footer .btn{font-size:13px}
 /* ---------- v3.4 student dashboard ---------- */
 
 
-@media(max-width:760px){.mobile-bottom{grid-template-columns:repeat(8,minmax(0,1fr))}.mobile-bottom .stop{min-width:0}.mobile-bottom .stop .lbl{font-size:11px}}
+@media(max-width:760px){.mobile-bottom{grid-template-columns:repeat(7,minmax(0,1fr))}.mobile-bottom .stop{min-width:0}.mobile-bottom .stop .lbl{font-size:11px}}
 
 
 /* ---------- v3.8 student diagnosis journey & 90-job specific scheduler ---------- */
@@ -820,6 +820,13 @@ body{background:var(--bg)!important}
 
 <style id="majorStyle">
 .stop[data-page="majorPage"]{--tc:var(--t0)}
+.kindbar{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:var(--r-md);padding:4px;margin:12px 0}
+.kindbar button{border:0;background:none;padding:10px 6px;border-radius:calc(var(--r-md) - 3px);cursor:pointer;color:var(--ink2);min-height:52px;font:inherit;line-height:1.25}
+.kindbar button b{display:block;font-size:15px}.kindbar button small{display:block;font-size:11px;font-weight:400;margin-top:2px}
+.kindbar button[aria-pressed=true]{background:var(--surface);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.kindbar button[aria-pressed=true] b{color:var(--primary)}
+.seg button small.pcnt{display:block;font-size:11px;font-weight:400}
+#publicPage{--tc:var(--t1)}
 .mj-input{display:flex;gap:8px}.mj-input input{flex:1;min-width:0}
 .mj-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
 .mj-col{border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;background:var(--surface)}
@@ -854,12 +861,11 @@ body{background:var(--bg)!important}
     <ol>
       <li><button class="stop active" data-page="homePage" onclick="openPage('homePage')"><span class="dot">H</span><span class="lbl">홈</span><span class="meta"></span></button></li>
       <li><button class="stop" data-page="majorPage" onclick="openPage('majorPage')"><span class="dot">학</span><span class="lbl">학과 탐색</span><span class="meta" id="navMetaMajor"></span></button></li>
-      <li><button class="stop" data-page="industryPage" onclick="openPage('industryPage')"><span class="dot">1</span><span class="lbl">산업 탐색</span><span class="meta" id="navMetaIndustry"></span></button></li>
-      <li><button class="stop" data-page="publicPage" onclick="openPage('publicPage')"><span class="dot">2</span><span class="lbl">공공기관 탐색</span><span class="meta" id="navMetaPublic"></span></button></li>
+      <li><button class="stop" data-page="industryPage" onclick="openIndustryTab()"><span class="dot">1</span><span class="lbl">산업 탐색</span><span class="meta" id="navMetaIndustry"></span></button></li>
       <li><button class="stop" data-page="jobPage" onclick="openPage('jobPage')"><span class="dot">3</span><span class="lbl">직무 탐색</span><span class="meta" id="navMetaJob"></span></button></li>
-      <li><button class="stop" data-page="diagnosisPage" onclick="openPage('diagnosisPage')"><span class="dot">4</span><span class="lbl">진단</span><span class="meta" id="navMetaDiag"></span></button></li>
-      <li><button class="stop" data-page="preparePage" onclick="openPage('preparePage')"><span class="dot">5</span><span class="lbl">진로 결정</span><span class="meta" id="navMetaPlan"></span></button></li>
-      <li><button class="stop" data-page="roadmapPage" onclick="openPage('roadmapPage')"><span class="dot">6</span><span class="lbl">진로 로드맵</span><span class="meta" id="navMetaRoad"></span></button></li>
+      <li><button class="stop" data-page="diagnosisPage" onclick="openPage('diagnosisPage')"><span class="dot">3</span><span class="lbl">진단</span><span class="meta" id="navMetaDiag"></span></button></li>
+      <li><button class="stop" data-page="preparePage" onclick="openPage('preparePage')"><span class="dot">4</span><span class="lbl">진로 결정</span><span class="meta" id="navMetaPlan"></span></button></li>
+      <li><button class="stop" data-page="roadmapPage" onclick="openPage('roadmapPage')"><span class="dot">5</span><span class="lbl">진로 로드맵</span><span class="meta" id="navMetaRoad"></span></button></li>
     </ol>
   </nav>
 </header>
@@ -873,15 +879,14 @@ body{background:var(--bg)!important}
     </div>
     <div class="hsec">활용 방법</div>
     <div id="guideBox" class="hlist">
-      <div class="guide-free" style="border:1.5px solid var(--primary);background:var(--sunk);border-radius:var(--r-md);padding:10px 12px;margin:0 0 8px;font-size:14px;line-height:1.55"><b>순서는 정해져 있지 않습니다.</b> 아래 번호는 참고용입니다. 학과·산업·공공기관·직무·진단 중 가장 궁금한 곳에서 <b>원하는 대로 시작</b>하고, 필요하면 다른 탐색으로 오가세요. 어디서 시작하든 ☆ 찜한 항목은 진로 결정에 모입니다.</div>
+      <div class="guide-free" style="border:1.5px solid var(--primary);background:var(--sunk);border-radius:var(--r-md);padding:10px 12px;margin:0 0 8px;font-size:14px;line-height:1.55"><b>순서는 정해져 있지 않습니다.</b> 아래 번호는 참고용입니다. 학과·산업(민간기업·공공기관)·직무·진단 중 가장 궁금한 곳에서 <b>원하는 대로 시작</b>하고, 필요하면 다른 탐색으로 오가세요. 어디서 시작하든 ☆ 찜한 항목은 진로 결정에 모입니다.</div>
       <div class="hrow static" style="--tc:var(--t0)"><span class="hic"><b style="font-size:18px">학</b></span><span class="hx"><b>학과 탐색(선택)</b><span>내 학과(전공)를 입력하면 연결이 높은 산업과 직무를 5개씩 추천합니다.</span><span>마음에 드는 추천 항목은 ☆ 찜 하세요. 학과 없이 산업·직무부터 시작해도 됩니다.</span></span></div>
-      <div class="hrow static" style="--tc:var(--t1)"><span class="hic"><b style="font-size:18px">1</b></span><span class="hx"><b>산업 탐색</b><span><span class="js-ind-groups">10</span>개 산업 생태계 중 관심 분야를 고르면 세부 산업과 대표기업을 확인할 수 있습니다.</span><span>관심 산업을 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
-      <div class="hrow static" style="--tc:var(--t2)"><span class="hic"><b style="font-size:18px">2</b></span><span class="hx"><b>공공기관 탐색(공공기관 진출 고려시 선택)</b><span>11개 사업 분야 중 관심 분야를 고르면 관련 공공기관을 확인할 수 있습니다.</span><span>관심 기관을 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
-      <div class="hrow static" style="--tc:var(--t3)"><span class="hic"><b style="font-size:18px">3</b></span><span class="hx"><b>직무 탐색</b><span><span class="js-job-groups">21</span>개 직무 대영역 중 관심 분야를 고르면 세부 직무와 필요 역량을 확인할 수 있습니다.</span><span>관심 직무를 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
-      <div class="hrow static" style="--tc:var(--t4)"><span class="hic"><b style="font-size:18px">4</b></span><span class="hx"><b>진단</b><span>64문항에 ‘지금의 나’를 기준으로 답하면 적합 산업·직무 TOP5를 추천합니다.</span><span>추천은 정답이 아닌 참고용이며, 마음에 드는 항목은 찜하세요.</span></span></div>
-      <div class="hrow static" style="--tc:var(--t5)"><span class="hic"><b style="font-size:16px">5·6</b></span><span class="hx"><b>진로 결정·로드맵</b><span>찜한 항목과 진단 추천을 비교해 목표 산업·직무 1개 조합을 정하면, 맞춤 진로 로드맵이 만들어집니다.</span><span>PDF로 저장해 상담이나 짝과 공유할 수 있습니다.</span></span></div>
+      <div class="hrow static" style="--tc:var(--t1)"><span class="hic"><b style="font-size:18px">1</b></span><span class="hx"><b>산업 탐색(민간기업·공공기관)</b><span>민간기업은 <span class="js-ind-groups">10</span>개 산업 생태계에서 세부 산업과 대표기업을, 공공기관은 중앙·지방으로 나눠 관련 기관을 확인할 수 있습니다.</span><span>공공기관은 진출을 고려할 때 선택하세요. 관심 항목을 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
+      <div class="hrow static" style="--tc:var(--t3)"><span class="hic"><b style="font-size:18px">2</b></span><span class="hx"><b>직무 탐색</b><span><span class="js-job-groups">21</span>개 직무 대영역 중 관심 분야를 고르면 세부 직무와 필요 역량을 확인할 수 있습니다.</span><span>관심 직무를 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
+      <div class="hrow static" style="--tc:var(--t4)"><span class="hic"><b style="font-size:18px">3</b></span><span class="hx"><b>진단</b><span>64문항에 ‘지금의 나’를 기준으로 답하면 적합 산업·직무 TOP5를 추천합니다.</span><span>추천은 정답이 아닌 참고용이며, 마음에 드는 항목은 찜하세요.</span></span></div>
+      <div class="hrow static" style="--tc:var(--t5)"><span class="hic"><b style="font-size:16px">4·5</b></span><span class="hx"><b>진로 결정·로드맵</b><span>찜한 항목과 진단 추천을 비교해 목표 산업·직무 1개 조합을 정하면, 맞춤 진로 로드맵이 만들어집니다.</span><span>PDF로 저장해 상담이나 짝과 공유할 수 있습니다.</span></span></div>
     </div>
-    <p class="muted small" style="margin:8px 4px 4px">마음에 드는 산업·공공기관·직무에 <b>☆ 찜 하기</b>를 누르면 5단계 진로 결정의 관심목록에 자동으로 모입니다. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
+    <p class="muted small" style="margin:8px 4px 4px">마음에 드는 산업·공공기관·직무에 <b>☆ 찜 하기</b>를 누르면 4단계 진로 결정의 관심목록에 자동으로 모입니다. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
   </section>
 
   <!-- 1. 학과 (v1.3 신규) -->
@@ -892,7 +897,7 @@ body{background:var(--bg)!important}
           <div class="step-tag">시작점 · 학과</div>
           <h1 id="h-major">학과 탐색</h1>
           <p class="muted">내 학과를 입력하면 전공과 연결이 높은 산업과 직무를 5개씩 추천합니다. 마음에 드는 항목은 ☆ 찜 하기로 담고 산업·직무 탐색에서 자세히 확인하세요.</p>
-          <p class="muted small">사용 순서는 정해져 있지 않습니다. 학과로 시작했다면 산업·직무 탐색(공공기관·진단은 선택)으로 이어가 5단계 진로 결정에서 모아 보세요. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
+          <p class="muted small">사용 순서는 정해져 있지 않습니다. 학과로 시작했다면 산업·직무 탐색(공공기관·진단은 선택)으로 이어가 4단계 진로 결정에서 모아 보세요. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
         </div>
       </div>
       <div class="search">
@@ -921,6 +926,10 @@ body{background:var(--bg)!important}
           <h1 id="h-ind">산업 탐색</h1>
           <p class="muted">산업 생태계를 먼저 고르고, 세부 산업과 대표기업으로 좁혀 보세요. 기업명으로 바로 찾을 수도 있습니다.</p>
         </div>
+      </div>
+      <div class="kindbar" role="group" aria-label="산업 탐색 구분">
+        <button type="button" data-kind="PRIVATE" aria-pressed="true" onclick="setIndKind('PRIVATE')"><b>민간기업</b><small><span class="js-ind-n">60</span>개 산업 · 대표기업</small></button>
+        <button type="button" data-kind="PUBLIC" aria-pressed="false" onclick="setIndKind('PUBLIC')"><b>공공기관</b><small>중앙 · 지방 (진출 고려 시)</small></button>
       </div>
       <div class="learn">
         <strong class="t">산업 = 비슷한 제품·서비스로 비슷한 고객 문제를 해결하는 기업들의 무리</strong>
@@ -953,10 +962,14 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <div class="step-tag">2단계</div>
-          <h1 id="h-pub">공공기관 탐색<span class="muted" style="font-size:14px;font-weight:500"> (공공기관 진출 고려시 선택)</span></h1>
-          <p class="muted">기관 이름을 알면 바로 검색하고, 모르면 사업분야부터 좁혀 보세요.</p>
+          <div class="step-tag">1단계</div>
+          <h1 id="h-pub">산업 탐색</h1>
+          <p class="muted">공공기관은 중앙·지방으로 나눠 탐색합니다. 기관 이름을 알면 바로 검색하고, 모르면 사업분야부터 좁혀 보세요.</p>
         </div>
+      </div>
+      <div class="kindbar" role="group" aria-label="산업 탐색 구분">
+        <button type="button" data-kind="PRIVATE" aria-pressed="false" onclick="setIndKind('PRIVATE')"><b>민간기업</b><small><span class="js-ind-n">60</span>개 산업 · 대표기업</small></button>
+        <button type="button" data-kind="PUBLIC" aria-pressed="true" onclick="setIndKind('PUBLIC')"><b>공공기관</b><small>중앙 · 지방 (진출 고려 시)</small></button>
       </div>
       <div class="learn">
         <strong class="t">기관 이름보다 ‘설립목적과 주요사업’을 먼저 보세요</strong>
@@ -971,10 +984,10 @@ body{background:var(--bg)!important}
       <div id="publicSearchResults" class="search-results" aria-live="polite"></div>
 
       <div class="step">
-        <div class="step-title"><span class="num">1</span>기관 구분</div>
+        <div class="step-title"><span class="num">1</span>중앙·지방 고르기</div>
         <div class="seg" role="group" aria-label="기관 구분">
-          <button type="button" data-ptype="CENTRAL" aria-pressed="true" onclick="setPublicType('CENTRAL')">중앙 공공기관</button>
-          <button type="button" data-ptype="LOCAL" aria-pressed="false" onclick="setPublicType('LOCAL')">지방 공공기관</button>
+          <button type="button" data-ptype="CENTRAL" aria-pressed="true" onclick="setPublicType('CENTRAL')">중앙공공기관<small class="pcnt" data-pc="CENTRAL"></small></button>
+          <button type="button" data-ptype="LOCAL" aria-pressed="false" onclick="setPublicType('LOCAL')">지방공공기관<small class="pcnt" data-pc="LOCAL"></small></button>
         </div>
         <p id="publicStatus" class="muted" style="margin-top:6px"></p>
       </div>
@@ -1006,7 +1019,7 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <div class="step-tag">3단계</div>
+          <div class="step-tag">2단계</div>
           <h1 id="h-job">직무 탐색</h1>
           <p class="muted">직무는 ‘무슨 일을 해서 어떤 결과를 내는가’로 이해합니다. 세부직무·결과물·성과 기준까지 확인하세요.</p>
         </div>
@@ -1041,7 +1054,7 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <div class="step-tag">4단계</div>
+          <div class="step-tag">3단계</div>
           <h1 id="h-diag">산업·직무 탐색 진단</h1>
           <p class="muted">64문항 · 약 10분 · 정답이 없습니다. ‘되고 싶은 나’가 아니라 ‘지금의 나’를 기준으로 고르세요.</p>
         </div>
@@ -1071,9 +1084,9 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <div class="step-tag">5단계</div>
+          <div class="step-tag">4단계</div>
           <h1 id="h-prep">진로 결정</h1>
-          <p class="muted">관심목록과 진단 추천 결과를 비교해 목표 조합 1개와 준비 조건을 정합니다. 정한 뒤 6단계에서 로드맵을 확인하세요.</p>
+          <p class="muted">관심목록과 진단 추천 결과를 비교해 목표 조합 1개와 준비 조건을 정합니다. 정한 뒤 5단계에서 로드맵을 확인하세요.</p>
         </div>
       </div>
       <div class="prep-step no-print">
@@ -1132,11 +1145,11 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <div class="step-tag">6단계</div>
+          <div class="step-tag">5단계</div>
           <h1 id="h-road">나의 진로 로드맵</h1>
-          <p class="muted">5단계에서 정한 목표와 조건으로 만든 맞춤 로드맵입니다.</p>
+          <p class="muted">4단계에서 정한 목표와 조건으로 만든 맞춤 로드맵입니다.</p>
         </div>
-        <button class="btn no-print" type="button" onclick="openPage('preparePage')">← 5단계에서 목표·조건 수정</button>
+        <button class="btn no-print" type="button" onclick="openPage('preparePage')">← 4단계에서 목표·조건 수정</button>
       </div>
       <div id="planResult" class="plan"></div>
       <div class="btn-row no-print">
@@ -1148,12 +1161,11 @@ body{background:var(--bg)!important}
 <nav class="mobile-bottom no-print" aria-label="모바일 주요 메뉴">
   <button class="stop active" data-page="homePage" onclick="openPage('homePage')"><span class="dot">H</span><span class="lbl">홈</span></button>
   <button class="stop" data-page="majorPage" onclick="openPage('majorPage')"><span class="dot">학</span><span class="lbl">학과</span></button>
-  <button class="stop" data-page="industryPage" onclick="openPage('industryPage')"><span class="dot">1</span><span class="lbl">산업</span></button>
-  <button class="stop" data-page="publicPage" onclick="openPage('publicPage')"><span class="dot">2</span><span class="lbl">공공기관</span></button>
-  <button class="stop" data-page="jobPage" onclick="openPage('jobPage')"><span class="dot">3</span><span class="lbl">직무</span></button>
-  <button class="stop" data-page="diagnosisPage" onclick="openPage('diagnosisPage')"><span class="dot">4</span><span class="lbl">진단</span></button>
-  <button class="stop" data-page="preparePage" onclick="openPage('preparePage')"><span class="dot">5</span><span class="lbl">진로 결정</span></button>
-  <button class="stop" data-page="roadmapPage" onclick="openPage('roadmapPage')"><span class="dot">6</span><span class="lbl">로드맵</span></button>
+  <button class="stop" data-page="industryPage" onclick="openIndustryTab()"><span class="dot">1</span><span class="lbl">산업</span></button>
+  <button class="stop" data-page="jobPage" onclick="openPage('jobPage')"><span class="dot">2</span><span class="lbl">직무</span></button>
+  <button class="stop" data-page="diagnosisPage" onclick="openPage('diagnosisPage')"><span class="dot">3</span><span class="lbl">진단</span></button>
+  <button class="stop" data-page="preparePage" onclick="openPage('preparePage')"><span class="dot">4</span><span class="lbl">진로 결정</span></button>
+  <button class="stop" data-page="roadmapPage" onclick="openPage('roadmapPage')"><span class="dot">5</span><span class="lbl">로드맵</span></button>
 </nav>
 <section id="appInfo" class="no-print" style="max-width:1180px;margin:0 auto 14px">
   <div class="app-badge" id="appEditionBadge" style="display:none">헬퍼탐 · Google Play Edition</div>
@@ -1568,8 +1580,7 @@ function renderProgress() {
   };
   const _mj = LS.get(KEYS.major, null), _mjOn = !!(_mj && (_mj.q || _mj.s || _mj.m));
   setMeta('navMetaMajor', _mjOn ? '입력함' : '', _mjOn);
-  setMeta('navMetaIndustry', n('INDUSTRY') ? '★ ' + n('INDUSTRY') : '', n('INDUSTRY'));
-  setMeta('navMetaPublic', n('PUBLIC') ? '★ ' + n('PUBLIC') : '', n('PUBLIC'));
+  setMeta('navMetaIndustry', (n('INDUSTRY') + n('PUBLIC')) ? '★ ' + (n('INDUSTRY') + n('PUBLIC')) : '', n('INDUSTRY') + n('PUBLIC'));
   setMeta('navMetaJob', n('JOB') ? '★ ' + n('JOB') : '', n('JOB'));
   const answered = Object.keys(STATE.answers).length;
   setMeta('navMetaDiag', diagDone ? '완료' : (answered ? answered + '/' + DB.diagnosisQuestions.length : ''), diagDone);
@@ -1588,15 +1599,31 @@ function interestRemove(btn){
 
 
 /* ---------- 페이지 전환 ---------- */
+
+/* v12.115: 산업 탐색 = 민간기업 / 공공기관 토글(공공기관은 다시 중앙·지방). publicPage 는 내부 화면으로 유지 */
+const IND_KIND_KEY = 'visionhr_indkind_v1';
+function indKindGet() { try { return localStorage.getItem(IND_KIND_KEY) === 'PUBLIC' ? 'PUBLIC' : 'PRIVATE'; } catch (e) { return 'PRIVATE'; } }
+function indKindSave(k) { try { localStorage.setItem(IND_KIND_KEY, k); } catch (e) {} }
+function setIndKind(k) { openPage(k === 'PUBLIC' ? 'publicPage' : 'industryPage'); }
+function openIndustryTab() { openPage(indKindGet() === 'PUBLIC' ? 'publicPage' : 'industryPage'); }
+function indKindInit() {
+  const c = (DB.public && DB.public.CENTRAL || []).length, l = (DB.public && DB.public.LOCAL || []).length;
+  document.querySelectorAll('.pcnt').forEach(function (e) { const n = e.getAttribute('data-pc') === 'CENTRAL' ? c : l; e.textContent = n ? n.toLocaleString('ko-KR') + '곳' : ''; });
+  document.querySelectorAll('.js-ind-n').forEach(function (e) { e.textContent = DB.industries.length; });
+}
 function openPage(pageId) {
   updatePlanBack(pageId);
   if (pageId !== 'industryPage' && pageId !== 'jobPage') STATE.industryReturn = null;
   document.querySelectorAll('.page').forEach(function (p) { p.classList.toggle('active', p.id === pageId); });
   document.querySelectorAll('.stop').forEach(function (b) {
-    const on = b.getAttribute('data-page') === pageId;
+    const on = b.getAttribute('data-page') === (pageId === 'publicPage' ? 'industryPage' : pageId);
     b.classList.toggle('active', on);
     if (on) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
   });
+  if (pageId === 'industryPage' || pageId === 'publicPage') {
+    const kind = pageId === 'publicPage' ? 'PUBLIC' : 'PRIVATE'; indKindSave(kind);
+    document.querySelectorAll('.kindbar button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-kind') === kind); });
+  }
   var _ai = $('appInfo'); if (_ai) _ai.style.display = (pageId === 'homePage') ? '' : 'none';
   const nav = document.querySelector('nav.route'), act = document.querySelector('.stop.active');
   if (nav && act && nav.scrollWidth > nav.clientWidth) {
@@ -2173,7 +2200,7 @@ function showIndustry(code) {
       (ind.entryLevel ? '<span class="tag" title="이 산업에 신입이 들어가기 쉬운 정도">신입 진입 용이성 : ' + esc(easeLabel(ind.entryLevel)) + '</span>' : '') +
     '</div>' +
     (splitList(ind.subIndustries).length ? '<div style="margin-top:12px"><b class="small">대표 세부시장</b>' + tagList(first(ind.subIndustries, 6)) + '</div>' : '') +
-    '<p class="industry-intro-help">☆ 찜 하기를 누르면 <b>5단계 진로 결정 → 내가 찜한 관심목록</b>에 바로 표시되고, 5단계 목표 산업 선택 목록에서도 ★ 찜한 항목으로 우선 노출됩니다.</p>' +
+    '<p class="industry-intro-help">☆ 찜 하기를 누르면 <b>4단계 진로 결정 → 내가 찜한 관심목록</b>에 바로 표시되고, 4단계 목표 산업 선택 목록에서도 ★ 찜한 항목으로 우선 노출됩니다.</p>' +
   '</div>';
 
   h += '%%GLOSS%%';
@@ -3312,7 +3339,7 @@ function startPlan(o) {
   if (saved.i && saved.j) v73MarkChoice(saved.i, saved.j);
   const miss = [];
   if (!saved.i) miss.push('산업'); if (!saved.j) miss.push('직무');
-  toast('진로 결정(5단계) 목표에 반영했습니다' + (o.autoJob ? ' · 목표 직무: ' + JOB_BY[o.autoJob].name + '(이 기관 첫 채용 직무)' : '') + (miss.length ? ' · ' + miss.join('·') + '도 골라 주세요' : ''));
+  toast('진로 결정(4단계) 목표에 반영했습니다' + (o.autoJob ? ' · 목표 직무: ' + JOB_BY[o.autoJob].name + '(이 기관 첫 채용 직무)' : '') + (miss.length ? ' · ' + miss.join('·') + '도 골라 주세요' : ''));
   openPage('preparePage');
   scrollToEl($('planIndustrySelect').closest('.prep-step'));
 }
@@ -3434,7 +3461,7 @@ function renderPrepare() {
   /* 2. 진단 */
   const d = STATE.diagnosis;
   if (!d) {
-    $('prepareDiagnosisSummary').innerHTML = '<p class="muted small" style="margin:0">아직 진단 전입니다. <button type="button" class="btn sm" onclick="openPage(\'diagnosisPage\')">4단계 진단 하러 가기</button></p>';
+    $('prepareDiagnosisSummary').innerHTML = '<p class="muted small" style="margin:0">아직 진단 전입니다. <button type="button" class="btn sm" onclick="openPage(\'diagnosisPage\')">3단계 진단 하러 가기</button></p>';
   } else {
     let h = '<div class="int-grid">' +
       '<div><h4>적합 산업 추천</h4><ol class="list">' + d.industries.map(function (i) { return '<li>' + esc(i.name) + ' <span class="muted small">' + Math.round(i.fit) + '</span></li>'; }).join('') + '</ol></div>' +
@@ -3452,7 +3479,7 @@ function renderPrepare() {
   if (saved.p && PUBLIC_BY[saved.p] && !pubs.some(function (x) { return x.id === saved.p; })) pubs.push({ id: saved.p, name: PUBLIC_BY[saved.p].name });
   $('planPublicSelect').innerHTML = '<option value="">선택 안 함</option>' + pubs.map(function (x) {
     return '<option value="' + esc(x.id) + '"' + (x.id === saved.p ? ' selected' : '') + '>' + esc(x.name) + '</option>';
-  }).join('') + (pubs.length ? '' : '<option value="" disabled>2단계에서 관심 기관을 찜하면 여기에 나옵니다</option>');
+  }).join('') + (pubs.length ? '' : '<option value="" disabled>산업 탐색의 공공기관에서 관심 기관을 찜하면 여기에 나옵니다</option>');
   if (saved.status !== undefined) {
     var _mig = { '3-1': '3', '3-2': '3', '4-1': '4', '4-2': '4' };
     $('planStatus').value = _mig[saved.status] || saved.status;
@@ -3581,7 +3608,7 @@ function makePlan() {
   const v = readPlanInput();
   const box = $('planResult');
   if (!v.i || !v.j) {
-    box.innerHTML = '<p class="muted" style="margin-top:12px">5단계에서 목표 산업과 직무를 고르면 여기에 로드맵이 만들어집니다.</p><div class="btn-row no-print"><button class="btn primary" type="button" onclick="openPage(\'preparePage\')">← 5단계 진로 결정으로 가기</button></div>';
+    box.innerHTML = '<p class="muted" style="margin-top:12px">4단계에서 목표 산업과 직무를 고르면 여기에 로드맵이 만들어집니다.</p><div class="btn-row no-print"><button class="btn primary" type="button" onclick="openPage(\'preparePage\')">← 4단계 진로 결정으로 가기</button></div>';
     return;
   }
   const ip = industryPkg(v.i), jp = jobPkg(v.j);
@@ -4347,6 +4374,7 @@ function initializeApp() {
   renderQuestions();
   renderConsentGate();
   renderDiagnosis();
+  indKindInit();
   majorInit();
   renderProgress();
   openPage('homePage');
