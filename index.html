@@ -827,6 +827,7 @@ body{background:var(--bg)!important}
 .kindbar button[aria-pressed=true] b{color:var(--primary)}
 .seg button small.pcnt{display:block;font-size:11px;font-weight:400}
 #publicPage{--tc:var(--t1)}
+#majorPage{--tc:var(--t0)}
 .mj-input{display:flex;gap:8px}.mj-input input{flex:1;min-width:0}
 .mj-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
 .mj-col{border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;background:var(--surface)}
@@ -893,11 +894,15 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <div class="step-tag">시작점 · 학과</div>
           <h1 id="h-major">학과 탐색</h1>
           <p class="muted">내 학과를 입력하면 전공과 연결이 높은 산업과 직무를 5개씩 추천합니다. 마음에 드는 항목은 ☆ 찜 하기로 담고 산업·직무 탐색에서 자세히 확인하세요.</p>
-          <p class="muted small">사용 순서는 정해져 있지 않습니다. 학과로 시작했다면 산업·직무 탐색(공공기관·진단은 선택)으로 이어가 진로 결정에서 모아 보세요. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
         </div>
+      </div>
+      <div class="learn">
+        <strong class="t">학과는 산업·직무를 찾는 출발점 중 하나입니다</strong>
+        <p>학과와 직접 연결된 직무만 있는 것은 아닙니다. 이 앱은 <b>학과 표준분류와 산업·직무별 연관 전공 자료를 연결표로 합산</b>해 참고용으로 추천합니다. 정확한 학과명이 아니어도 되며, 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
+        <ol class="flow"><li>학과 입력</li><li>연결 산업</li><li>연결 직무</li><li>☆ 찜 하기</li><li>상세 확인</li></ol>
+        <div class="src">학과 분류 기준: 대학알리미 학과 표준분류 · 추천은 정답이 아닌 참고용입니다</div>
       </div>
       <div class="search">
         <label class="label" for="majorInput">내 학과(전공)</label>
@@ -909,7 +914,7 @@ body{background:var(--bg)!important}
       </div>
       <div id="majorSuggest"></div>
       <div class="step">
-        <div class="step-title">학과 분류로 둘러보기 <span class="muted small" style="font-weight:400">대학알리미 학과 표준분류</span></div>
+        <div class="step-title"><span class="num">1</span>학과 분류로 둘러보기 <span class="muted small" style="font-weight:400">대학알리미 학과 표준분류</span></div>
         <div id="majorBrowse"></div>
       </div>
       <div id="majorResult" aria-live="polite"></div>
