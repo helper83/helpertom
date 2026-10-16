@@ -458,7 +458,7 @@ footer .btn{font-size:13px}
   .detail{margin-top:14px;padding-top:14px}.detail-head h2{font-size:20px}.lead{font-size:14px}.quick{grid-template-columns:1fr}.quick div{padding:10px}
   .likert{gap:4px}.likert span{min-height:54px;padding:4px 2px}.diag-bar{top:62px;padding:8px 10px;gap:8px}.diag-bar .btn{padding:5px 8px;font-size:12px;min-height:34px}
   .prep-step{padding:13px}.kpi{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .mobile-bottom{position:fixed;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));left:0;right:0;bottom:0;z-index:90;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px rgba(24,33,47,.08)}
+  .mobile-bottom{position:fixed;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));left:0;right:0;bottom:0;z-index:90;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px rgba(24,33,47,.08)}
   .mobile-bottom .stop{padding:4px 1px 2px;border:0;gap:1px;min-height:54px}.mobile-bottom .stop .dot{width:26px;height:26px;font-size:12px}.mobile-bottom .stop .lbl{font-size:11px}.mobile-bottom .stop .meta{display:none}.mobile-bottom .stop.active{color:var(--primary-ink)}
   footer{padding:12px 12px 88px}.toast{bottom:82px}
 }
@@ -525,7 +525,7 @@ footer .btn{font-size:13px}
 /* ---------- v3.4 student dashboard ---------- */
 
 
-@media(max-width:760px){.mobile-bottom{grid-template-columns:repeat(7,minmax(0,1fr))}.mobile-bottom .stop{min-width:0}.mobile-bottom .stop .lbl{font-size:11px}}
+@media(max-width:760px){.mobile-bottom{grid-template-columns:repeat(6,minmax(0,1fr))}.mobile-bottom .stop{min-width:0}.mobile-bottom .stop .lbl{font-size:11px}}
 
 
 /* ---------- v3.8 student diagnosis journey & 90-job specific scheduler ---------- */
@@ -865,7 +865,6 @@ body{background:var(--bg)!important}
       <li><button class="stop" data-page="jobPage" onclick="openPage('jobPage')"><span class="dot">직</span><span class="lbl">직무 탐색</span><span class="meta" id="navMetaJob"></span></button></li>
       <li><button class="stop" data-page="diagnosisPage" onclick="openPage('diagnosisPage')"><span class="dot">진</span><span class="lbl">진단</span><span class="meta" id="navMetaDiag"></span></button></li>
       <li><button class="stop" data-page="preparePage" onclick="openPage('preparePage')"><span class="dot">결</span><span class="lbl">진로 결정</span><span class="meta" id="navMetaPlan"></span></button></li>
-      <li><button class="stop" data-page="roadmapPage" onclick="openPage('roadmapPage')"><span class="dot">맵</span><span class="lbl">진로 로드맵</span><span class="meta" id="navMetaRoad"></span></button></li>
     </ol>
   </nav>
 </header>
@@ -884,7 +883,7 @@ body{background:var(--bg)!important}
       <div class="hrow static" style="--tc:var(--t1)"><span class="hic"><b style="font-size:18px">산</b></span><span class="hx"><b>산업 탐색(민간기업·공공기관)</b><span>민간기업은 <span class="js-ind-groups">10</span>개 산업 생태계에서 세부 산업과 대표기업을, 공공기관은 중앙·지방으로 나눠 관련 기관을 확인할 수 있습니다.</span><span>공공기관은 진출을 고려할 때 선택하세요. 관심 항목을 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
       <div class="hrow static" style="--tc:var(--t3)"><span class="hic"><b style="font-size:18px">직</b></span><span class="hx"><b>직무 탐색</b><span><span class="js-job-groups">21</span>개 직무 대영역 중 관심 분야를 고르면 세부 직무와 필요 역량을 확인할 수 있습니다.</span><span>관심 직무를 1~3개 찜하면 진로 결정 시 비교 대상으로 쓰입니다.</span></span></div>
       <div class="hrow static" style="--tc:var(--t4)"><span class="hic"><b style="font-size:18px">진</b></span><span class="hx"><b>진단</b><span>64문항에 ‘지금의 나’를 기준으로 답하면 적합 산업·직무 TOP5를 추천합니다.</span><span>추천은 정답이 아닌 참고용이며, 마음에 드는 항목은 찜하세요.</span></span></div>
-      <div class="hrow static" style="--tc:var(--t5)"><span class="hic"><b style="font-size:18px">맵</b></span><span class="hx"><b>진로 결정·로드맵</b><span>찜한 항목과 진단 추천을 비교해 목표 산업·직무 1개 조합을 정하면, 맞춤 진로 로드맵이 만들어집니다.</span><span>PDF로 저장해 상담이나 짝과 공유할 수 있습니다.</span></span></div>
+      <div class="hrow static" style="--tc:var(--t5)"><span class="hic"><b style="font-size:18px">결</b></span><span class="hx"><b>진로 결정(목표 정하기·내 로드맵)</b><span>찜한 항목과 진단 추천을 비교해 목표 산업·직무 1개 조합을 정하면, 같은 탭의 ‘내 로드맵’에 맞춤 계획이 만들어집니다.</span><span>PDF로 저장해 상담이나 짝과 공유할 수 있습니다.</span></span></div>
     </div>
     <p class="muted small" style="margin:8px 4px 4px">마음에 드는 산업·공공기관·직무에 <b>☆ 찜 하기</b>를 누르면 진로 결정의 관심목록에 자동으로 모입니다. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
   </section>
@@ -1081,8 +1080,12 @@ body{background:var(--bg)!important}
       <div class="page-head">
         <div>
           <h1 id="h-prep">진로 결정</h1>
-          <p class="muted">관심목록과 진단 추천 결과를 비교해 목표 조합 1개와 준비 조건을 정합니다. 정한 뒤 진로 로드맵을 확인하세요.</p>
+          <p class="muted">관심목록과 진단 추천 결과를 비교해 목표 조합 1개와 준비 조건을 정합니다. 정한 뒤 ‘내 로드맵’에서 맞춤 계획을 확인하세요.</p>
         </div>
+      </div>
+      <div class="kindbar planbar no-print" role="group" aria-label="진로 결정 구분">
+        <button type="button" data-kind="PLAN" aria-pressed="true" onclick="openPage('preparePage')"><b>목표 정하기</b><small>관심목록 → 목표 → 조건</small></button>
+        <button type="button" data-kind="ROAD" aria-pressed="false" onclick="openPage('roadmapPage')"><b>내 로드맵</b><small>목표 기반 맞춤 계획</small></button>
       </div>
       <div class="prep-step no-print">
         <div class="step-title"><span class="num">1</span>내가 찜한 관심목록</div>
@@ -1140,10 +1143,13 @@ body{background:var(--bg)!important}
     <div class="card">
       <div class="page-head">
         <div>
-          <h1 id="h-road">나의 진로 로드맵</h1>
-          <p class="muted">진로 결정에서 정한 목표와 조건으로 만든 맞춤 로드맵입니다.</p>
+          <h1 id="h-road">진로 결정</h1>
+          <p class="muted">‘목표 정하기’에서 정한 목표와 조건으로 만든 맞춤 로드맵입니다. 목표·조건을 바꾸려면 ‘목표 정하기’를 누르세요.</p>
         </div>
-        <button class="btn no-print" type="button" onclick="openPage('preparePage')">← 진로 결정에서 목표·조건 수정</button>
+      </div>
+      <div class="kindbar planbar no-print" role="group" aria-label="진로 결정 구분">
+        <button type="button" data-kind="PLAN" aria-pressed="false" onclick="openPage('preparePage')"><b>목표 정하기</b><small>관심목록 → 목표 → 조건</small></button>
+        <button type="button" data-kind="ROAD" aria-pressed="true" onclick="openPage('roadmapPage')"><b>내 로드맵</b><small>목표 기반 맞춤 계획</small></button>
       </div>
       <div id="planResult" class="plan"></div>
       <div class="btn-row no-print">
@@ -1159,7 +1165,6 @@ body{background:var(--bg)!important}
   <button class="stop" data-page="jobPage" onclick="openPage('jobPage')"><span class="dot">직</span><span class="lbl">직무</span></button>
   <button class="stop" data-page="diagnosisPage" onclick="openPage('diagnosisPage')"><span class="dot">진</span><span class="lbl">진단</span></button>
   <button class="stop" data-page="preparePage" onclick="openPage('preparePage')"><span class="dot">결</span><span class="lbl">진로 결정</span></button>
-  <button class="stop" data-page="roadmapPage" onclick="openPage('roadmapPage')"><span class="dot">맵</span><span class="lbl">로드맵</span></button>
 </nav>
 <section id="appInfo" class="no-print" style="max-width:1180px;margin:0 auto 14px">
   <div class="app-badge" id="appEditionBadge" style="display:none">헬퍼탐 · Google Play Edition</div>
@@ -1610,13 +1615,17 @@ function openPage(pageId) {
   if (pageId !== 'industryPage' && pageId !== 'jobPage') STATE.industryReturn = null;
   document.querySelectorAll('.page').forEach(function (p) { p.classList.toggle('active', p.id === pageId); });
   document.querySelectorAll('.stop').forEach(function (b) {
-    const on = b.getAttribute('data-page') === (pageId === 'publicPage' ? 'industryPage' : pageId);
+    const on = b.getAttribute('data-page') === (pageId === 'publicPage' ? 'industryPage' : pageId === 'roadmapPage' ? 'preparePage' : pageId);
     b.classList.toggle('active', on);
     if (on) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
   });
   if (pageId === 'industryPage' || pageId === 'publicPage') {
     const kind = pageId === 'publicPage' ? 'PUBLIC' : 'PRIVATE'; indKindSave(kind);
-    document.querySelectorAll('.kindbar button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-kind') === kind); });
+    document.querySelectorAll('.kindbar:not(.planbar) button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-kind') === kind); });
+  }
+  if (pageId === 'preparePage' || pageId === 'roadmapPage') {
+    const pk = pageId === 'roadmapPage' ? 'ROAD' : 'PLAN';
+    document.querySelectorAll('.planbar button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-kind') === pk); });
   }
   var _ai = $('appInfo'); if (_ai) _ai.style.display = (pageId === 'homePage') ? '' : 'none';
   const nav = document.querySelector('nav.route'), act = document.querySelector('.stop.active');
