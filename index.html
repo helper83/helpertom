@@ -67,6 +67,7 @@
 <!-- v12.63 (2026-10-06): 사용자 확정 5개 개선 반영 - (1) 주색 스카이 블루(#1E7BC4)·주소창(theme-color) 흰색 (2) 탭 컬러 칩+페이지 색 제목 띠 (3) 홈 섹션 제목+리스트형 구분 (4) 준비계획 순차 아코디언(후보 확인→목표→조건→계획표) (5) 로고 H+금빛 화살표. 데이터·진단·계획 로직은 v12.62와 동일. -->
 <!-- v12.62 (2026-10-02): (1) 진단 결과에 "PDF로 저장 · 인쇄" 버튼 추가(진단 결과 전용 인쇄 레이아웃·리포트 머리글) (2) 헤더 로고를 브론즈 HP 엠블럼으로 교체(파비콘 포함) -->
 <!-- v12.115 (2026-10-22): 학과 탐색 학과명 매칭표 확충(학부·전공 19건 추가, 검색 시 학과 분류·추천 산업/직무 연결). 결과 화면에서 특정 대학명·소속 단과대학 표시 제거(범용 앱), 학교명 접두어(예: 대학명 학과명) 입력은 계속 인식 -->
+<!-- v12.117 (2026-10-25): QA 자동 수정 — 입력창 16px, 버튼 터치 영역 44px(1100px 이하) -->
 <!-- v12.116 (2026-10-25): 학과 탐색을 헬퍼손 산업직무 최신판으로 교체 — 서울여대 계열 학과 58개 추가(화면에 대학명 미표시), 수업 학과 33개 맞춤 진출 가이드(우선 산업·직무, 관련 자격·면허, 준비 포인트, 출처 링크) -->
 <!-- v12.114 (2026-10-16): 학과 탐색 신설(미니 v1.3~v1.15 이식: 학과표준분류155·경기대215·고용24 학과정보·동의어 사전·찜 우선 진로결정), 60개 산업×107개 직무(F51~F60·J96~J107 신규, 연결 6420건), 홈 활용 방법에 학과 탐색·자유 시작 문구 추가 -->
 <!-- 헬퍼탐 Final v12.16 · 2026-09-27 · 50개 산업×95개 직무 통합 데이터 및 공공기관 근거검증 누적본 -->
@@ -847,6 +848,10 @@ body{background:var(--bg)!important}
 .mj-badge{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--sunk);border:1px solid var(--line2);font-size:12px;color:var(--ink2)}
 .mj-badge.thin{background:#FFF4DC;border-color:#F0D9A0;color:#7A5200}
 @media(max-width:700px){.mj-cols{grid-template-columns:1fr}}
+/* QA-APPSKILL:BEGIN v12.117 (AS-04) 입력창 16px, 터치 영역 44px */
+select,input[type=number],input[type=search],input[type=text],textarea{font-size:16px}
+@media(max-width:1100px){.btn,.btn.sm,#qToggleBtn{min-height:44px}}
+/* QA-APPSKILL:END */
 </style>
 </head>
 <body>
