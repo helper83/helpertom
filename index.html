@@ -4719,7 +4719,7 @@ else initializeApp();
 <script>
 /* v1.21: 진로 결정 → 수업 나눔(구글 슬라이드로 보내기). 보내기 전 미리보기, 개인정보 형태 차단. */
 (function(){'use strict';
-var CFG={url:''}; /* ★ 강사 설정: docs/goal-share-setup.md 의 Apps Script 웹 앱 URL(…/exec) */
+var CFG={url:'https://script.google.com/macros/s/AKfycbxFw5430Tya9ToNdtX3-f7KkD7ZHnigRm_FUsX2uMpBgaJxtICBjoiU6Qz3IPPhMaW7Ng/exec'}; /* ★ 강사 설정: docs/goal-share-setup.md 의 Apps Script 웹 앱 URL(…/exec) */
 var PII=[/01[016789][-\s.]?\d{3,4}[-\s.]?\d{4}/,/[\w.+-]+@[\w-]+\.[\w.-]+/,/\d{6}[-\s]?[1-4]\d{6}/];
 var K_NICK='visionhr_share_nick_v1',K_AT='visionhr_share_goal_at_v1',K_WHY='visionhr_share_goal_why_v1_';var WH=[['ind','목표 산업을 고른 이유','예: 데이터가 많이 쓰이는 분야라서'],['job','목표 직무를 고른 이유','예: 분석으로 문제를 푸는 일이 맞아서'],['pub','목표 공공기관을 고른 이유 (선택 · 고른 경우만)','예: 공익 업무에 관심이 있어서']];
 function $g(id){return document.getElementById(id)}
