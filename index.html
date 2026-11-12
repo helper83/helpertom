@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
 <!-- v12.127 (2026-11-13): 요정 안내 강화 — (1) '▶ 이 화면 안내' 단계별 투어(요소를 강조하고 설명, 이전/다음) 홈·학과·산업·공공기관·직무·진단·진로 결정·로드맵 (2) 기능을 처음 쓸 때 요정의 한마디(☆찜·결과 보기·학과 추천·검색·목록 선택·준비 기간·PDF 저장·진로 결정에 반영·탭 이동) (3) 말풍선 안내 방식 선택(처음 한 번만/화면마다 짧게/안 함). -->
 <!-- v12.126 (2026-11-13): 꾸미기 추가 — (1) 도우미 요정(별이·꽃님·잎새·달이·몽실 중 선택, 화면별 사용법 말풍선, 켜기/끄기·위치) (2) 색상 6종(스카이·민트·라벤더·선셋·로즈·오션) (3) 글꼴 3종(IBM Plex 내장·기기 기본 고딕·명조). 설정은 이 기기에만 저장, 초기화 버튼에 포함. -->
 <!-- v12.125 (2026-11-13): 오늘의 발견 '스탬프북'을 '퍼즐'로 교체 — 카드 1장·퀴즈 정답 1개=조각 1개, 내 집·자동차·햄버거·우주선·나무·기차 중 선택, 1주(14조각)/2주(28조각) 코스, 완성작 갤러리·퍼즐 배지 3종, 기존 스탬프 수는 조각으로 자동 이어짐 -->
@@ -1055,6 +1056,69 @@ body.disc-open #fxWrap{display:none}
 .lk-fx{display:block;line-height:0}
 .fx-hl{outline:3px solid var(--primary-ink)!important;outline-offset:3px;border-radius:10px;box-shadow:0 0 0 7px var(--pf,#DCEBF8)!important;position:relative;transition:box-shadow .2s}
 @media print{.fx-hl{outline:0!important;box-shadow:none!important}}
+/* v12.128 게임 */
+.gm-say{display:flex;align-items:center;gap:8px;margin:12px 0 4px}
+.gm-av{flex:none;line-height:0}
+.gm-bub{background:var(--tint);border:1px solid var(--line-blue);border-radius:14px;padding:8px 12px;font-size:14px;line-height:1.5;color:var(--ink)}
+.gm-hub{display:grid;gap:10px;margin:10px 0 4px}
+.gm-card{display:flex;align-items:center;gap:12px;min-height:72px;padding:12px;border:1.5px solid var(--line-blue);border-radius:var(--r-md);background:var(--surface);color:var(--ink);text-align:left;cursor:pointer}
+.gm-card:hover{background:var(--tint2,#f4fafe)}
+.gm-ic{flex:none;font-size:28px;line-height:1}
+.gm-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.gm-tx b{font-size:16px}
+.gm-tx span{font-size:13px;color:var(--muted);line-height:1.45}
+.gm-st{flex:none;font-size:13px;font-weight:700;color:var(--primary-ink);white-space:nowrap}
+.gm-titles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:6px}
+.gm-tt{border:1.5px dashed var(--line-blue);border-radius:var(--r-md);padding:8px 4px;text-align:center;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+.gm-tt b{font-size:24px;line-height:1.2}
+.gm-tt.on{border-style:solid;background:var(--pf,#DCEBF8);color:var(--ink);font-weight:700}
+.gm-dots{display:flex;gap:6px;justify-content:center;margin:4px 0 10px}
+.gm-dots i{width:34px;height:8px;border-radius:99px;background:var(--line2)}
+.gm-dots i.done{background:var(--primary-ink)}
+.gm-dots i.now{background:var(--primary)}
+.gm-q{font-size:20px;font-weight:700;line-height:1.4;text-align:center;margin:4px 0 14px}
+.gm-q:focus{outline:none}
+.gm-opts{display:grid;gap:10px}
+.gm-opt{display:flex;align-items:center;gap:10px;min-height:72px;padding:12px;border:2px solid var(--line-blue);border-radius:var(--r-md);background:var(--surface);color:var(--ink);text-align:left;font-size:16px;font-weight:600;cursor:pointer;transition:transform .12s}
+.gm-opt:active:not([disabled]){transform:scale(.98)}
+.gm-opt.on{border-color:var(--primary-ink);background:var(--pf,#DCEBF8);box-shadow:0 0 0 2px var(--primary-ink) inset}
+.gm-opt.dim{opacity:.55}
+.gm-ab{flex:none;width:32px;height:32px;border-radius:50%;background:var(--primary-ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.gm-ot{flex:1;min-width:0}
+.gm-title{text-align:center;margin:6px 0 4px;display:flex;flex-direction:column;gap:2px;align-items:center}
+.gm-big{font-size:56px;line-height:1.1}
+.gm-title b{font-size:22px}
+.gm-title em{font-style:normal;color:var(--ink2);font-size:15px}
+.gm-bars{display:grid;gap:6px;margin:10px 0}
+.gm-bar{display:grid;grid-template-columns:116px 1fr 20px;align-items:center;gap:8px;font-size:13px}
+.gm-bar .bar{height:10px;border-radius:99px;background:var(--line2);overflow:hidden}
+.gm-bar .bar i{display:block;height:100%;background:var(--primary-ink);border-radius:99px}
+.gm-reward{margin:10px 0;padding:10px 12px;border-radius:var(--r-md);background:var(--ok-tint);color:var(--ok);font-weight:700;text-align:center}
+.gm-reward.off{background:var(--sunk);color:var(--ink2);font-weight:500;font-size:13px}
+.gm-jobs{display:grid;gap:8px}
+.gm-job{display:flex;align-items:stretch;gap:8px}
+.gm-jn{flex:1;min-width:0;min-height:44px;text-align:left;padding:8px 10px;border:1px solid var(--line-blue);border-radius:var(--r-md);background:var(--surface);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.gm-jn b{font-size:14px}
+.gm-jn span{font-size:12px;color:var(--muted);line-height:1.4}
+.gm-m{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
+.gm-col h4{margin:0 0 6px;font-size:13px;color:var(--muted)}
+.gm-col{display:flex;flex-direction:column;gap:8px}
+.gm-mb{display:flex;align-items:center;gap:6px;min-height:56px;padding:8px 10px;border:2px solid var(--line-blue);border-radius:var(--r-md);background:var(--surface);color:var(--ink);text-align:left;font-size:14px;line-height:1.4;cursor:pointer}
+.gm-mb.sel{border-color:var(--primary-ink);background:var(--pf,#DCEBF8);box-shadow:0 0 0 2px var(--primary-ink) inset}
+.gm-mb.ok{border-color:var(--ok);background:var(--ok-tint);color:var(--ink);opacity:.9}
+.gm-mb.task{font-size:13px}
+.gm-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--ok);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+@keyframes gmShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.gm-shake .disc-card{animation:gmShake .4s}
+@media (prefers-reduced-motion:reduce){.gm-shake .disc-card,.gm-opt{animation:none!important;transition:none!important}}
+@media (max-width:360px){.gm-m{grid-template-columns:1fr}.gm-bar{grid-template-columns:100px 1fr 18px}}
+@media print{#gameModal{display:none!important}}
+.kindbar.kind4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kindbar.kind4 button{padding:8px 2px}
+.kindbar.kind4 button b{font-size:14px}
+@media (max-width:480px){.kindbar.kind4{grid-template-columns:1fr 1fr}.kindbar.kind4 button{min-height:48px}}
+#homePage .hp[hidden]{display:none}
+@media print{#homePage .hp[hidden]{display:block}#homeKind{display:none}}
 </style>
 </head>
 <body>
@@ -1090,13 +1154,26 @@ body.disc-open #fxWrap{display:none}
       <h1 id="h-home">학과·산업·직무, 어디서부터 볼까요?</h1>
       <p class="muted">60개 산업과 107개 직무를 전부 볼 필요는 없습니다. 지금 나에게 맞는 출발점 하나를 선택하세요.</p>
     </div>
+    <div class="kindbar kind4 no-print" id="homeKind" role="group" aria-label="홈 바로가기">
+      <button type="button" data-hk="DISC" aria-pressed="true"><b>오늘의 발견</b></button>
+      <button type="button" data-hk="DS" aria-pressed="false"><b>오늘의 실행</b></button>
+      <button type="button" data-hk="GUIDE" aria-pressed="false"><b>활용 방법</b></button>
+      <button type="button" data-hk="LOOK" aria-pressed="false"><b>내 취향</b></button>
+    </div>
+    <div class="hp" id="hp-DS" data-hp="DS" hidden>
     <div class="hsec no-print" id="dsHead" aria-live="polite"></div>
     <div class="hlist no-print" id="dsList"></div>
+    </div>
+    <div class="hp" id="hp-DISC" data-hp="DISC">
     <div class="hsec no-print" id="discHead" aria-live="polite"></div>
     <div class="hlist no-print" id="discList" role="list"></div>
     <span id="discSec" hidden></span>
+    </div>
+    <div class="hp" id="hp-LOOK" data-hp="LOOK" hidden>
     <div class="hsec no-print">내 취향</div>
     <div class="hlist no-print"><button type="button" class="hrow" id="lookRow" style="--tc:var(--t6)"><span class="hic"><b style="font-size:18px">꾸</b></span><span class="hx"><b>꾸미기 · 요정 · 색상 · 글꼴</b><span>도우미 요정과 앱의 색·글꼴을 내 취향대로 바꿔요</span></span><span class="hgo" aria-hidden="true">›</span></button></div>
+    </div>
+    <div class="hp" id="hp-GUIDE" data-hp="GUIDE" hidden>
     <div class="hsec">활용 방법</div>
     <div id="guideBox" class="hlist">
       <div class="guide-free" style="border:1.5px solid var(--primary);background:var(--sunk);border-radius:var(--r-md);padding:10px 12px;margin:0 0 8px;font-size:14px;line-height:1.55"><b>순서는 정해져 있지 않습니다.</b> 아래 항목은 참고용이며 순서가 없습니다. 학과·산업(민간기업·공공기관)·직무·진단 중 가장 궁금한 곳에서 <b>원하는 대로 시작</b>하고, 필요하면 다른 탐색으로 오가세요. 어디서 시작하든 ☆ 찜한 항목은 진로 결정에 모입니다.</div>
@@ -1107,6 +1184,7 @@ body.disc-open #fxWrap{display:none}
       <div class="hrow static" style="--tc:var(--t5)"><span class="hic"><b style="font-size:18px">결</b></span><span class="hx"><b>진로 결정(목표 정하기·내 로드맵)</b><span>찜한 항목과 진단 추천을 비교해 목표 산업·직무 1개 조합을 정하면, 같은 탭의 ‘내 로드맵’에 맞춤 계획이 만들어집니다.</span><span>PDF로 저장해 상담이나 짝과 공유할 수 있습니다.</span></span></div>
     </div>
     <p class="muted small" style="margin:8px 4px 4px">마음에 드는 산업·공공기관·직무에 <b>☆ 찜 하기</b>를 누르면 진로 결정의 관심목록에 자동으로 모입니다. 입력 내용은 이 기기 브라우저에만 저장됩니다.</p>
+    </div>
   </section>
 
   <!-- 1. 학과 (v1.3 신규) -->
@@ -4306,10 +4384,10 @@ function printPlan() {
   window.print();
 }
 function resetAllAppData() {
-  if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 응답 수집 동의, 오늘의 발견 기록(퍼즐·퀴즈), 꾸미기 설정(요정·색상·글꼴)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
+  if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 응답 수집 동의, 오늘의 발견 기록(퍼즐·퀴즈·게임), 꾸미기 설정(요정·색상·글꼴)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
   [KEYS.interests, KEYS.answers, KEYS.result, KEYS.plan, KEYS.guide, KEYS.major, 'visionhr_diagnosis_result_v1','visionhr_diagnosis_result_v2','visionhr_diag_answers_v1', KEYS.schedule,
     PLAN_CHECK_KEY, SCHED_OPEN_KEY, 'visionhr_sched_days_v1', VALIDATION_KEY, CLOUD_CONFIG.queueKey, CLOUD_CONFIG.consentKey,
-    'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1', 'visionhr_look_v1', 'visionhr_fairy_v1'].forEach(function (k) { LS.del(k); });
+    'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1', 'visionhr_disc_game_v1', 'visionhr_look_v1', 'visionhr_fairy_v1'].forEach(function (k) { LS.del(k); });
   window.location.reload();
 }
 
@@ -5435,9 +5513,11 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function foundCount(b, k) { var ps = poolSets()[k], n = 0; Object.keys(b[k]).forEach(function (c) { if (ps[c]) n++; }); return n; }
   function stats() {
     var b = bookGet(), s = st(), l = logGet(), f = { IND: foundCount(b, 'IND'), PUB: foundCount(b, 'PUB'), JOB: foundCount(b, 'JOB') };
-    return { b: b, f: f, total: f.IND + f.PUB + f.JOB, full: Object.keys(b.full).length, best: Math.max(s.best || 0, s.streak || 0), cur: s.last === TODAY.s || s.last === dateStr(TODAY.idx - 1) ? (s.streak || 0) : 0, qn: l.quizN || 0, qok: l.quizOk || 0, re: b.re || 0, bonusOk: b.bonusOk || 0, pz: pzGet().done.length, pzT: Object.keys(pzGet().done.reduce(function (m, d) { m[d.t] = 1; return m; }, {})).length };
+    return { b: b, f: f, total: f.IND + f.PUB + f.JOB, full: Object.keys(b.full).length, best: Math.max(s.best || 0, s.streak || 0), cur: s.last === TODAY.s || s.last === dateStr(TODAY.idx - 1) ? (s.streak || 0) : 0, qn: l.quizN || 0, qok: l.quizOk || 0, re: b.re || 0, bonusOk: b.bonusOk || 0, pz: pzGet().done.length, gm: gmGet().tot, gp: gmGet().plays, gt: gmTitles(gmGet()), pzT: Object.keys(pzGet().done.reduce(function (m, d) { m[d.t] = 1; return m; }, {})).length };
   }
   var BADGES = [
+    { t: '게임 첫 판', d: '게임을 한 판 끝내기', ok: function (x) { return x.gp >= 1; } },
+    { t: '칭호 수집가', d: '밸런스 게임 칭호 4종 모두 만나기', ok: function (x) { return x.gt >= 4; } },
     { t: '3일 연속', d: '3일 연속 방문', ok: function (x) { return x.best >= 3; } },
     { t: '7일 연속', d: '7일 연속 방문', ok: function (x) { return x.best >= 7; } },
     { t: '14일 연속', d: '14일 연속 방문', ok: function (x) { return x.best >= 14; } },
@@ -5521,7 +5601,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function pzNeed(w) { return 14 * w; }
   /* 조각 = 발견한 카드 수 + 퀴즈 정답 수. 완성되면 자동으로 보관하고 다음 퍼즐 선택을 기다린다 */
   function pzSync() {
-    var z = pzGet(), x = stats(), e = x.total + x.qok, done = null, dirty = false;
+    var z = pzGet(), x = stats(), e = x.total + x.qok + x.gm, done = null, dirty = false;
     if (e < z.spent) { z.spent = e; dirty = true; }
     if (z.cur && e - z.spent >= pzNeed(z.cur.w)) {
       z.done.push({ t: z.cur.t, w: z.cur.w, d: TODAY ? TODAY.s : '' }); z.spent += pzNeed(z.cur.w); done = z.cur.t; z.cur = null; dirty = true;
@@ -5561,7 +5641,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var pz = PUZ_BY[z.cur.t], need = pzNeed(z.cur.w), p = Math.min(r.p, need), pct = Math.round(p / need * 100);
     h += '<div class="pz-head"><b>' + pz.e + ' ' + esc(pz.n) + ' · ' + z.cur.w + '주 코스</b><button type="button" class="btn ghost sm" data-pz-change>퍼즐 바꾸기</button></div>' + pzSvg(pz, p, z.cur.w, false);
     h += '<div class="disc-bar"><div class="lab"><span>조각</span><b>' + p + ' / ' + need + '</b></div><div class="bar" role="img" aria-label="퍼즐 조각 ' + p + '개, 전체 ' + need + '개"><i style="width:' + pct + '%"></i></div></div>';
-    h += '<p class="muted small" style="margin:0">오늘의 카드를 열 때마다, 퀴즈를 맞힐 때마다 조각이 1개씩 붙어요.</p>';
+    h += '<p class="muted small" style="margin:0">오늘의 카드를 열 때, 퀴즈를 맞힐 때, 게임을 끝낼 때마다 조각이 붙어요.</p>';
     return h;
   }
   function pzGallery() {
@@ -5584,6 +5664,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     if (q) h += row('QUIZ', QTAB.tc, QTAB.letter, '오늘의 퀴즈', (qd ? (qd.ok ? '정답을 맞혔어요 ✓' : '오늘 퀴즈 완료') + (bq ? (bd ? ' · 🎁 보너스 완료' : ' · 🎁 보너스 문제가 열렸어요') : '') : '1문항' + (bq ? ' + 🎁 보너스' : '') + ' · 오늘의 카드를 읽고 풀어 보세요'));
     var pr = pzSync(), pcur = pr.z.cur;
     h += row('BOOK', BOOKTAB.tc, BOOKTAB.letter, '내 퍼즐', pcur ? PUZ_BY[pcur.t].e + ' ' + PUZ_BY[pcur.t].n + ' · 조각 ' + Math.min(pr.p, pzNeed(pcur.w)) + '/' + pzNeed(pcur.w) + ' · 완성 ' + pr.z.done.length + '개' : '새 퍼즐을 골라 보세요 · 모은 조각 ' + pr.p + '개');
+    h += row('GAME', GMTC, '게', '게임 · 밸런스 · 짝짓기', gmHomeSub());
     list.innerHTML = h;
   }
   function row(k, tc, letter, title, sub) {
@@ -5755,13 +5836,231 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       }
     });
     var list = document.getElementById('discList');
-    if (list) list.addEventListener('click', function (e) { var b = e.target.closest('[data-disc]'); if (b) open(b.getAttribute('data-disc')); });
+    if (list) list.addEventListener('click', function (e) { var b = e.target.closest('[data-disc]'); if (!b) return; if (b.getAttribute('data-disc') === 'GAME') gmOpen(); else open(b.getAttribute('data-disc')); });
   }
+
+  /* ---- v12.128 게임: 직무 밸런스 · 업무 짝짓기 (판을 끝내면 퍼즐 조각 +1, 게임당 하루 1개) ---- */
+  var GMKEY = 'visionhr_disc_game_v1', GMTC = '--t5', GV = 'HUB', GS = null, GLAST = null;
+  var BQ = [
+    { q: '월요일 아침, 더 끌리는 일은?', a: ['숫자 표를 뜯어보며 숨은 규칙 찾기', 'D'], b: ['고객 반응을 보고 홍보 문구 바꿔 보기', 'M'] },
+    { q: '내가 고르고 싶은 일의 모습은?', a: ['야근은 없지만 매일 비슷한 루틴', 'P'], b: ['가끔 야근해도 늘 새로운 문제', 'I'] },
+    { q: '이런 칭찬을 듣는다면?', a: ['“정확하게 해냈네요”', 'D'], b: ['“아이디어가 신선하네요”', 'I'] },
+    { q: '점심 후 회의, 나는?', a: ['앞에 나가 설득하는 발표자', 'M'], b: ['자료를 만들어 뒤에서 받쳐 주는 사람', 'P'] },
+    { q: '문제가 터졌을 때 나는?', a: ['원인부터 끝까지 추적한다', 'D'], b: ['일단 사람들을 모아 해결책 회의', 'M'] },
+    { q: '하루를 보내고 싶은 곳은?', a: ['사무실에서 모니터 앞', 'P'], b: ['현장을 돌아다니며 직접 확인', 'M'] },
+    { q: '성과를 확인하는 방식은?', a: ['숫자로 딱 떨어지는 결과', 'D'], b: ['사람들이 좋아했다는 반응', 'M'] },
+    { q: '신입 때 더 배우고 싶은 것은?', a: ['한 분야를 깊게 파는 전문성', 'D'], b: ['여러 부서를 도는 폭넓은 경험', 'I'] },
+    { q: '일하고 싶은 조직은?', a: ['규칙이 분명한 곳', 'P'], b: ['자율이 큰 곳', 'I'] },
+    { q: '팀 프로젝트에서 내 역할은?', a: ['일정과 진행 관리', 'P'], b: ['아이디어 내고 직접 만들기', 'I'] }
+  ];
+  var GT = {
+    D: { e: '🕵️', t: '데이터 탐정', line: '숨은 규칙은 못 숨겨요!', d: '숫자와 근거로 파고드는 쪽에 끌렸어요.', kw: ['데이터', '분석', '회계', '품질', '통계', '연구'], say: ['오~ 근거파! 🔍', '숫자 앞에서 눈이 반짝이네요', '분석가의 선택!'] },
+    M: { e: '🎤', t: '분위기 메이커', line: '사람이 곧 성과예요!', d: '사람과 소통하며 일하는 쪽에 끌렸어요.', kw: ['마케팅', '영업', '인사', '홍보', '고객', '교육', '서비스'], say: ['사람 좋아하는 티가 나요 😄', '소통형 발견!', '분위기 메이커 후보예요'] },
+    I: { e: '💡', t: '아이디어 뱅크', line: '일단 만들어 보죠!', d: '새로운 것을 만들고 도전하는 쪽에 끌렸어요.', kw: ['기획', '디자인', '콘텐츠', '개발', '창작'], say: ['오, 새로운 쪽이군요 ✨', '아이디어가 샘솟네요', '도전 정신 접수!'] },
+    P: { e: '🧭', t: '든든한 설계자', line: '일정은 제게 맡기세요!', d: '체계와 안정 속에서 일을 끌고 가는 쪽에 끌렸어요.', kw: ['재무', '구매', '물류', '생산', '총무', '자금', '세무', '경영지원'], say: ['든든한 선택이에요 🛡️', '계획형이시군요', '체계가 편한 타입!'] }
+  };
+  var GKEYS = ['D', 'M', 'I', 'P'];
+  function gmGet() {
+    var g = LS.get(GMKEY, {}); if (!g || typeof g !== 'object' || Array.isArray(g)) g = {};
+    g.tot = Number(g.tot) || 0; g.plays = Number(g.plays) || 0; if (!g.days || typeof g.days !== 'object') g.days = {}; if (!g.titles || typeof g.titles !== 'object') g.titles = {}; return g;
+  }
+  function gmDay(g) { if (!g.days[TODAY.s]) g.days[TODAY.s] = {}; return g.days[TODAY.s]; }
+  function gmTitles(g) { return Object.keys(g.titles).filter(function (k) { return GT[k]; }).length; }
+  function gmReward(kind) {   /* kind: b(밸런스)·m(짝짓기). 하루 1회만 조각을 줌 */
+    var g = gmGet(), d = gmDay(g), got = false;
+    d[kind + 'p'] = (d[kind + 'p'] || 0) + 1; g.plays++;
+    if (!d[kind]) { d[kind] = 1; g.tot++; got = true; }
+    var ks = Object.keys(g.days).sort(); ks.slice(0, Math.max(0, ks.length - 30)).forEach(function (k) { delete g.days[k]; });
+    LS.set(GMKEY, g); return { got: got, g: g };
+  }
+  function gmModal() { return document.getElementById('gameModal'); }
+  function gmFairy() {
+    var f = (typeof window.fxFairy === 'function') ? window.fxFairy(44) : null;
+    return f ? '<span class="gm-av" aria-hidden="true">' + f.svg + '</span>' : '';
+  }
+  function gmSay(text, id) { return '<div class="gm-say">' + gmFairy() + '<span class="gm-bub" role="status" aria-live="polite"' + (id ? ' id="' + id + '"' : '') + '>' + esc(text) + '</span></div>'; }
+  function gmBand(title, sub) {
+    return '<div class="disc-card" style="--tc:var(' + GMTC + ')" role="document"><div class="disc-band"><div class="grow"><h2 id="gmTitle" tabindex="-1">' + esc(title) + '</h2><small>' + esc(sub) + '</small></div><button type="button" class="disc-x" data-gm="close" aria-label="닫기">✕</button></div>';
+  }
+  function gmPiece(got, kindLabel) {
+    return got ? '<div class="gm-reward" role="status">🧩 퍼즐 조각 +1! <small>(' + kindLabel + ' 오늘 보상)</small></div>' : '<div class="gm-reward off" role="status">오늘 ' + kindLabel + ' 조각은 이미 받았어요. 다시 해도 재미로 즐길 수 있어요!</div>';
+  }
+  /* 홈·허브 요약 */
+  function gmHomeSub() {
+    var g = gmGet(), d = (TODAY && g.days[TODAY.s]) || {}, n = (d.b ? 1 : 0) + (d.m ? 1 : 0);
+    return n >= 2 ? '오늘 조각 2/2 완료 · 칭호 ' + gmTitles(g) + '/4' : '밸런스·짝짓기 · 오늘 🧩 ' + n + '/2';
+  }
+  function hubView() {
+    var g = gmGet(), d = gmDay(g), pz = pzSync();
+    var h = gmBand('게임', '1분 게임으로 퍼즐 조각을 받아요') + '<div class="disc-body">' + gmSay('안녕! 오늘은 어떤 게임을 해 볼까요? 한 판 끝낼 때마다 퍼즐 조각이 붙어요 🧩') + '<div class="gm-hub">';
+    h += '<button type="button" class="gm-card" data-gm="startB"><span class="gm-ic">⚖️</span><span class="gm-tx"><b>직무 밸런스 게임</b><span>5문항 · 약 1분 · 끌리는 쪽을 고르면 나의 칭호가 나와요</span></span><span class="gm-st">' + (d.b ? '✓ 오늘 조각 받음' : '🧩 +1') + '</span></button>';
+    h += '<button type="button" class="gm-card" data-gm="startM"><span class="gm-ic">🔗</span><span class="gm-tx"><b>업무 짝짓기</b><span>직무 4개 ↔ 신입 첫 업무 4개 · 약 1분 · 실제 직무 데이터로 만들어요</span></span><span class="gm-st">' + (d.m ? '✓ 오늘 조각 받음' : '🧩 +1') + '</span></button></div>';
+    h += '<h3 class="disc-h3">내 칭호 수집 <small class="muted">' + gmTitles(g) + '/4</small></h3><div class="gm-titles">' + GKEYS.map(function (k) { var on = g.titles[k]; return '<div class="gm-tt' + (on ? ' on' : '') + '"><b aria-hidden="true">' + (on ? GT[k].e : '❔') + '</b><span>' + (on ? esc(GT[k].t) : '아직 못 만났어요') + '</span></div>'; }).join('') + '</div>';
+    h += '<p class="muted small" style="margin:10px 0 0">지금 퍼즐: 조각 ' + pz.p + '개 모음 · 게임당 하루 한 번 조각을 받아요(다시 해도 괜찮아요).</p></div>';
+    h += '<div class="disc-foot"><button type="button" class="btn ghost" data-gm="puzzle">내 퍼즐 보기</button><button type="button" class="btn primary" data-gm="close">닫기</button></div></div>';
+    return h;
+  }
+  /* ---- 밸런스 ---- */
+  function startB() {
+    var g = gmGet(), d = gmDay(g), rnd = d.bp ? Math.random : mulberry32(TODAY.idx * 131 + 7);
+    var seq = shuf(BQ.map(function (_, i) { return i; }), rnd).slice(0, 5), flip = seq.map(function () { return rnd() < 0.5; });
+    GS = { k: 'B', seq: seq, flip: flip, i: 0, picks: [], cur: null, combo: 0, say: '' }; GV = 'B';
+  }
+  function bView() {
+    var i = GS.i, q = BQ[GS.seq[i]], fl = GS.flip[i], o = fl ? [q.b, q.a] : [q.a, q.b], dots = '';
+    for (var k = 0; k < 5; k++) dots += '<i class="' + (k < i ? 'done' : (k === i ? 'now' : '')) + '"></i>';
+    var h = gmBand('직무 밸런스 게임', (i + 1) + ' / 5') + '<div class="disc-body"><div class="gm-dots" role="img" aria-label="5문항 중 ' + (i + 1) + '번째">' + dots + '</div><div class="gm-q" id="gmQ">' + esc(q.q) + '</div><div class="gm-opts">';
+    o.forEach(function (x, n) {
+      var cls = GS.cur === null ? '' : (GS.cur === n ? ' on' : ' dim');
+      h += '<button type="button" class="gm-opt' + cls + '" data-gm="pick" data-n="' + n + '"' + (GS.cur === null ? '' : ' disabled') + (GS.cur === n ? ' aria-pressed="true"' : '') + '><span class="gm-ab" aria-hidden="true">' + (n ? 'B' : 'A') + '</span><span class="gm-ot">' + esc(x[0]) + '</span></button>';
+    });
+    h += '</div>' + (GS.cur !== null ? gmSay(GS.say, 'gmSay') : gmSay('끌리는 쪽을 골라 주세요. 정답은 없어요!')) + '</div><div class="disc-foot">';
+    h += GS.cur !== null ? '<button type="button" class="btn primary" data-gm="next">' + (i === 4 ? '결과 보기 →' : '다음 →') + '</button>' : '<button type="button" class="btn ghost" data-gm="hub">그만하기</button>';
+    return h + '</div></div>';
+  }
+  function bPick(n) {
+    if (GS.cur !== null) return;
+    var q = BQ[GS.seq[GS.i]], o = GS.flip[GS.i] ? [q.b, q.a] : [q.a, q.b], tag = o[n][1], rnd = Math.random;
+    GS.cur = n; GS.picks.push(tag);
+    var prev = GS.picks.length > 1 ? GS.picks[GS.picks.length - 2] : null; GS.combo = (prev === tag) ? GS.combo + 1 : 1;
+    var s = GT[tag].say[Math.floor(rnd() * GT[tag].say.length)];
+    GS.say = GS.combo >= 2 ? '🔥 ' + GT[tag].t + ' 콤보 ×' + GS.combo + '! ' + s : s;
+    render2(); var nx = gmModal().querySelector('[data-gm="next"]'); if (nx) nx.focus();
+  }
+  function bJobs(tag, rnd) {
+    var kw = GT[tag].kw, seen = {}, c = [];
+    shuf(DB.jobs, rnd).forEach(function (j) {
+      if (c.length >= 3 || seen[j.group]) return;
+      if (kw.some(function (w) { return j.name.indexOf(w) >= 0; })) { seen[j.group] = 1; c.push(j); }
+    });
+    return c;
+  }
+  function bResult() {
+    var cnt = { D: 0, M: 0, I: 0, P: 0 }; GS.picks.forEach(function (t) { cnt[t]++; });
+    var best = null; GKEYS.forEach(function (k) { if (best === null || cnt[k] > cnt[best]) best = k; });
+    var tied = GKEYS.filter(function (k) { return cnt[k] === cnt[best]; });
+    if (tied.length > 1) { for (var z = GS.picks.length - 1; z >= 0; z--) { if (tied.indexOf(GS.picks[z]) >= 0) { best = GS.picks[z]; break; } } }
+    var r = gmReward('b'), g = r.g; g.titles[best] = 1; LS.set(GMKEY, g);
+    GS.res = { best: best, cnt: cnt, got: r.got, jobs: bJobs(best, Math.random), newT: gmTitles(g) };
+    try { pzAfter(); } catch (e) { } renderHome(); GV = 'BR';
+  }
+  function brView() {
+    var R = GS.res, T = GT[R.best];
+    var h = gmBand('나의 칭호', '밸런스 게임 결과') + '<div class="disc-body"><div class="gm-title"><span class="gm-big" aria-hidden="true">' + T.e + '</span><b>' + esc(T.t) + '</b><em>“' + esc(T.line) + '”</em></div><p class="disc-line" style="text-align:center">' + esc(T.d) + '</p>';
+    h += '<div class="gm-bars" role="list" aria-label="성향 점수">' + GKEYS.map(function (k) { return '<div class="gm-bar" role="listitem"><span>' + GT[k].e + ' ' + esc(GT[k].t) + '</span><div class="bar"><i style="width:' + (R.cnt[k] * 20) + '%"></i></div><b>' + R.cnt[k] + '</b></div>'; }).join('') + '</div>';
+    h += gmPiece(R.got, '밸런스 게임');
+    if (R.jobs.length) {
+      h += '<h3 class="disc-h3">이런 직무는 어때요? <small class="muted">(참고용 · 하나만으로 단정할 수 없어요)</small></h3><div class="gm-jobs">';
+      R.jobs.forEach(function (j) { h += '<div class="gm-job"><button type="button" class="gm-jn" data-gm="job" data-code="' + esc(j.code) + '"><b>' + esc(j.name) + '</b><span>' + esc(j.group) + ' · 자세히 보기 ›</span></button>' + starButton('JOB', j.code, j.name, true) + '</div>'; });
+      h += '</div>';
+    }
+    h += '</div><div class="disc-foot"><button type="button" class="btn primary" data-gm="startB">한 판 더</button><div class="row2"><button type="button" class="btn ghost" data-gm="startM">업무 짝짓기 하러 가기</button><button type="button" class="btn ghost" data-gm="hub">게임 목록</button></div></div></div>';
+    return h;
+  }
+  /* ---- 업무 짝짓기 ---- */
+  function toks(name) { return name.split(/[·\s,()\/]+/).filter(function (x) { return x.length >= 2; }); }
+  function startM() {
+    var g = gmGet(), d = gmDay(g), rnd = d.mp ? Math.random : mulberry32(TODAY.idx * 977 + 31), items = [], seenG = {};
+    shuf(DB.jobs, rnd).forEach(function (j) {
+      if (items.length >= 4 || seenG[j.group]) return;
+      var p = jobPkg(j.code); if (!p || !p.job) return;
+      var ts = toks(j.name), tasks = (p.job.entryTasks || []).filter(function (t) { return t.length <= 48 && !ts.some(function (w) { return t.indexOf(w) >= 0; }); });
+      if (!tasks.length) return;
+      var t = tasks[Math.floor(rnd() * tasks.length)];
+      if (items.some(function (x) { return x.task === t; })) return;
+      seenG[j.group] = 1; items.push({ code: j.code, name: j.name, task: t });
+    });
+    if (items.length < 4) { GS = null; GV = 'HUB'; return false; }
+    GS = { k: 'M', items: items, order: shuf(items.map(function (_, i) { return i; }), rnd), selJ: null, selT: null, done: {}, mis: 0, streak: 0, maxS: 0, say: '직무와 신입 첫 업무를 하나씩 눌러 짝을 지어 주세요!' }; GV = 'M'; return true;
+  }
+  function mView() {
+    var n = Object.keys(GS.done).length, h = gmBand('업무 짝짓기', '짝 ' + n + ' / 4 · 실수 ' + GS.mis + '번') + '<div class="disc-body"><div class="gm-m"><div class="gm-col" role="group" aria-label="직무"><h4>직무</h4>';
+    GS.items.forEach(function (it, i) {
+      var dn = GS.done[i];
+      h += '<button type="button" class="gm-mb' + (dn ? ' ok' : '') + (GS.selJ === i ? ' sel' : '') + '" data-gm="mj" data-i="' + i + '"' + (dn ? ' disabled' : '') + ' aria-pressed="' + (GS.selJ === i) + '">' + (dn ? '<span class="gm-n">' + dn + '</span>' : '') + '<span>' + esc(it.name) + '</span></button>';
+    });
+    h += '</div><div class="gm-col" role="group" aria-label="신입 첫 업무"><h4>신입 첫 업무</h4>';
+    GS.order.forEach(function (i) {
+      var it = GS.items[i], dn = GS.done[i];
+      h += '<button type="button" class="gm-mb task' + (dn ? ' ok' : '') + (GS.selT === i ? ' sel' : '') + '" data-gm="mt" data-i="' + i + '"' + (dn ? ' disabled' : '') + ' aria-pressed="' + (GS.selT === i) + '">' + (dn ? '<span class="gm-n">' + dn + '</span>' : '') + '<span>' + esc(it.task) + '</span></button>';
+    });
+    h += '</div></div>' + gmSay(GS.say, 'gmSay') + '</div><div class="disc-foot"><button type="button" class="btn ghost" data-gm="hub">그만하기</button></div></div>';
+    return h;
+  }
+  function mTry() {
+    if (GS.selJ === null || GS.selT === null) return;
+    var j = GS.selJ, t = GS.selT, ok = j === t;
+    if (ok) {
+      GS.done[j] = Object.keys(GS.done).length + 1; GS.streak++; GS.maxS = Math.max(GS.maxS, GS.streak);
+      GS.say = (GS.streak >= 2 ? '🔥 ' + GS.streak + '연속! ' : '딱 맞아요! ') + '「' + GS.items[j].name + '」 신입은 이런 일을 해요.';
+    } else { GS.mis++; GS.streak = 0; GS.say = '앗, 아쉬워요! 다시 골라 볼까요?'; GS.shake = true; }
+    GS.selJ = null; GS.selT = null;
+    if (Object.keys(GS.done).length === 4) { mResult(); return; }
+    render2();
+    if (!ok) { var m = gmModal(); m.classList.add('gm-shake'); setTimeout(function () { m.classList.remove('gm-shake'); }, 450); }
+  }
+  function mResult() {
+    var r = gmReward('m'), mis = GS.mis, grade = mis === 0 ? ['🏆', '업무 척척박사', '실수 없이 모두 맞혔어요!'] : mis <= 2 ? ['🥈', '감 좋은 신입', '조금만 더 하면 척척박사!'] : ['🌱', '성장 중인 새싹', '다음엔 더 잘할 거예요!'];
+    GS.res = { got: r.got, grade: grade }; try { pzAfter(); } catch (e) { } renderHome(); GV = 'MR'; render2();
+    var t = document.getElementById('gmTitle'); if (t) t.focus();
+  }
+  function mrView() {
+    var R = GS.res, h = gmBand('짝짓기 완성!', '실수 ' + GS.mis + '번 · 최고 ' + GS.maxS + '연속') + '<div class="disc-body"><div class="gm-title"><span class="gm-big" aria-hidden="true">' + R.grade[0] + '</span><b>' + esc(R.grade[1]) + '</b><em>' + esc(R.grade[2]) + '</em></div>' + gmPiece(R.got, '업무 짝짓기');
+    h += '<h3 class="disc-h3">오늘 만난 직무</h3><div class="gm-jobs">';
+    GS.items.forEach(function (it) { h += '<div class="gm-job"><button type="button" class="gm-jn" data-gm="job" data-code="' + esc(it.code) + '"><b>' + esc(it.name) + '</b><span>' + esc(it.task) + '</span></button>' + starButton('JOB', it.code, it.name, true) + '</div>'; });
+    h += '</div></div><div class="disc-foot"><button type="button" class="btn primary" data-gm="startM">한 판 더</button><div class="row2"><button type="button" class="btn ghost" data-gm="startB">밸런스 게임 하러 가기</button><button type="button" class="btn ghost" data-gm="hub">게임 목록</button></div></div></div>';
+    return h;
+  }
+  /* ---- 공통 ---- */
+  function render2() {
+    var m = gmModal(); if (!m) return;
+    m.innerHTML = GV === 'HUB' ? hubView() : GV === 'B' ? bView() : GV === 'BR' ? brView() : GV === 'M' ? mView() : GV === 'MR' ? mrView() : hubView();
+  }
+  function gmShow(focusTitle) { var m = gmModal(); m.classList.remove('hidden'); document.body.classList.add('disc-open'); if (focusTitle !== false) { var t = document.getElementById('gmTitle'); if (t) t.focus(); } }
+  function gmOpen() {
+    var m = gmModal(); if (!m) return; if (!TODAY) TODAY = kstToday();
+    if (m.classList.contains('hidden')) GLAST = document.activeElement;
+    GV = 'HUB'; GS = null; render2(); gmShow();
+  }
+  function gmClose() {
+    var m = gmModal(); if (!m || m.classList.contains('hidden')) return;
+    m.classList.add('hidden'); m.innerHTML = ''; document.body.classList.remove('disc-open');
+    try { if (GLAST && GLAST.focus) GLAST.focus(); } catch (e) { } renderHome();
+  }
+  function gmBind() {
+    var m = gmModal(); if (!m) return;
+    m.addEventListener('click', function (e) {
+      var t = e.target; if (t === m) { gmClose(); return; }
+      if (t.closest('[data-star]')) { return; }
+      var b = t.closest('[data-gm]'); if (!b) return; var a = b.getAttribute('data-gm');
+      if (a === 'close') gmClose();
+      else if (a === 'hub') { GV = 'HUB'; GS = null; render2(); gmShow(); }
+      else if (a === 'startB') { startB(); render2(); gmShow(); }
+      else if (a === 'startM') { if (startM()) { render2(); gmShow(); } else { toast('게임을 만들 데이터를 찾지 못했어요'); render2(); } }
+      else if (a === 'pick') { bPick(Number(b.getAttribute('data-n'))); }
+      else if (a === 'next') { if (GS.i >= 4) { bResult(); render2(); gmShow(); } else { GS.i++; GS.cur = null; GS.say = ''; render2(); var q = document.getElementById('gmQ'); if (q) { q.setAttribute('tabindex', '-1'); q.focus(); } } }
+      else if (a === 'mj') { var i = Number(b.getAttribute('data-i')); GS.selJ = GS.selJ === i ? null : i; render2(); var f1 = m.querySelector('[data-gm="mj"][data-i="' + i + '"]'); if (f1 && !f1.disabled) f1.focus(); mTry(); }
+      else if (a === 'mt') { var i2 = Number(b.getAttribute('data-i')); GS.selT = GS.selT === i2 ? null : i2; render2(); var f2 = m.querySelector('[data-gm="mt"][data-i="' + i2 + '"]'); if (f2 && !f2.disabled) f2.focus(); mTry(); }
+      else if (a === 'puzzle') { gmClose(); open('BOOK'); }
+      else if (a === 'job') { var code = b.getAttribute('data-code'); gmClose(); goJob(code); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (m.classList.contains('hidden')) return;
+      if (e.key === 'Escape') { gmClose(); return; }
+      if (e.key === 'Tab') {
+        var f = Array.prototype.slice.call(m.querySelectorAll('button:not([disabled]),a[href],input')).filter(function (x) { return x.offsetParent !== null; });
+        if (!f.length) return; var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === m.querySelector('#gmTitle'))) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  }
+  window.gameOpen = gmOpen;
 
   window.discInit = function () {
     TODAY = kstToday();
     if (!modal()) return;
-    bind(); renderHome();
+    bind(); gmBind(); renderHome();
     var _op = window.openPage;
     if (typeof _op === 'function' && !_op.__disc) {
       window.openPage = function (id) { var r = _op.apply(this, arguments); try { if (id === 'diagnosisPage') logBump('diag'); } catch (e) { } return r; };
@@ -5791,7 +6090,24 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 })();
 </script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(){return navigator.serviceWorker.ready;}).then(function(r){setTimeout(function(){if(r.active)r.active.postMessage('precache-shards');},4000);}).catch(function(){});});}</script>
+<script>
+/* v12.129 홈 바로가기: 오늘의 실행·오늘의 발견·내 취향·활용 방법 중 하나를 골라 보기 */
+(function () {
+  var bar = document.getElementById('homeKind'); if (!bar) return;
+  function setHome(k, focus) {
+    var found = false;
+    Array.prototype.forEach.call(document.querySelectorAll('#homePage .hp'), function (p) { var on = p.getAttribute('data-hp') === k; p.hidden = !on; if (on) found = true; });
+    if (!found) return;
+    Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-hk') === k ? 'true' : 'false'); });
+    window.__homeKind = k; if (typeof window.fxCtx === 'function') window.fxCtx();
+    if (focus) { var t = document.getElementById('hp-' + k); if (t) { var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; var r = bar.getBoundingClientRect(); if (r.top < hh || r.top > window.innerHeight * 0.5) window.scrollBy({ top: r.top - hh - 8, behavior: 'auto' }); } }
+  }
+  bar.addEventListener('click', function (e) { var b = e.target.closest('[data-hk]'); if (b) setHome(b.getAttribute('data-hk'), true); });
+  window.setHomeKind = setHome;
+})();
+</script>
 <div id="discModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="discTitle"></div>
+<div id="gameModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="gmTitle"></div>
 <div id="lookModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="lookTitle"></div>
 <div id="wishModal" class="wish-modal hidden" role="dialog" aria-modal="true" aria-labelledby="wishTitle">
   <div class="wish-card">
@@ -5836,7 +6152,10 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   ];
   var CH_BY = {}; CHARS.forEach(function (c) { CH_BY[c.k] = c; });
   var TIPS = {
-    homePage: ['어디서 시작해도 괜찮아요! 학과·산업·직무·진단 중 궁금한 곳을 아래에서 골라 보세요.', '마음에 드는 항목에 ☆을 눌러 찜하면 “진로 결정”에 모여요.', '오늘의 발견 카드를 열 때마다 퍼즐 조각이 하나씩 붙어요 🧩'],
+    'homePage:DISC': ['“오늘의 발견”이에요. 카드·퀴즈·게임을 하나씩 열 때마다 퍼즐 조각이 붙어요 🧩', '게임(밸런스·짝짓기)은 한 판 끝낼 때마다 조각을 받아요. 하루 한 번씩 보상이에요.', '마음에 드는 카드는 열어서 ☆ 찜하면 “진로 결정”에 모여요.'],
+    'homePage:DS': ['“오늘의 실행”이에요. 진로 결정에서 목표를 정하면 오늘 할 일이 여기에 나와요.', '하루 1개씩 체크하면 돼요. 밀린 일은 자동으로 일정을 조정해 줘요.', '아직 목표가 없다면 아래 버튼으로 “진로 결정”에 가 보세요.'],
+    'homePage:GUIDE': ['“활용 방법”이에요. 순서는 정해져 있지 않으니 궁금한 곳부터 시작하세요.', '진단→학과→산업→직무→진로 결정 순으로 둘러보면 가장 자연스러워요.', '찜한 항목은 어디서 시작해도 “진로 결정”에 모여요.'],
+    'homePage:LOOK': ['“내 취향”이에요. 요정·색상·글꼴을 내 취향대로 바꿀 수 있어요.', '꾸미기 행을 누르면 바로 바꿀 수 있고, 설정은 이 기기에만 저장돼요.'],
     diagnosisPage: ['64문항, 약 10분이에요. 정답은 없어요. “되고 싶은 나”가 아니라 “지금의 나”로 답해 주세요.', '다 풀면 잘 맞는 산업·직무 TOP5를 추천해 줘요. 참고용이니 마음에 드는 건 ☆ 찜!', '다시 하고 싶으면 “응답 지우고 다시 하기”를 누르면 돼요.'],
     majorPage: ['학과(전공)를 입력하면 연결이 높은 산업과 직무를 5개씩 추천해요. 정확한 이름이 아니어도 괜찮아요.', '학과 없이 산업·직무부터 시작해도 돼요.', '입력한 내용은 이 기기 브라우저에만 저장돼요.'],
     industryPage: ['먼저 산업 생태계를 고르고, 세부 산업과 대표기업으로 좁혀 보세요. 기업 이름으로 바로 검색도 돼요.', '위쪽 “민간기업 / 공공기관” 버튼으로 오갈 수 있어요.', '대표기업을 열면 실제 채용 직무와 주요 업무를 볼 수 있어요.'],
@@ -5846,9 +6165,12 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     roadmapPage: ['정한 목표와 조건으로 만든 로드맵이에요. “오늘의 실행”에서 오늘 할 일을 체크해 보세요.', '밀린 일은 자동으로 일정을 조정해 줘요.', '“PDF로 저장·인쇄”로 내보낼 수도 있어요.']
   };
   var GUIDE = ['① 진단으로 나를 알아보고 (선택: 학과 탐색)', '② 산업·직무를 둘러보며 ☆ 찜하기', '③ “진로 결정”에서 목표 1개 정하기', '④ “내 로드맵”에서 오늘의 실행 체크하기', '순서는 정해져 있지 않아요. 궁금한 곳부터 시작해도 괜찮아요.'];
-  var ACTIONS = { homePage: ['진단 시작하기', 'diagnosisPage'], diagnosisPage: ['학과 탐색 보기', 'majorPage'], majorPage: ['산업 탐색 가기', 'industryPage'], industryPage: ['직무 탐색 가기', 'jobPage'], publicPage: ['직무 탐색 가기', 'jobPage'], jobPage: ['진로 결정 가기', 'preparePage'], preparePage: ['내 로드맵 보기', 'roadmapPage'] };
+  var ACTIONS = { 'homePage:DISC': ['진단 시작하기', 'diagnosisPage'], 'homePage:DS': ['진로 결정 가기', 'preparePage'], 'homePage:GUIDE': ['진단 시작하기', 'diagnosisPage'], diagnosisPage: ['학과 탐색 보기', 'majorPage'], majorPage: ['산업 탐색 가기', 'industryPage'], industryPage: ['직무 탐색 가기', 'jobPage'], publicPage: ['직무 탐색 가기', 'jobPage'], jobPage: ['진로 결정 가기', 'preparePage'], preparePage: ['내 로드맵 보기', 'roadmapPage'] };
   var TOUR = {
-    homePage: [['.home-top', '시작 화면', '학과·산업·직무·진단 중 어디서 시작해도 돼요. 화면 아래(PC는 위쪽) 탭으로 이동해요.'], ['#dsList', '오늘의 실행', '진로 결정을 마치면 오늘 할 일이 여기에 나와요. 하루 1개씩 체크해 보세요.'], ['#discList', '오늘의 발견·퀴즈·퍼즐', '카드를 열거나 퀴즈를 맞히면 퍼즐 조각이 하나씩 붙어요. 재미로 즐겨 보세요.'], ['#lookRow', '꾸미기', '요정, 색상, 글꼴을 내 취향대로 바꿀 수 있어요.'], ['#guideBox', '활용 방법', '처음이라면 여기서 전체 흐름을 먼저 확인해 보세요.']],
+    'homePage:DISC': [['#homeKind', '바로가기 버튼', '오늘의 발견·오늘의 실행·활용 방법·내 취향 중 보고 싶은 것을 눌러 골라요.'], ['#discList', '오늘의 발견', '카드를 열고 ☆ 찜하면 진로 결정에 모여요. 열 때마다 퍼즐 조각이 붙어요.'], ['#discList [data-disc="QUIZ"]', '오늘의 퀴즈', '1문항을 맞히면 퍼즐 조각을 받아요.'], ['#discList [data-disc="BOOK"]', '내 퍼즐', '모은 조각으로 집·자동차 같은 퍼즐을 완성해요.'], ['#discList [data-disc="GAME"]', '게임', '밸런스 게임과 업무 짝짓기를 하고 조각을 받아요.']],
+    'homePage:DS': [['#homeKind', '바로가기 버튼', '다른 버튼을 누르면 화면과 요정 안내가 함께 바뀌어요.'], ['#dsHead', '오늘의 실행', '진로 결정 후 오늘 할 일이 여기에 나와요.'], ['#dsList', '매일 한 가지 체크', '하루 1개씩 체크해 보세요. 밀린 일은 자동 조정돼요.']],
+    'homePage:GUIDE': [['#homeKind', '바로가기 버튼', '다른 버튼을 누르면 화면과 요정 안내가 함께 바뀌어요.'], ['#guideBox .guide-free', '순서는 자유', '어디서 시작해도 괜찮아요.'], ['#guideBox', '각 탐색 소개', '진단·학과·산업·직무·진로 결정이 어떤 기능인지 확인해요.']],
+    'homePage:LOOK': [['#homeKind', '바로가기 버튼', '다른 버튼을 누르면 화면과 요정 안내가 함께 바뀌어요.'], ['#lookRow', '꾸미기', '요정, 색상, 글꼴을 바꿀 수 있어요. 눌러서 열어 보세요.']],
     majorPage: [['#majorInput', '학과 입력', '학과 이름을 입력하거나 목록에서 골라요. 일부만 입력해도 괜찮아요.'], ['#majorBrowse', '학과 둘러보기', '이름이 가물가물하면 분류별로 훑어볼 수도 있어요.'], ['#majorResult', '추천 결과', '연결이 높은 산업·직무가 5개씩 나와요. 마음에 들면 ☆ 찜하기!']],
     industryPage: [['#industrySearch', '이름으로 찾기', '기업 이름이나 산업 이름 일부만 입력해도 바로 찾아 줘요.'], ['#industryGroupGrid', '산업 생태계 고르기', '큰 생태계를 고르면 세부 산업으로 좁혀져요.'], ['#industrySelectWrap', '세부 산업 선택', '목록에서 산업을 고르면 아래에 상세가 열려요.'], ['#industryDetail', '상세 보기', '대표기업, 실제 채용 직무, 하는 일을 볼 수 있어요. ☆ 찜하기도 잊지 마세요.']],
     publicPage: [['#publicSearch', '기관 이름으로 찾기', '기관 이름 일부만 입력해도 찾아 줘요.'], ['#publicSubtypeGrid', '기관 유형 고르기', '중앙·지방 등 유형을 먼저 고르면 단계별로 좁혀져요.'], ['#publicSectorGrid', '사업분야 고르기', '하는 일이 비슷한 기관끼리 묶여 있어요.'], ['#publicDetail', '기관 상세', '기관이 하는 일과 채용 직무를 볼 수 있어요.']],
@@ -5867,10 +6189,11 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     ['change', '#industrySelect,#jobSelect,#publicSelect,#publicRegionSelect', 'sel', '고르면 아래에 상세가 열려요. 스크롤을 내려서 하는 일과 채용 직무를 확인해 보세요.'],
     ['change', '#planMonths,#planWeeklyHours,#planStartDate', 'term', '기간·주당 시간·시작일에 맞춰 주차별 로드맵이 만들어져요. 다 정했다면 “내 로드맵”으로!'],
     ['focusin', '#industrySearch,#jobSearch,#publicSearch,#majorInput', 'search', '이름 일부만 입력해도 찾아 줘요. 예: 반도체, 공정, 간호'],
+    ['click', '#homeKind [data-hk]', 'hk', '위 버튼으로 화면을 오가요. 요정 안내도 지금 보고 있는 화면에 맞춰 바뀌어요.'],
     ['click', '.stop[data-page]', 'tab', '아래 탭을 누르면 해당 단계로 이동해요. 순서는 정해져 있지 않아요. 궁금한 곳부터 가 보세요.']
   ];
   var TOUR_S = null, HL = null;
-  var W = null, B = null, BTN = null, MODAL = null, tipIdx = 0, hideT = null, showT = null, curPage = 'homePage', LAST_FOCUS = null, auto = false;
+  var W = null, B = null, BTN = null, MODAL = null, tipIdx = 0, hideT = null, showT = null, curPage = 'homePage:DISC', LAST_FOCUS = null, auto = false;
 
   function esc2(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function look() { var l = LS.get(LKEY, {}); if (!l || typeof l !== 'object' || Array.isArray(l)) l = {}; return l; }
@@ -5927,7 +6250,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     W.hidden = !f.on; W.classList.toggle('fx-left', f.side === 'L');
     BTN.innerHTML = fairySvg(c, 52); BTN.setAttribute('aria-label', '도우미 요정 ' + c.n + ' 열기');
   }
-  function tipsFor() { return TIPS[curPage] || TIPS.homePage; }
+  function tipsFor() { return TIPS[curPage] || TIPS['homePage:DISC']; }
   function bubbleHtml(mode) {
     var f = fst(), c = CH_BY[f.ch], h = '<div class="fx-top"><b>' + esc2(c.n) + '</b><button type="button" class="fx-x" data-fx="close" aria-label="말풍선 닫기">✕</button></div>';
     if (mode === 'intro') {
@@ -5986,7 +6309,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     });
   }
   function busy() { return document.body.classList.contains('disc-open'); }
-  function pageNow() { var p = document.querySelector('.page.active'); return p ? p.id : 'homePage'; }
+  function pageNow() { var p = document.querySelector('.page.active'), id = p ? p.id : 'homePage'; return id === 'homePage' ? 'homePage:' + (window.__homeKind || 'DISC') : id; }
   /* 화면이 바뀔 때: 처음 보는 화면이면 말풍선으로 짧게 안내(10초 뒤 자동으로 닫힘) */
   function modalOpen() { return busy() || (MODAL && !MODAL.classList.contains('hidden')); }
   function onPage() {
@@ -6059,6 +6382,8 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     });
   }
 
+  window.fxCtx = function () { try { onPage(); } catch (e) { } };
+  window.fxFairy = function (size) { var f = fst(), c = CH_BY[f.ch]; return { svg: fairySvg(c, size), name: c.n }; };
   window.openLook = openLook;
   window.fxInit = function () {
     MODAL = document.getElementById('lookModal'); if (!MODAL) return;
