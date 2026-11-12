@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v12.126 (2026-11-13): 꾸미기 추가 — (1) 도우미 요정(별이·꽃님·잎새·달이·몽실 중 선택, 화면별 사용법 말풍선, 켜기/끄기·위치) (2) 색상 6종(스카이·민트·라벤더·선셋·로즈·오션) (3) 글꼴 3종(IBM Plex 내장·기기 기본 고딕·명조). 설정은 이 기기에만 저장, 초기화 버튼에 포함. -->
 <!-- v12.125 (2026-11-13): 오늘의 발견 '스탬프북'을 '퍼즐'로 교체 — 카드 1장·퀴즈 정답 1개=조각 1개, 내 집·자동차·햄버거·우주선·나무·기차 중 선택, 1주(14조각)/2주(28조각) 코스, 완성작 갤러리·퍼즐 배지 3종, 기존 스탬프 수는 조각으로 자동 이어짐 -->
 <!-- v12.124 (2026-11-12): 앱 품질 개편 — (1) DB 분리·지연 로딩: 산업 기업 상세·공공기관 패키지를 data/ 조각으로 옮겨 처음 받는 파일 15.3MB→약 4.5MB (tools/split_db.py, sw.js 사전 캐시), (2) 학교 이름 제거(코드·주석·데이터 표지), (3) IBM Plex Sans KR 웹폰트 내장(OFL), (4) 자동 수정 4건: 헤더 '비전HR컨설팅(hp83@naver.com)' 메일 링크·글자 14px 정리·입력 16px/터치 44px·접기 헤더 44px -->
 <!-- v12.123 (2026-11-12): 진로 결정·내 로드맵에 '오늘의 실행' 추가 — 주차 과제를 5단계로 나눠 하루 1개 체크(홈·로드맵), 주차 카드 요일 칩(최근 3일 소급), 밀린 과제 자동 조정(하루 최대 2개). 체크는 기기 안에만 저장. -->
@@ -12,6 +13,8 @@
 <!-- v12.111 (2026-10-07): 로고 시안 6(상승 화살표 H)로 교체 — 헤더·파비콘·홈화면 아이콘 -->
 <html lang="ko">
 <head>
+<script>try{var __l=JSON.parse(localStorage.getItem("visionhr_look_v1")||"{}"),__d=document.documentElement;if(__l.c&&__l.c!=="sky")__d.setAttribute("data-theme",String(__l.c));if(__l.f&&__l.f!=="plex")__d.setAttribute("data-font",String(__l.f))}catch(e){}</script>
+
 <base target="_top">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -183,7 +186,7 @@ p{margin:0 0 10px}
 .muted{color:var(--muted);font-size:14px}
 .small{font-size:13px}
 .hidden{display:none!important}
-:focus-visible{outline:3px solid #7db6e2;outline-offset:2px}
+:focus-visible{outline:3px solid var(--focus,#7db6e2);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
 /* ---------- header & route stepper ---------- */
@@ -245,7 +248,7 @@ main{max-width:1180px;margin:0 auto;padding:18px 18px 90px}
 .skip-link{position:absolute;left:8px;top:-60px;z-index:200;background:#fff;color:var(--primary-ink,#2B57C9);border:2px solid currentColor;border-radius:8px;padding:8px 12px;font-weight:700}.skip-link:focus{top:8px}
 .label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink2)}
 select,input[type=number],input[type=search],input[type=text]{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:var(--r-md);background:var(--surface);min-height:44px}
-select:focus,input:focus{outline:none;border-color:#7db6e2;box-shadow:0 0 0 3px rgba(30,123,196,.14)}
+select:focus,input:focus{outline:none;border-color:var(--focus,#7db6e2);box-shadow:0 0 0 3px rgba(30,123,196,.14)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:8px 14px;border-radius:var(--r-md);border:1.5px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;color:var(--ink)}
 .btn:hover{border-color:#AFC0E4;background:#f8fcfe}
 .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
@@ -327,7 +330,7 @@ ul.list li{margin:3px 0;font-size:14px;color:var(--ink2)}
 .co-item .nm{font-weight:700}
 .name-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .home-link{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:4px 9px;border:1px solid var(--line-blue);border-radius:999px;background:var(--tint);color:var(--primary-ink);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
-.home-link:hover{border-color:var(--primary);background:#f4fafe}
+.home-link:hover{border-color:var(--primary);background:var(--tint2,#f4fafe)}
 .home-link::after{content:" ↗";font-size:12px}
 .action-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}.action-link{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:5px 10px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--primary-ink);font-size:12px;font-weight:700;text-decoration:none}.action-link:hover{border-color:var(--primary);background:var(--tint)}.action-link::after{content:" ↗";font-size:12px}.action-link.primary-action{background:var(--primary);border-color:var(--primary);color:#fff}
 @media(max-width:640px){.name-actions{align-items:flex-start}.home-link{min-height:34px;padding:5px 10px}}
@@ -383,7 +386,7 @@ details.more>.in{padding:0 14px 14px}
 .likert span b{font-size:15px;color:var(--ink)}
 .likert input:checked+span{background:var(--primary);border-color:var(--primary);color:#fff}
 .likert input:checked+span b{color:#fff}
-.likert input:focus-visible+span{outline:3px solid #7db6e2;outline-offset:2px}
+.likert input:focus-visible+span{outline:3px solid var(--focus,#7db6e2);outline-offset:2px}
 .profile{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .prof{border:1px solid var(--line2);border-radius:var(--r-md);padding:12px}
 .prof h4{margin:0 0 6px;font-size:14px}
@@ -487,7 +490,7 @@ footer .btn{font-size:13px}
 .roadmap-acc>summary::-webkit-details-marker{display:none}
 .roadmap-acc .ra-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .roadmap-acc .ra-top b{font-size:16px}
-.roadmap-acc .ra-btn{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 14px;border-radius:var(--r-md);background:#DCEBF8;border:1px solid var(--line-blue);color:#1F5F94;font-size:13px;font-weight:600;white-space:nowrap}
+.roadmap-acc .ra-btn{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 14px;border-radius:var(--r-md);background:var(--pf,#DCEBF8);border:1px solid var(--line-blue);color:var(--primary-ink,#1F5F94);font-size:13px;font-weight:600;white-space:nowrap}
 .roadmap-acc[open] .ra-btn{background:var(--surface)}
 .roadmap-acc .ra-open{display:none}.roadmap-acc[open] .ra-open{display:inline}.roadmap-acc[open] .ra-closed{display:none}
 .roadmap-acc .ra-strip{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
@@ -496,9 +499,9 @@ footer .btn{font-size:13px}
 .roadmap-acc .ra-body{padding:0 16px 14px;border-top:1px solid var(--line2)}
 .roadmap-acc[open] .ra-strip{display:none}
 .qf-acc{margin-top:10px;padding-top:9px;border-top:1px dashed var(--line2)}
-.qf-acc>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border:1px solid var(--line-blue);border-radius:999px;background:var(--surface);font-size:13px;font-weight:600;color:#1F5F94;min-height:30px}
+.qf-acc>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:3px 12px;border:1px solid var(--line-blue);border-radius:999px;background:var(--surface);font-size:13px;font-weight:600;color:var(--primary-ink,#1F5F94);min-height:30px}
 .qf-acc>summary::-webkit-details-marker{display:none}
-.qf-acc[open]>summary{background:#DCEBF8}
+.qf-acc[open]>summary{background:var(--pf,#DCEBF8)}
 .qf-acc .live{margin-top:8px;border:1.5px dashed var(--line-blue);border-radius:10px;padding:10px 12px;background:#F7FBFE}
 @media print{
   @page{margin:14mm}
@@ -607,7 +610,7 @@ footer .btn{font-size:13px}
 .actual-j74{font-size:12px;color:var(--muted);margin-top:5px}
 .actual-source{font-weight:700;margin-left:5px}
 .inline-job{border:0;background:none;color:var(--primary-ink);font-weight:700;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-.actual-role-row.focused-role{outline:2px solid #7db6e2;outline-offset:2px;background:#f4fafe}
+.actual-role-row.focused-role{outline:2px solid var(--focus,#7db6e2);outline-offset:2px;background:var(--tint2,#f4fafe)}
 
 
 .talent-fact{border-color:#D6CCF4!important;background:#FBF9FF!important}
@@ -995,6 +998,60 @@ body .learn .src a{display:inline-flex;align-items:center;min-height:44px;paddin
 .pz-gal figure{margin:0;text-align:center;font-size:12px;color:var(--ink2)}
 .pz-gal .pz-svg{max-width:none;margin:0 0 4px}
 @media(prefers-reduced-motion:no-preference){.pz-svg g{transition:opacity .6s}}
+
+/* v12.126 꾸미기: 색상·글꼴·도우미 요정 */
+html[data-theme="mint"]{--primary:#37946F;--primary-ink:#1B6B4C;--tint:#E7F5EE;--tint2:#F1FAF5;--line-blue:#8DBFA9;--pf:#D9F0E5;--pf-ink:#1B6B4C;--bg:#F2F8F5;--focus:#5DBB96;--t0:#34906B;--t1:#6F86E0}
+html[data-theme="lav"]{--primary:#8E6FD8;--primary-ink:#5B3FA8;--tint:#F0EAFB;--tint2:#F7F3FD;--line-blue:#B7A5E3;--pf:#E6DDF8;--pf-ink:#5B3FA8;--bg:#F6F4FB;--focus:#A98BE6;--t0:#8E6FD8;--t2:#6F86E0}
+html[data-theme="sunset"]{--primary:#C26F1C;--primary-ink:#8A4A0A;--tint:#FDF1E3;--tint2:#FEF7EE;--line-blue:#E0B27E;--pf:#FBE6CF;--pf-ink:#8A4A0A;--bg:#FBF6F0;--focus:#E39A52;--t0:#BF6A17;--t3:#6F86E0}
+html[data-theme="rose"]{--primary:#D14C80;--primary-ink:#A02A58;--tint:#FCE9F1;--tint2:#FEF3F8;--line-blue:#E3A3BE;--pf:#F9DCE9;--pf-ink:#A02A58;--bg:#FAF4F7;--focus:#E67CA3;--t0:#CC4A7C;--t4:#6F86E0}
+html[data-theme="ocean"]{--primary:#26868F;--primary-ink:#14626A;--tint:#E3F3F5;--tint2:#EFF9FA;--line-blue:#8EC3C9;--pf:#D5EEF0;--pf-ink:#14626A;--bg:#F1F7F8;--focus:#55B1BA;--t0:#2A8590;--t1:#6F86E0}
+html[data-font="device"]{--font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
+html[data-font="serif"]{--font:"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif}
+body{transition:background-color .2s}
+#fxWrap{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:18px;z-index:95;display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:calc(100vw - 24px)}
+#fxWrap[hidden]{display:none}
+#fxWrap.fx-left{right:auto;left:max(12px,env(safe-area-inset-left,0px));align-items:flex-start}
+.fx-btn{width:56px;height:56px;min-width:44px;min-height:44px;padding:2px;border-radius:50%;border:2px solid #fff;background:var(--surface);box-shadow:0 3px 12px rgba(24,33,47,.22);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fx-btn:focus-visible{outline:3px solid var(--focus,#7db6e2);outline-offset:3px}
+.fx-btn svg{display:block;animation:fxFloat 3.4s ease-in-out infinite}
+.fx-wing{transform-origin:32px 40px;animation:fxFlap 1.6s ease-in-out infinite}
+.fx-tw{animation:fxTw 2.2s ease-in-out infinite}
+@keyframes fxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes fxFlap{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.88)}}
+@keyframes fxTw{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.fx-btn svg,.fx-wing,.fx-tw{animation:none!important}}
+.fx-bubble{width:min(300px,calc(100vw - 24px));background:var(--surface);color:var(--ink);border:1.5px solid var(--primary);border-radius:14px;padding:10px 12px 12px;box-shadow:0 6px 22px rgba(24,33,47,.22);font-size:14px;line-height:1.55}
+.fx-bubble[hidden]{display:none}
+.fx-bubble p{margin:0 0 8px;font-size:14px}
+.fx-bubble .fx-sub{font-size:13px;color:var(--muted)}
+.fx-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.fx-top b{font-size:15px;color:var(--primary-ink)}
+.fx-x{min-width:44px;min-height:44px;margin:-8px -8px -8px 0;border:0;background:transparent;font-size:16px;color:var(--muted);cursor:pointer;border-radius:10px}
+.fx-list{margin:0 0 8px;padding-left:18px;font-size:14px}
+.fx-list li{margin:0 0 4px}
+.fx-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.fx-act.sm{margin-top:4px}
+.fx-b{min-height:44px;padding:6px 12px;border-radius:var(--r-md);border:1px solid var(--line-blue);background:var(--surface);color:var(--primary-ink);font-size:13px;font-weight:600;cursor:pointer}
+.fx-b.pri{background:var(--primary-ink);border-color:var(--primary-ink);color:#fff}
+.fx-b:focus-visible,.fx-x:focus-visible{outline:3px solid var(--focus,#7db6e2);outline-offset:2px}
+@media (max-width:640px){#fxWrap{bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+body.disc-open #fxWrap{display:none}
+@media print{#fxWrap,#lookModal{display:none!important}}
+.lk-sw{display:flex;align-items:center;gap:10px;min-height:44px;font-size:14px;cursor:pointer}
+.lk-sw input{width:22px;height:22px;flex:none;accent-color:var(--primary)}
+.lk-grid{display:grid;gap:8px;margin:6px 0 10px}
+.lk-grid.c5{grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}
+.lk-grid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lk-grid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lk-grid.c1{grid-template-columns:1fr}
+.lk-grid button{min-height:44px;padding:8px 6px;border-radius:var(--r-md);border:1.5px solid var(--line-blue);background:var(--surface);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px}
+.lk-grid.c1 button{align-items:flex-start;padding:10px 12px}
+.lk-grid button b{font-size:14px}
+.lk-grid.c1 button span{font-size:15px;color:var(--ink2)}
+.lk-grid button[aria-pressed="true"]{border-color:var(--primary-ink);background:var(--pf,#DCEBF8);box-shadow:0 0 0 2px var(--primary-ink) inset}
+.lk-grid button:focus-visible{outline:3px solid var(--focus,#7db6e2);outline-offset:2px}
+.lk-dot{width:28px;height:28px;border-radius:50%;display:block;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
+.lk-fx{display:block;line-height:0}
 </style>
 </head>
 <body>
@@ -1035,6 +1092,8 @@ body .learn .src a{display:inline-flex;align-items:center;min-height:44px;paddin
     <div class="hsec no-print" id="discHead" aria-live="polite"></div>
     <div class="hlist no-print" id="discList" role="list"></div>
     <span id="discSec" hidden></span>
+    <div class="hsec no-print">내 취향</div>
+    <div class="hlist no-print"><button type="button" class="hrow" id="lookRow" style="--tc:var(--t6)"><span class="hic"><b style="font-size:18px">꾸</b></span><span class="hx"><b>꾸미기 · 요정 · 색상 · 글꼴</b><span>도우미 요정과 앱의 색·글꼴을 내 취향대로 바꿔요</span></span><span class="hgo" aria-hidden="true">›</span></button></div>
     <div class="hsec">활용 방법</div>
     <div id="guideBox" class="hlist">
       <div class="guide-free" style="border:1.5px solid var(--primary);background:var(--sunk);border-radius:var(--r-md);padding:10px 12px;margin:0 0 8px;font-size:14px;line-height:1.55"><b>순서는 정해져 있지 않습니다.</b> 아래 항목은 참고용이며 순서가 없습니다. 학과·산업(민간기업·공공기관)·직무·진단 중 가장 궁금한 곳에서 <b>원하는 대로 시작</b>하고, 필요하면 다른 탐색으로 오가세요. 어디서 시작하든 ☆ 찜한 항목은 진로 결정에 모입니다.</div>
@@ -4244,10 +4303,10 @@ function printPlan() {
   window.print();
 }
 function resetAllAppData() {
-  if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 응답 수집 동의, 오늘의 발견 기록(퍼즐·퀴즈)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
+  if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 응답 수집 동의, 오늘의 발견 기록(퍼즐·퀴즈), 꾸미기 설정(요정·색상·글꼴)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
   [KEYS.interests, KEYS.answers, KEYS.result, KEYS.plan, KEYS.guide, KEYS.major, 'visionhr_diagnosis_result_v1','visionhr_diagnosis_result_v2','visionhr_diag_answers_v1', KEYS.schedule,
     PLAN_CHECK_KEY, SCHED_OPEN_KEY, 'visionhr_sched_days_v1', VALIDATION_KEY, CLOUD_CONFIG.queueKey, CLOUD_CONFIG.consentKey,
-    'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1'].forEach(function (k) { LS.del(k); });
+    'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1', 'visionhr_look_v1', 'visionhr_fairy_v1'].forEach(function (k) { LS.del(k); });
   window.location.reload();
 }
 
@@ -4770,6 +4829,7 @@ function initializeApp() {
   $('loading').classList.add('off');
   try { if (typeof dsInit === 'function') dsInit(); } catch (e) { /* 오늘의 실행 오류가 앱을 막지 않게 */ }
   try { if (typeof discInit === 'function') discInit(); } catch (e) { /* 오늘의 발견 오류가 앱을 막지 않게 */ }
+  try { if (typeof window.fxInit === 'function') window.fxInit(); else window.__fxPending = true; } catch (e) { /* 꾸미기 오류가 앱을 막지 않게 */ }
   window.addEventListener('resize', function () {
     document.documentElement.style.setProperty('--head-h', ($('siteHeader').offsetHeight + 6) + 'px');
   });
@@ -5729,6 +5789,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 </script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(){return navigator.serviceWorker.ready;}).then(function(r){setTimeout(function(){if(r.active)r.active.postMessage('precache-shards');},4000);}).catch(function(){});});}</script>
 <div id="discModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="discTitle"></div>
+<div id="lookModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="lookTitle"></div>
 <div id="wishModal" class="wish-modal hidden" role="dialog" aria-modal="true" aria-labelledby="wishTitle">
   <div class="wish-card">
     <div class="wish-head"><h2 id="wishTitle">의견 보내기</h2><button type="button" class="btn ghost sm" onclick="closeWish()" aria-label="닫기">닫기 ✕</button></div>
@@ -5749,5 +5810,207 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     <div id="wishStatus" class="wish-status" aria-live="polite"></div>
   </div>
 </div>
+<script>
+/* v12.126 꾸미기(색·글꼴) + 도우미 요정 — 설정은 이 기기에만 저장 */
+(function () {
+  var LKEY = 'visionhr_look_v1', FKEY = 'visionhr_fairy_v1';
+  var THEMES = [
+    { k: 'sky', n: '스카이', c: '#4A94CF' }, { k: 'mint', n: '민트', c: '#37946F' }, { k: 'lav', n: '라벤더', c: '#8E6FD8' },
+    { k: 'sunset', n: '선셋', c: '#C26F1C' }, { k: 'rose', n: '로즈', c: '#D14C80' }, { k: 'ocean', n: '오션', c: '#26868F' }
+  ];
+  var FONTS = [
+    { k: 'plex', n: '기본 (IBM Plex)', f: '"IBM Plex Sans KR",sans-serif' },
+    { k: 'device', n: '기기 기본 고딕', f: '-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif' },
+    { k: 'serif', n: '명조 (바탕)', f: '"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif' }
+  ];
+  /* 요정 5명: 머리색·옷색·날개색·머리모양·장식 */
+  var CHARS = [
+    { k: 'star', n: '별이', hair: '#F6C453', dress: '#FFD86B', wing: '#FFF1B8', style: 'bob', acc: 'star', hi: '반짝! 나는 별이야. 같이 천천히 둘러보자!' },
+    { k: 'flower', n: '꽃님', hair: '#9B5D3C', dress: '#FF9DBB', wing: '#FFD6E4', style: 'buns', acc: 'flower', hi: '안녕~ 나는 꽃님이야. 궁금한 건 언제든 물어봐!' },
+    { k: 'leaf', n: '잎새', hair: '#6FBF73', dress: '#7ED6A0', wing: '#D4F4DE', style: 'long', acc: 'leaf', hi: '반가워! 나는 잎새야. 차근차근 알려 줄게.' },
+    { k: 'moon', n: '달이', hair: '#8E86C9', dress: '#7C8CF0', wing: '#D9DEFF', style: 'bob', acc: 'moon', hi: '안녕, 나는 달이야. 조용히 곁에서 도와줄게.' },
+    { k: 'cloud', n: '몽실', hair: '#8FD3F4', dress: '#A8DCF7', wing: '#EAF7FF', style: 'buns', acc: 'cloud', hi: '몽실몽실~ 나는 몽실이야. 같이 가자!' }
+  ];
+  var CH_BY = {}; CHARS.forEach(function (c) { CH_BY[c.k] = c; });
+  var TIPS = {
+    homePage: ['어디서 시작해도 괜찮아요! 학과·산업·직무·진단 중 궁금한 곳을 아래에서 골라 보세요.', '마음에 드는 항목에 ☆을 눌러 찜하면 “진로 결정”에 모여요.', '오늘의 발견 카드를 열 때마다 퍼즐 조각이 하나씩 붙어요 🧩'],
+    diagnosisPage: ['64문항, 약 10분이에요. 정답은 없어요. “되고 싶은 나”가 아니라 “지금의 나”로 답해 주세요.', '다 풀면 잘 맞는 산업·직무 TOP5를 추천해 줘요. 참고용이니 마음에 드는 건 ☆ 찜!', '다시 하고 싶으면 “응답 지우고 다시 하기”를 누르면 돼요.'],
+    majorPage: ['학과(전공)를 입력하면 연결이 높은 산업과 직무를 5개씩 추천해요. 정확한 이름이 아니어도 괜찮아요.', '학과 없이 산업·직무부터 시작해도 돼요.', '입력한 내용은 이 기기 브라우저에만 저장돼요.'],
+    industryPage: ['먼저 산업 생태계를 고르고, 세부 산업과 대표기업으로 좁혀 보세요. 기업 이름으로 바로 검색도 돼요.', '위쪽 “민간기업 / 공공기관” 버튼으로 오갈 수 있어요.', '대표기업을 열면 실제 채용 직무와 주요 업무를 볼 수 있어요.'],
+    publicPage: ['공공기관은 중앙·지방으로 나눠 볼 수 있어요. 기관을 고르면 하는 일과 채용 직무가 나와요.', '위쪽 “민간기업 / 공공기관” 버튼으로 오갈 수 있어요.', '마음에 드는 기관은 ☆ 찜해 두세요.'],
+    jobPage: ['직무는 “무슨 일을 해서 어떤 결과를 내는가”로 이해해요. 역할·업무·역량·성과·신입 진입경로를 확인해 보세요.', '직무 검색창에 이름을 넣으면 바로 찾을 수 있어요.', '회사마다 업무 범위가 달라요. 실제 채용공고도 꼭 확인하세요.'],
+    preparePage: ['찜한 목록과 진단 결과를 비교해서 목표 산업과 직무를 하나씩 정해요.', '학년·준비 기간·주당 준비시간·시작일을 넣으면 맞춤 로드맵이 만들어져요.', '다 정했다면 “내 로드맵”으로 가 보세요.'],
+    roadmapPage: ['정한 목표와 조건으로 만든 로드맵이에요. “오늘의 실행”에서 오늘 할 일을 체크해 보세요.', '밀린 일은 자동으로 일정을 조정해 줘요.', '“PDF로 저장·인쇄”로 내보낼 수도 있어요.']
+  };
+  var GUIDE = ['① 진단으로 나를 알아보고 (선택: 학과 탐색)', '② 산업·직무를 둘러보며 ☆ 찜하기', '③ “진로 결정”에서 목표 1개 정하기', '④ “내 로드맵”에서 오늘의 실행 체크하기', '순서는 정해져 있지 않아요. 궁금한 곳부터 시작해도 괜찮아요.'];
+  var ACTIONS = { homePage: ['진단 시작하기', 'diagnosisPage'], diagnosisPage: ['학과 탐색 보기', 'majorPage'], majorPage: ['산업 탐색 가기', 'industryPage'], industryPage: ['직무 탐색 가기', 'jobPage'], publicPage: ['직무 탐색 가기', 'jobPage'], jobPage: ['진로 결정 가기', 'preparePage'], preparePage: ['내 로드맵 보기', 'roadmapPage'] };
+  var W = null, B = null, BTN = null, MODAL = null, tipIdx = 0, hideT = null, showT = null, curPage = 'homePage', LAST_FOCUS = null, auto = false;
+
+  function esc2(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function look() { var l = LS.get(LKEY, {}); if (!l || typeof l !== 'object' || Array.isArray(l)) l = {}; return l; }
+  function fst() {
+    var f = LS.get(FKEY, {}); if (!f || typeof f !== 'object' || Array.isArray(f)) f = {};
+    if (f.on === undefined) f.on = true; if (!CH_BY[f.ch]) f.ch = 'star'; if (f.tips === undefined) f.tips = true; if (f.side !== 'L') f.side = 'R';
+    if (!f.seen || typeof f.seen !== 'object') f.seen = {}; return f;
+  }
+  function applyLook() {
+    var l = look(), d = document.documentElement;
+    if (l.c && l.c !== 'sky') d.setAttribute('data-theme', l.c); else d.removeAttribute('data-theme');
+    if (l.f && l.f !== 'plex') d.setAttribute('data-font', l.f); else d.removeAttribute('data-font');
+  }
+
+  /* ---- 요정 그림 ---- */
+  function fairySvg(c, size) {
+    var s = '<svg viewBox="0 0 64 64" width="' + size + '" height="' + size + '" aria-hidden="true" focusable="false">';
+    s += '<g class="fx-wing"><ellipse cx="17" cy="40" rx="9" ry="14" transform="rotate(-28 17 40)" fill="' + c.wing + '" stroke="#fff" stroke-width="1.2"/><ellipse cx="47" cy="40" rx="9" ry="14" transform="rotate(28 47 40)" fill="' + c.wing + '" stroke="#fff" stroke-width="1.2"/></g>';
+    if (c.style === 'long') s += '<rect x="15" y="26" width="34" height="26" rx="12" fill="' + c.hair + '"/>';
+    if (c.style === 'bob') s += '<circle cx="32" cy="30" r="17.5" fill="' + c.hair + '"/>';
+    s += '<path d="M21 60 Q22 46 32 46 Q42 46 43 60Z" fill="' + c.dress + '"/><circle cx="32" cy="47" r="2" fill="#fff" opacity=".7"/>';
+    if (c.style === 'buns') s += '<circle cx="17.5" cy="19" r="6.5" fill="' + c.hair + '"/><circle cx="46.5" cy="19" r="6.5" fill="' + c.hair + '"/>';
+    s += '<circle cx="32" cy="32" r="14.5" fill="#FFE6D8"/>';
+    s += '<path d="M17.5 30 Q18 14 32 14 Q46 14 46.5 30 Q40 21 32 23.5 Q24 21 17.5 30Z" fill="' + c.hair + '"/>';
+    s += '<ellipse cx="26.5" cy="34" rx="2.2" ry="2.9" fill="#3b2f2f"/><ellipse cx="37.5" cy="34" rx="2.2" ry="2.9" fill="#3b2f2f"/><circle cx="27.2" cy="32.8" r=".9" fill="#fff"/><circle cx="38.2" cy="32.8" r=".9" fill="#fff"/>';
+    s += '<circle cx="22.2" cy="39" r="2.6" fill="#ff9fb3" opacity=".65"/><circle cx="41.8" cy="39" r="2.6" fill="#ff9fb3" opacity=".65"/><path d="M29 40 Q32 43.2 35 40" stroke="#b5524f" stroke-width="1.5" fill="none" stroke-linecap="round"/>';
+    if (c.acc === 'star') s += '<path d="M46 9 l1.8 4.2 4.5.4 -3.4 3 1 4.4 -3.9 -2.3 -3.9 2.3 1 -4.4 -3.4 -3 4.5 -.4z" fill="#FFD54A" stroke="#fff" stroke-width=".8"/>';
+    if (c.acc === 'flower') s += '<g transform="translate(44 12)"><circle cx="0" cy="-4" r="3" fill="#fff"/><circle cx="4" cy="-1" r="3" fill="#fff"/><circle cx="2.5" cy="3.5" r="3" fill="#fff"/><circle cx="-2.5" cy="3.5" r="3" fill="#fff"/><circle cx="-4" cy="-1" r="3" fill="#fff"/><circle cx="0" cy="0" r="2.4" fill="#FFD54A"/></g>';
+    if (c.acc === 'leaf') s += '<path d="M42 16 Q50 6 56 10 Q52 20 42 16Z" fill="#43A855" stroke="#fff" stroke-width=".8"/><path d="M44 15 L53 10" stroke="#fff" stroke-width=".8"/>';
+    if (c.acc === 'moon') s += '<path d="M47 8 a7 7 0 1 0 5 11 a5.6 5.6 0 1 1 -5 -11z" fill="#FFE27A" stroke="#fff" stroke-width=".8"/>';
+    if (c.acc === 'cloud') s += '<g fill="#fff" stroke="#bfe3f7" stroke-width=".8"><circle cx="44" cy="12" r="4"/><circle cx="49" cy="10.5" r="5"/><circle cx="53" cy="13" r="3.6"/><rect x="42" y="12" width="13" height="5" rx="2.5" stroke="none"/></g>';
+    s += '<path class="fx-tw" d="M8 14 l1.2 2.8 2.8 1.2 -2.8 1.2 -1.2 2.8 -1.2 -2.8 -2.8 -1.2 2.8 -1.2z" fill="#FFD54A"/><path class="fx-tw" d="M56 46 l1 2.2 2.2 1 -2.2 1 -1 2.2 -1 -2.2 -2.2 -1 2.2 -1z" fill="#fff"/>';
+    return s + '</svg>';
+  }
+
+  /* ---- 요정 위젯 ---- */
+  function build() {
+    if (document.getElementById('fxWrap')) return;
+    W = document.createElement('div'); W.id = 'fxWrap'; W.className = 'no-print';
+    W.innerHTML = '<div class="fx-bubble" id="fxBubble" role="dialog" aria-label="도우미 요정" hidden></div><button type="button" class="fx-btn" id="fxBtn" aria-expanded="false" aria-controls="fxBubble"></button>';
+    document.body.appendChild(W); B = document.getElementById('fxBubble'); BTN = document.getElementById('fxBtn');
+    BTN.addEventListener('click', function () { if (B.hidden) { auto = false; openBubble('menu'); } else if (auto) { auto = false; clearTimeout(hideT); } else closeBubble(); });
+    B.addEventListener('click', onBubble);
+    B.addEventListener('mouseenter', function () { clearTimeout(hideT); }); B.addEventListener('focusin', function () { clearTimeout(hideT); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (MODAL && !MODAL.classList.contains('hidden')) { closeLook(); return; }
+      if (B && !B.hidden) { closeBubble(); BTN.focus(); }
+    });
+    paintBtn();
+  }
+  function paintBtn() {
+    if (!W) return; var f = fst(), c = CH_BY[f.ch];
+    W.hidden = !f.on; W.classList.toggle('fx-left', f.side === 'L');
+    BTN.innerHTML = fairySvg(c, 52); BTN.setAttribute('aria-label', '도우미 요정 ' + c.n + ' 열기');
+  }
+  function tipsFor() { return TIPS[curPage] || TIPS.homePage; }
+  function bubbleHtml(mode) {
+    var f = fst(), c = CH_BY[f.ch], h = '<div class="fx-top"><b>' + esc2(c.n) + '</b><button type="button" class="fx-x" data-fx="close" aria-label="말풍선 닫기">✕</button></div>';
+    if (mode === 'intro') {
+      h += '<p>' + esc2(c.hi) + '</p><p class="fx-sub">내가 마음에 들면 그대로 쓰고, 다른 요정이 좋으면 바꿀 수 있어요.</p><div class="fx-act"><button type="button" class="fx-b pri" data-fx="close">이대로 시작</button><button type="button" class="fx-b" data-fx="look">요정 고르기</button></div>';
+    } else if (mode === 'guide') {
+      h += '<p><b>앱 사용법 한눈에</b></p><ul class="fx-list">' + GUIDE.map(function (g) { return '<li>' + esc2(g) + '</li>'; }).join('') + '</ul><div class="fx-act"><button type="button" class="fx-b" data-fx="menu">← 뒤로</button></div>';
+    } else {
+      var t = tipsFor(), msg = t[tipIdx % t.length], a = ACTIONS[curPage];
+      h += '<p>' + esc2(msg) + '</p><div class="fx-act">' + (t.length > 1 ? '<button type="button" class="fx-b" data-fx="next">다른 팁 ' + ((tipIdx % t.length) + 1) + '/' + t.length + '</button>' : '') +
+        (a ? '<button type="button" class="fx-b pri" data-fx="go" data-p="' + a[1] + '">' + esc2(a[0]) + '</button>' : '') + '</div>' +
+        '<div class="fx-act sm"><button type="button" class="fx-b" data-fx="guide">앱 사용법</button><button type="button" class="fx-b" data-fx="look">🎨 꾸미기</button><button type="button" class="fx-b" data-fx="off">요정 숨기기</button></div>';
+    }
+    return h;
+  }
+  function openBubble(mode) { if (!B) return; clearTimeout(hideT); B.innerHTML = bubbleHtml(mode); B.hidden = false; BTN.setAttribute('aria-expanded', 'true'); W.classList.add('fx-open'); }
+  function closeBubble() { if (!B) return; clearTimeout(hideT); B.hidden = true; BTN.setAttribute('aria-expanded', 'false'); W.classList.remove('fx-open'); auto = false; }
+  function onBubble(e) {
+    var t = e.target.closest('[data-fx]'); if (!t) return; var a = t.getAttribute('data-fx');
+    if (a === 'close') { var f = fst(); if (!f.intro) { f.intro = 1; LS.set(FKEY, f); } closeBubble(); BTN.focus(); }
+    else if (a === 'next') { tipIdx++; openBubble('menu'); var n = B.querySelector('[data-fx="next"]'); if (n) n.focus(); }
+    else if (a === 'guide') { openBubble('guide'); var g = B.querySelector('[data-fx="menu"]'); if (g) g.focus(); }
+    else if (a === 'menu') { openBubble('menu'); }
+    else if (a === 'go') { var p = t.getAttribute('data-p'); closeBubble(); try { if (p === 'industryPage' && typeof openIndustryTab === 'function') openIndustryTab(); else openPage(p); window.scrollTo(0, 0); } catch (x) { } }
+    else if (a === 'look') { var f2 = fst(); if (!f2.intro) { f2.intro = 1; LS.set(FKEY, f2); } closeBubble(); openLook(); }
+    else if (a === 'off') { var f3 = fst(); f3.on = false; f3.intro = 1; LS.set(FKEY, f3); closeBubble(); paintBtn(); try { toast('요정을 숨겼어요. 홈의 “꾸미기”에서 다시 켤 수 있어요'); } catch (x) { } }
+  }
+  function busy() { return document.body.classList.contains('disc-open'); }
+  function pageNow() { var p = document.querySelector('.page.active'); return p ? p.id : 'homePage'; }
+  /* 화면이 바뀔 때: 처음 보는 화면이면 말풍선으로 짧게 안내(10초 뒤 자동으로 닫힘) */
+  function modalOpen() { return busy() || (MODAL && !MODAL.classList.contains('hidden')); }
+  function onPage() {
+    if (!W) return; curPage = pageNow(); tipIdx = 0; clearTimeout(showT);
+    if (!B.hidden && !auto) { openBubble('menu'); return; }
+    var f = fst(); if (!f.on) { return; }
+    if (f.intro && !(f.tips && !f.seen[curPage])) { if (!B.hidden && auto) closeBubble(); return; }
+    var tries = 0;
+    function attempt() {
+      if (modalOpen()) { if (++tries < 40) showT = setTimeout(attempt, 1000); return; }
+      var ff = fst(); if (!ff.on) return;
+      if (!ff.intro) { auto = true; openBubble('intro'); hideT = setTimeout(function () { if (auto) { var f4 = fst(); f4.intro = 1; LS.set(FKEY, f4); closeBubble(); } }, 14000); return; }
+      if (!ff.tips || ff.seen[curPage]) return;
+      ff.seen[curPage] = 1; LS.set(FKEY, ff); auto = true; tipIdx = 0; openBubble('menu');
+      hideT = setTimeout(function () { if (auto) closeBubble(); }, 10000);
+    }
+    showT = setTimeout(attempt, 900);
+  }
+
+  /* ---- 꾸미기 창 ---- */
+  function lookHtml() {
+    var l = look(), f = fst(), th = l.c || 'sky', fo = l.f || 'plex';
+    var h = '<div class="disc-card" style="--tc:var(--t0)" role="document"><div class="disc-band"><div class="grow"><h2 id="lookTitle" tabindex="-1">나만의 헬퍼탐 꾸미기</h2><small>바꾸면 바로 적용돼요 · 이 기기에만 저장돼요</small></div><button type="button" class="disc-x" data-lk="close" aria-label="닫기">✕</button></div><div class="disc-body">';
+    h += '<h3 class="disc-h3" style="margin-top:4px">🧚 도우미 요정</h3>';
+    h += '<label class="lk-sw"><input type="checkbox" data-lk="fon"' + (f.on ? ' checked' : '') + '><span>요정 도우미 켜기</span></label>';
+    h += '<div class="lk-grid c5" role="group" aria-label="요정 고르기">' + CHARS.map(function (c) { return '<button type="button" data-lk="ch" data-v="' + c.k + '" aria-pressed="' + (f.ch === c.k) + '"><span class="lk-fx">' + fairySvg(c, 52) + '</span><b>' + c.n + '</b></button>'; }).join('') + '</div>';
+    h += '<label class="lk-sw"><input type="checkbox" data-lk="ftips"' + (f.tips ? ' checked' : '') + '><span>처음 보는 화면에서 말풍선으로 안내받기</span></label>';
+    h += '<div class="lk-grid c2" role="group" aria-label="요정 위치">' + [['R', '오른쪽 아래'], ['L', '왼쪽 아래']].map(function (a) { return '<button type="button" data-lk="side" data-v="' + a[0] + '" aria-pressed="' + (f.side === a[0]) + '"><b>' + a[1] + '</b></button>'; }).join('') + '</div>';
+    h += '<h3 class="disc-h3">🎨 색상</h3><div class="lk-grid c3" role="group" aria-label="색상 고르기">' + THEMES.map(function (t) { return '<button type="button" data-lk="th" data-v="' + t.k + '" aria-pressed="' + (th === t.k) + '"><span class="lk-dot" style="background:' + t.c + '"></span><b>' + t.n + '</b></button>'; }).join('') + '</div>';
+    h += '<h3 class="disc-h3">🔤 글꼴</h3><div class="lk-grid c1" role="group" aria-label="글꼴 고르기">' + FONTS.map(function (x) { return '<button type="button" data-lk="fo" data-v="' + x.k + '" aria-pressed="' + (fo === x.k) + '" style="font-family:' + x.f + '"><b>' + x.n + '</b><span>가나다라마 헬퍼탐 Abc 123</span></button>'; }).join('') + '</div>';
+    h += '<p class="muted small" style="margin:6px 0 0">명조는 기기에 글꼴이 있을 때 적용돼요. 없으면 기본 글꼴로 보여요.</p></div>';
+    h += '<div class="disc-foot"><button type="button" class="btn ghost" data-lk="reset">기본값으로 되돌리기</button><button type="button" class="btn primary" data-lk="close">닫기</button></div></div>';
+    return h;
+  }
+  function renderLook() { MODAL.innerHTML = lookHtml(); }
+  function openLook() {
+    if (!MODAL) return; LAST_FOCUS = document.activeElement; renderLook(); MODAL.classList.remove('hidden'); document.body.classList.add('disc-open');
+    var t = document.getElementById('lookTitle'); if (t) t.focus();
+  }
+  function closeLook() {
+    if (!MODAL || MODAL.classList.contains('hidden')) return; MODAL.classList.add('hidden'); MODAL.innerHTML = ''; document.body.classList.remove('disc-open');
+    try { if (LAST_FOCUS && LAST_FOCUS.focus) LAST_FOCUS.focus(); } catch (e) { } paintBtn(); onPage();
+  }
+  function keepFocus(sel) { var n = MODAL.querySelector(sel); if (n) n.focus(); }
+  function bindLook() {
+    MODAL.addEventListener('click', function (e) {
+      var t = e.target; if (t === MODAL) { closeLook(); return; }
+      var b = t.closest('[data-lk]'); if (!b) return; var a = b.getAttribute('data-lk'), v = b.getAttribute('data-v'), l, f;
+      if (a === 'close') closeLook();
+      else if (a === 'th') { l = look(); l.c = v; LS.set(LKEY, l); applyLook(); renderLook(); keepFocus('[data-lk="th"][data-v="' + v + '"]'); }
+      else if (a === 'fo') { l = look(); l.f = v; LS.set(LKEY, l); applyLook(); renderLook(); keepFocus('[data-lk="fo"][data-v="' + v + '"]'); }
+      else if (a === 'ch') { f = fst(); f.ch = v; LS.set(FKEY, f); paintBtn(); renderLook(); keepFocus('[data-lk="ch"][data-v="' + v + '"]'); }
+      else if (a === 'side') { f = fst(); f.side = v; LS.set(FKEY, f); paintBtn(); renderLook(); keepFocus('[data-lk="side"][data-v="' + v + '"]'); }
+      else if (a === 'reset') { if (!window.confirm('색상·글꼴·요정 설정을 기본값으로 되돌릴까요?')) return; LS.del(LKEY); LS.del(FKEY); applyLook(); paintBtn(); renderLook(); }
+    });
+    MODAL.addEventListener('change', function (e) {
+      var a = e.target && e.target.getAttribute('data-lk'); if (!a) return; var f = fst();
+      if (a === 'fon') { f.on = !!e.target.checked; f.intro = 1; LS.set(FKEY, f); paintBtn(); }
+      else if (a === 'ftips') { f.tips = !!e.target.checked; LS.set(FKEY, f); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (MODAL.classList.contains('hidden') || e.key !== 'Tab') return;
+      var f = Array.prototype.slice.call(MODAL.querySelectorAll('button:not([disabled]),input')).filter(function (x) { return x.offsetParent !== null; });
+      if (!f.length) return; var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === MODAL.querySelector('#lookTitle'))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+  }
+
+  window.openLook = openLook;
+  window.fxInit = function () {
+    MODAL = document.getElementById('lookModal'); if (!MODAL) return;
+    applyLook(); build(); bindLook();
+    var row = document.getElementById('lookRow'); if (row) row.addEventListener('click', openLook);
+    var _op = window.openPage; window.openPage = function () { var r = _op.apply(this, arguments); try { onPage(); } catch (e) { } return r; };
+    curPage = pageNow(); onPage();
+  };
+  try { applyLook(); } catch (e) { }
+  if (window.__fxPending) { window.__fxPending = false; try { window.fxInit(); } catch (e) { } }
+})();
+</script>
+
 </body>
 </html>
