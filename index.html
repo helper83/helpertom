@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v12.123 (2026-11-12): 진로 결정·내 로드맵에 '오늘의 실행' 추가 — 주차 과제를 5단계로 나눠 하루 1개 체크(홈·로드맵), 주차 카드 요일 칩(최근 3일 소급), 밀린 과제 자동 조정(하루 최대 2개). 체크는 기기 안에만 저장. -->
 <!-- v12.122 (2026-11-12): 보너스 문제에 '이 직무 면접 한 줄 질문' 유형 추가 -->
 <!-- v12.121 (2026-11-12): 오늘의 발견 다시 모으기(최근 7일)·재미 배지 2종·보너스 문제(주말/3일 연속) -->
 <!-- v12.120 (2026-11-12): 오늘의 발견에 스탬프북(발견 도감·배지)과 오늘의 퀴즈(하루 1문항, 오늘의 카드에서 자동 출제) 추가. 전체 초기화에 오늘의 발견 기록 포함. 동의 문구 consent-2026-11-v4. -->
@@ -937,6 +938,31 @@ body.disc-open{overflow:hidden}
 .disc-past button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:48px;padding:8px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);font-size:14px;text-align:left;cursor:pointer}
 .disc-past button b{font-size:12px;color:var(--ok)}
 .disc-past .d{font-weight:700;flex:none}
+.ds-meta{padding:10px 14px;font-size:13px;color:var(--ink2);background:var(--surface);border-top:1.5px solid #A9B7C9}
+.ds-meta:first-child{border-top:0}
+.ds-item{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;min-height:56px;background:var(--surface);border-top:1.5px solid #A9B7C9;cursor:pointer}
+.ds-item input{width:24px;height:24px;margin:2px 0 0;flex:none;accent-color:var(--ok);cursor:pointer}
+.ds-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ds-item b{font-size:15px;line-height:1.45;overflow-wrap:anywhere}
+.ds-item small{font-size:13px;color:var(--ink2)}
+.ds-item.on b{text-decoration:line-through;color:var(--ink2)}
+.ds-note{margin:0;padding:10px 14px;font-size:13px;line-height:1.5;background:var(--signal-tint);color:var(--signal-ink);border-top:1.5px solid #A9B7C9}
+.ds-note.ok{background:var(--ok-tint);color:var(--ok)}
+.ds-foot{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border-top:1.5px solid #A9B7C9}
+.ds-foot:empty{display:none}
+.ds-foot .btn{min-height:44px}
+.ds-road{margin:0 0 12px;border:1.5px solid #A9B7C9;border-radius:12px;overflow:hidden}
+.ds-road .ds-title{padding:10px 14px;font-weight:700;font-size:15px;background:var(--sunk)}
+.ds-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:4px;margin-top:10px}
+.ds-chip{min-width:44px;min-height:44px;padding:2px 0;border:1.5px solid var(--line2);border-radius:10px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.ds-chip small{font-size:12px;color:var(--ink2)}
+.ds-chip b{font-size:14px}
+.ds-chip.on{background:var(--ok-tint);border-color:var(--ok);color:var(--ok)}
+.ds-chip.today{box-shadow:0 0 0 2px var(--pf-ink)}
+.ds-chip:disabled{opacity:.5;cursor:default}
+.ds-steps{margin-top:8px}
+.ds-steps summary{min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:600;cursor:pointer}
+.ds-steps .ds-item{border:1px solid var(--line2);border-radius:10px;margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -972,6 +998,8 @@ body.disc-open{overflow:hidden}
       <h1 id="h-home">학과·산업·직무, 어디서부터 볼까요?</h1>
       <p class="muted">60개 산업과 107개 직무를 전부 볼 필요는 없습니다. 지금 나에게 맞는 출발점 하나를 선택하세요.</p>
     </div>
+    <div class="hsec no-print" id="dsHead" aria-live="polite"></div>
+    <div class="hlist no-print" id="dsList"></div>
     <div class="hsec no-print" id="discHead" aria-live="polite"></div>
     <div class="hlist no-print" id="discList" role="list"></div>
     <span id="discSec" hidden></span>
@@ -3734,7 +3762,7 @@ function makePlan() {
   const phases = planPhases(v.months, job, prep);
   const alloc = weeklyAllocation(v.hours);
   const kpi = planKpi(v.months, v.hours);
-  let h = '<div class="plan-title"><div><div class="muted small">나의 ' + v.months + '개월 로드맵 · ' + new Date().toLocaleDateString('ko-KR') + '</div>' +
+  let h = '<div id="dsRoad" class="ds-road no-print"></div><div class="plan-title"><div><div class="muted small">나의 ' + v.months + '개월 로드맵 · ' + new Date().toLocaleDateString('ko-KR') + '</div>' +
     '<h2>' + esc(ind.name) + ' × ' + esc(job.name) + '</h2></div></div>';
   h += '<div class="btn-row no-print"><button type="button" class="btn sm" onclick="goFromPlan(\'I\',\'' + v.i + '\')">산업 자세히 보기</button><button type="button" class="btn sm" onclick="goFromPlan(\'J\',\'' + v.j + '\')">직무 자세히 보기</button>' + (pub ? '<button type="button" class="btn sm" onclick="goFromPlan(\'P\',\'' + esc(v.p) + '\')">기관 자세히 보기</button>' : '') + '</div>';
   h += '<div class="plan-sec"><h3>1. 목표 직무 한눈에</h3><div class="grid g3">' +
@@ -3785,6 +3813,7 @@ function makePlan() {
 
   roadH += '<div class="plan-sec"><h3>주차별 실행 스케줄러 · 최대 24개월</h3>' + scheduleHtml(v, job, prep) + '</div>';
   setTimeout(renderScheduleProgress,0);
+  if(typeof dsRender==='function')setTimeout(dsRender,0);
 
   roadH += '<div class="plan-sec"><h3>' + (isPublic ? '공공기관 탐색 출발점' : '기업 탐색 출발점') + '</h3>' +
     (isPublic
@@ -3978,6 +4007,7 @@ function toggleScheduleWeek(n){
   renderScheduleProgress();
   const c=document.getElementById('week-'+n);
   if(c)c.classList.toggle('done',!!data[n]);
+  if(typeof dsAfterWeek==='function')dsAfterWeek(n);
 }
 function renderScheduleProgress(){
   const ctx=ACTIVE_SCHEDULE_CTX;
@@ -3996,6 +4026,7 @@ function resetSchedule(){
   const all=LS.get(KEYS.schedule,{})||{};
   delete all[ACTIVE_SCHEDULE_CTX];
   LS.set(KEYS.schedule,all);
+  if(typeof dsClear==='function')dsClear(ACTIVE_SCHEDULE_CTX);
   const op=LS.get(SCHED_OPEN_KEY,{})||{}; delete op[ACTIVE_SCHEDULE_CTX]; LS.set(SCHED_OPEN_KEY,op);
   makePlan();
 }
@@ -4053,7 +4084,7 @@ function scheduleHtml(v,job,prep){
     const start=addDaysISO(v.startDate,i*7,withYear), finish=addDaysISO(v.startDate,i*7+6,withYear);
     return '<div id="week-'+n+'" class="week-card '+(done[n]?'done':'')+'"><div class="week-top"><div><b>'+n+'주차 · '+esc(x.title)+'</b>'+(n===curW?' <span class="q-now">이번 주</span>':'')+'<br>'
       +'<span class="week-date">'+start+' ~ '+finish+'</span></div><label class="week-check"><input type="checkbox" '+(done[n]?'checked':'')+' onchange="toggleScheduleWeek('+n+')"> 완료</label></div>'
-      +'<div class="week-task">'+esc(x.task)+'</div><div class="small" style="margin-top:7px"><b>이번 주 결과물</b> · '+esc(x.output)+'</div></div>';
+      +'<div class="week-task">'+esc(x.task)+'</div><div class="small" style="margin-top:7px"><b>이번 주 결과물</b> · '+esc(x.output)+'</div>'+(typeof dsWeekHtml==='function'?dsWeekHtml(n,x,ACTIVE_SCHEDULE_CTX,v.startDate||localISODate()):'')+'</div>';
   };
   let qs='';
   for(let q=1;q<=nQ;q++){
@@ -4120,7 +4151,7 @@ function printPlan() {
 function resetAllAppData() {
   if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 응답 수집 동의, 오늘의 발견 기록(스탬프북·퀴즈)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
   [KEYS.interests, KEYS.answers, KEYS.result, KEYS.plan, KEYS.guide, KEYS.major, 'visionhr_diagnosis_result_v1','visionhr_diagnosis_result_v2','visionhr_diag_answers_v1', KEYS.schedule,
-    PLAN_CHECK_KEY, SCHED_OPEN_KEY, VALIDATION_KEY, CLOUD_CONFIG.queueKey, CLOUD_CONFIG.consentKey,
+    PLAN_CHECK_KEY, SCHED_OPEN_KEY, 'visionhr_sched_days_v1', VALIDATION_KEY, CLOUD_CONFIG.queueKey, CLOUD_CONFIG.consentKey,
     'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1'].forEach(function (k) { LS.del(k); });
   window.location.reload();
 }
@@ -4642,6 +4673,7 @@ function initializeApp() {
   renderProgress();
   openPage('homePage');
   $('loading').classList.add('off');
+  try { if (typeof dsInit === 'function') dsInit(); } catch (e) { /* 오늘의 실행 오류가 앱을 막지 않게 */ }
   try { if (typeof discInit === 'function') discInit(); } catch (e) { /* 오늘의 발견 오류가 앱을 막지 않게 */ }
   window.addEventListener('resize', function () {
     document.documentElement.style.setProperty('--head-h', ($('siteHeader').offsetHeight + 6) + 'px');
@@ -4844,6 +4876,176 @@ function build(){var box=$g('goalShare');if(!box||box.getAttribute('data-b'))ret
  box.appendChild(l1);box.appendChild(n);wf.forEach(function(x){box.appendChild(x[0]);box.appendChild(x[1])});box.appendChild(r);box.appendChild(prev)}
 var _rp=window.renderPrepare;window.renderPrepare=function(){var x=_rp.apply(this,arguments);try{build()}catch(e){}return x};
 if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventListener('DOMContentLoaded',function(){try{build()}catch(e){}});
+})();
+</script>
+<script>
+/* v12.123 오늘의 실행 — 로드맵 주차 과제를 5단계로 나눠 하루 1개씩 체크, 밀리면 자동 조정(기기 안에만 저장) */
+(function () {
+  'use strict';
+  var DKEY = 'visionhr_sched_days_v1', N = 5, EXTRA = 0, EXTRA_DAY = '', WDN = '일월화수목금토';
+  function iso(d) { return localISODate(d); }
+  function isoAdd(b, n) { var d = new Date(b + 'T00:00:00'); d.setDate(d.getDate() + n); return iso(d); }
+  function dayDiff(a, b) { return Math.round((new Date(a + 'T00:00:00') - new Date(b + 'T00:00:00')) / 864e5); }
+  function obj(x) { return (x && typeof x === 'object' && !Array.isArray(x)) ? x : {}; }
+  function dget(ctx) { return obj(obj(LS.get(DKEY, {}))[ctx]); }
+  function dset(ctx, d) { var a = obj(LS.get(DKEY, {})); a[ctx] = d; LS.set(DKEY, a); }
+  function wget(ctx) { return scheduleStore(ctx) || {}; }
+
+  function plan() {
+    var p = LS.get(KEYS.plan, null); if (!p || !p.i || !p.j) return null;
+    var jp; try { jp = jobPkg(p.j); } catch (e) { return null; }
+    if (!jp || !jp.job) return null;
+    var months = Number(p.months) || 6, v = { months: months, startDate: p.startDate || '' };
+    return { job: jp.job, tasks: schedulerTasks(jp.job, jp.preparation || {}, months), total: scheduleWeeks(months), ctx: scheduleContext(v, jp.job), start: p.startDate || iso() };
+  }
+  /* 한 주차 과제를 가벼운 5단계로 */
+  function steps(t) {
+    t = t || {};
+    return [
+      { s: '시작하기', t: '이번 주 과제 “' + (t.title || '') + '”를 읽고 할 일 3가지 메모하기', m: 10 },
+      { s: '자료 모으기', t: '과제에 필요한 공고·자료·사례 3개 찾아 저장하기', m: 20 },
+      { s: '핵심 정리', t: '찾은 자료의 핵심을 5줄 이내로 정리하기', m: 20 },
+      { s: '결과물 만들기', t: '“' + (t.output || '결과물') + '” 초안 만들기', m: 30 },
+      { s: '마무리 점검', t: '부족한 한 가지를 보완하고 저장하기', m: 15 }
+    ];
+  }
+  function isDone(sd, wd, n, k) { return !!sd[n + '-' + k] || !!wd[n]; }
+
+  /* 오늘 할 일 계산: 밀린 과제는 이번 주에 합치고, 하루 최대 2개로 자동 조정 */
+  function state() {
+    var pl = plan(); if (!pl) return { kind: 'none' };
+    var today = iso(), off = dayDiff(today, pl.start);
+    if (off < 0) return { kind: 'before', pl: pl, days: -off, start: pl.start };
+    var curW = Math.floor(off / 7) + 1;
+    if (curW > pl.total) return { kind: 'after', pl: pl };
+    var sd = dget(pl.ctx), wd = wget(pl.ctx), daysLeft = 7 - (off % 7), back = [], hold = 0, cur = [], ahead = [], w, k;
+    for (w = 1; w < curW; w++) for (k = 0; k < N; k++) if (!isDone(sd, wd, w, k)) { if (w >= curW - 2) back.push({ n: w, k: k }); else hold++; }
+    for (k = 0; k < N; k++) if (!isDone(sd, wd, curW, k)) cur.push({ n: curW, k: k });
+    if (curW < pl.total) for (k = 0; k < N; k++) if (!isDone(sd, wd, curW + 1, k)) ahead.push({ n: curW + 1, k: k });
+    var doneToday = [];
+    Object.keys(sd).forEach(function (key) { if (sd[key] === today) { var m = key.split('-'); doneToday.push({ n: +m[0], k: +m[1] }); } });
+    doneToday.sort(function (a, b) { return a.n - b.n || a.k - b.k; });
+    if (EXTRA_DAY !== today) { EXTRA = 0; EXTRA_DAY = today; }
+    var remaining = back.length + cur.length, startRem = remaining + doneToday.length;
+    var per = startRem ? Math.min(2, Math.max(1, Math.ceil(startRem / daysLeft))) : 0;
+    var pool = back.concat(cur); if (EXTRA > 0) pool = pool.concat(ahead);
+    var need = Math.max(0, per - doneToday.length) + EXTRA;
+    var next = pool.slice(0, need);
+    return { kind: 'run', pl: pl, today: today, curW: curW, daysLeft: daysLeft, back: back.length, hold: hold, cur: cur.length, doneToday: doneToday, next: next, per: per, canMore: pool.length > next.length, sd: sd, wd: wd };
+  }
+  function streak(sd) {
+    var set = {}, t = iso(), c = 0, d; Object.keys(sd).forEach(function (k) { if (/^\d{4}-/.test(sd[k])) set[sd[k]] = 1; });
+    d = set[t] ? t : isoAdd(t, -1); while (set[d]) { c++; d = isoAdd(d, -1); }
+    return c;
+  }
+  function weekCount(sd, wd, n) { var c = 0; for (var k = 0; k < N; k++) if (isDone(sd, wd, n, k)) c++; return c; }
+
+  /* ---- 저장 동작 ---- */
+  function setStep(ctx, n, k, on, date) {
+    var sd = dget(ctx), wd = wget(ctx), key = n + '-' + k, done = isDone(sd, wd, n, k), auto = false, j;
+    if (on && !done) {
+      sd[key] = date || iso(); var all = true;
+      for (j = 0; j < N; j++) if (!isDone(sd, wd, n, j)) all = false;
+      if (all && !wd[n]) { wd[n] = true; auto = true; }
+    } else if (!on && done) {
+      if (wd[n]) { for (j = 0; j < N; j++) if (j !== k && !sd[n + '-' + j]) sd[n + '-' + j] = 'W'; wd[n] = false; }
+      delete sd[key];
+    } else return false;
+    dset(ctx, sd); saveScheduleStore(ctx, wd);
+    return auto;
+  }
+  function chipToggle(ctx, n, date) {
+    var today = iso(); if (date > today || dayDiff(today, date) > 3) return;
+    var sd = dget(ctx), wd = wget(ctx);
+    var keys = Object.keys(sd).filter(function (k) { return sd[k] === date && k.indexOf(n + '-') === 0; }).sort();
+    if (keys.length) { setStep(ctx, n, +keys[keys.length - 1].split('-')[1], false); return; }
+    for (var k = 0; k < N; k++) if (!isDone(sd, wd, n, k)) { setStep(ctx, n, k, true, date); return; }
+    toast('이미 5단계를 모두 마친 주차예요');
+  }
+
+  /* ---- 화면 ---- */
+  function item(pl, it, on) {
+    var s = steps(pl.tasks[it.n - 1])[it.k];
+    return '<label class="ds-item' + (on ? ' on' : '') + '"><input type="checkbox" data-ds-step="' + it.n + '-' + it.k + '"' + (on ? ' checked' : '') + '><span class="ds-tx"><b>' + esc(s.t) + '</b><small>' + it.n + '주차 · ' + esc(s.s) + ' · 약 ' + s.m + '분</small></span></label>';
+  }
+  function note(S) {
+    var t = [];
+    if (S.back > 0) t.push('밀린 과제 ' + S.back + '개를 이번 주 일정에 합쳤어요.');
+    if (S.per > 1) t.push('남은 ' + (S.cur + S.back) + '개를 남은 ' + S.daysLeft + '일에 맞춰 오늘은 ' + S.per + '개로 조정했어요.');
+    if (S.hold > 0) t.push('더 오래된 미완료 ' + S.hold + '개는 로드맵에서 언제든 체크할 수 있어요.');
+    return t.length ? '<p class="ds-note">' + esc(t.join(' ')) + '</p>' : '';
+  }
+  function bodyHtml(S, mode) {   /* mode: 'home' | 'road' */
+    var h = '';
+    if (S.kind === 'none') return mode === 'home' ? '<button type="button" class="hrow" style="--tc:var(--t5)" data-ds-go="preparePage"><span class="hic"><b style="font-size:18px">실</b></span><span class="hx"><b>매일 한 가지씩 체크하기</b><span>진로 결정에서 목표를 정하면 오늘 할 일이 여기에 나와요</span></span><span class="hgo" aria-hidden="true">›</span></button>' : '';
+    if (S.kind === 'before') return '<div class="ds-meta">로드맵은 ' + esc(S.start) + '에 시작해요 (' + S.days + '일 후). 시작일을 바꾸려면 ‘목표 정하기’를 열어 주세요.</div>';
+    if (S.kind === 'after') return '<div class="ds-meta">로드맵 기간이 끝났어요. ‘목표 정하기’에서 새 로드맵을 만들어 보세요.</div>';
+    var pl = S.pl, sd = S.sd, wd = S.wd, sc = streak(sd), wt = pl.tasks[S.curW - 1] || {};
+    h += '<div class="ds-meta"><b>' + S.curW + '주차</b> · ' + esc(wt.title || '') + ' · 이번 주 ' + weekCount(sd, wd, S.curW) + '/' + N + (sc ? ' · 🔥 ' + sc + '일 연속' : '') + '</div>';
+    S.doneToday.forEach(function (it) { h += item(pl, it, true); });
+    S.next.forEach(function (it) { h += item(pl, it, false); });
+    h += note(S);
+    var goal = S.next.length === 0;
+    if (goal) h += '<p class="ds-note ok">' + (S.doneToday.length ? '오늘 목표를 달성했어요 🎉 내일 또 만나요.' : '이번 주 5단계를 모두 마쳤어요 🎉') + '</p>';
+    h += '<div class="ds-foot">' + (S.canMore ? '<button type="button" class="btn" data-ds-more>하나 더 미리 하기</button>' : '') + (mode === 'home' ? '<button type="button" class="btn" data-ds-go="roadmapPage">내 로드맵 열기</button>' : '') + '</div>';
+    return h;
+  }
+  function render() {
+    var S = state(), head = document.getElementById('dsHead'), list = document.getElementById('dsList'), road = document.getElementById('dsRoad');
+    if (head && list) {
+      var sc = S.kind === 'run' ? streak(S.sd) : 0;
+      head.innerHTML = '오늘의 실행' + (sc ? '<span class="disc-streak">🔥 ' + sc + '일 연속</span>' : '');
+      list.innerHTML = bodyHtml(S, 'home');
+    }
+    if (road) { var b = bodyHtml(S, 'road'); road.style.display = b ? '' : 'none'; road.innerHTML = b ? '<div class="ds-title">오늘의 실행</div>' + b : ''; }
+  }
+  function weekInner(n, x, ctx, start) {
+    var sd = dget(ctx), wd = wget(ctx), today = iso(), st = steps(x), h = '<div class="ds-chips no-print" role="group" aria-label="' + n + '주차 요일별 실행 기록">', i, k, cnt = weekCount(sd, wd, n);
+    for (i = 0; i < 7; i++) {
+      var date = isoAdd(start, (n - 1) * 7 + i), has = Object.keys(sd).some(function (key) { return sd[key] === date && key.indexOf(n + '-') === 0; });
+      var can = date <= today && dayDiff(today, date) <= 3, dd = new Date(date + 'T00:00:00');
+      h += '<button type="button" class="ds-chip' + (has ? ' on' : '') + (date === today ? ' today' : '') + '" data-ds-chip="' + n + '|' + date + '"' + (can ? '' : ' disabled') + ' aria-pressed="' + has + '" aria-label="' + (dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' + WDN[dd.getDay()] + '요일 ' + (has ? '실행 기록 있음' : '기록 없음') + '"><small>' + WDN[dd.getDay()] + '</small><b>' + (has ? '✓' : dd.getDate()) + '</b></button>';
+    }
+    h += '</div><details class="ds-steps no-print"><summary>하루 5단계 · ' + cnt + '/' + N + '</summary>';
+    for (k = 0; k < N; k++) {
+      var on = isDone(sd, wd, n, k);
+      h += '<label class="ds-item' + (on ? ' on' : '') + '"><input type="checkbox" data-ds-step="' + n + '-' + k + '"' + (on ? ' checked' : '') + '><span class="ds-tx"><b>' + esc(st[k].t) + '</b><small>' + esc(st[k].s) + ' · 약 ' + st[k].m + '분</small></span></label>';
+    }
+    return h + '</details>';
+  }
+  window.dsWeekHtml = function (n, x, ctx, start) { return '<div class="ds-wrap" data-n="' + n + '" data-ds-ctx="' + esc(ctx) + '" data-start="' + esc(start) + '">' + weekInner(n, x, ctx, start) + '</div>'; };
+  function refreshWeeks() {
+    var pl = null; try { pl = plan(); } catch (e) { }
+    document.querySelectorAll('.ds-wrap').forEach(function (w) {
+      var n = Number(w.getAttribute('data-n')), ctx = w.getAttribute('data-ds-ctx'), start = w.getAttribute('data-start'), d = w.querySelector('details'), open = d && d.open;
+      var tasks = pl ? pl.tasks : null, x = tasks ? tasks[n - 1] : null; if (!x) return;
+      w.innerHTML = weekInner(n, x, ctx, start); if (open) { var d2 = w.querySelector('details'); if (d2) d2.open = true; }
+      var wd = wget(ctx), card = document.getElementById('week-' + n);
+      if (card) { card.classList.toggle('done', !!wd[n]); var cb = card.querySelector('.week-check input'); if (cb) cb.checked = !!wd[n]; }
+    });
+    if (typeof renderScheduleProgress === 'function') { try { renderScheduleProgress(); } catch (e) { } }
+  }
+  function refresh() { render(); refreshWeeks(); }
+  window.dsAfterWeek = function () { refresh(); };
+  window.dsClear = function (ctx) { var a = obj(LS.get(DKEY, {})); delete a[ctx]; LS.set(DKEY, a); };
+  window.dsRender = refresh;
+  window.dsInit = function () {
+    refresh();
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) refresh(); });
+    document.addEventListener('change', function (e) {
+      var t = e.target; if (!t || !t.matches || !t.matches('[data-ds-step]')) return;
+      var m = t.getAttribute('data-ds-step').split('-'), wrap = t.closest('[data-ds-ctx]'), p = wrap ? null : plan(), ctx = wrap ? wrap.getAttribute('data-ds-ctx') : (p && p.ctx);
+      if (!ctx) return;
+      var auto = setStep(ctx, +m[0], +m[1], t.checked, iso()); if (auto) toast(m[0] + '주차 5단계를 모두 마쳤어요! 🎉');
+      refresh();
+    });
+    document.addEventListener('click', function (e) {
+      var t = e.target, c = t.closest && t.closest('[data-ds-chip]');
+      if (c) { var m = c.getAttribute('data-ds-chip').split('|'), w = c.closest('[data-ds-ctx]'); if (w) { chipToggle(w.getAttribute('data-ds-ctx'), +m[0], m[1]); refresh(); } return; }
+      if (t.closest && t.closest('[data-ds-more]')) { EXTRA++; refresh(); return; }
+      var g = t.closest && t.closest('[data-ds-go]'); if (g) openPage(g.getAttribute('data-ds-go'));
+    });
+  };
 })();
 </script>
 <script>
