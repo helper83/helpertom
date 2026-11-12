@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v12.122 (2026-11-12): 보너스 문제에 '이 직무 면접 한 줄 질문' 유형 추가 -->
 <!-- v12.121 (2026-11-12): 오늘의 발견 다시 모으기(최근 7일)·재미 배지 2종·보너스 문제(주말/3일 연속) -->
 <!-- v12.120 (2026-11-12): 오늘의 발견에 스탬프북(발견 도감·배지)과 오늘의 퀴즈(하루 1문항, 오늘의 카드에서 자동 출제) 추가. 전체 초기화에 오늘의 발견 기록 포함. 동의 문구 consent-2026-11-v4. -->
 <!-- v12.119 (2026-11-12): 오늘의 발견 — 공공기관은 중앙 기관만 선정, 팝업 [찜 하기]·[카카오톡 공유] 추가, 이용 요약(노출·더 알아보기·찜·공유·진단 시작 경로)을 동의한 진단 응답에만 익명 포함(동의 문구 consent-2026-11-v3). -->
@@ -5000,11 +5001,30 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     return finish('FIELD', 'IND', pk.IND, '다음 중 「' + ind.name + '」 산업에 속하는 분야는?', correct, d, rnd,
       '“' + correct + '”은(는) 「' + ind.name + '」 산업이 다루는 분야입니다. 나머지 보기는 다른 산업의 분야입니다.', '‘산업’ 카드의 「이런 분야를 다룹니다」에 답이 있어요');
   }
+  var IV_T = [
+    function (t) { return '“' + t + '” 같은 일을 처음 맡는다면, 가장 먼저 무엇을 확인하시겠어요?'; },
+    function (t) { return '“' + t + '” 과정에서 실수를 줄이려면 어떤 점검 습관이 필요할까요?'; },
+    function (t) { return '“' + t + '” 일을 하다 막혔을 때 선배에게 어떻게 질문하시겠어요?'; }
+  ];
+  function qInterview(pk, rnd) {   /* 보너스 전용: 이 직무 면접 한 줄 질문 */
+    var job = jobPkg(pk.JOB).job, tasks = (job.entryTasks || []).slice(0, 2); if (!tasks.length) return null;
+    var ti = Math.floor(rnd() * IV_T.length), mk = IV_T[ti], t0 = tasks[Math.floor(rnd() * tasks.length)], own = (job.entryTasks || []).join('|'), L = t0.length, d = [];
+    shuf(DB.jobs.filter(function (j) { return j.group !== job.group; }), rnd).forEach(function (j) {
+      if (d.length >= 3) return;
+      var t = (jobPkg(j.code).job.entryTasks || []).slice(0, 2); if (!t.length) return;
+      var x = t[Math.floor(rnd() * t.length)];
+      if (own.indexOf(x) < 0 && Math.abs(x.length - L) <= L * 0.6 && d.indexOf(x) < 0) d.push(x);
+    });
+    if (d.length < 3) return null;
+    return finish('INTERVIEW', 'JOB', pk.JOB, '「' + job.name + '」 면접에서 면접관이 물어볼 만한 한 줄 질문은?', mk(t0), d.map(mk), rnd,
+      '「' + job.name + '」 신입의 첫 업무인 “' + t0 + '”라는 일을 묻는 질문입니다. 나머지는 다른 직무의 업무를 묻는 질문이에요. 답변은 상황 → 행동 → 결과 순서로 한 줄씩 말해 보세요.', '‘직무’ 카드의 「신입이 처음 맡는 일」을 보세요');
+  }
   function quizFor(idx, bonus) {
     var pk = pickFor(idx), rnd = mulberry32(idx * 7919 + 13), fn = [qJob, qCompany, qMinistry, qField], start = idx % 4, q = null, i;
     for (i = 0; i < 4 && !q; i++) q = fn[(start + i) % 4](pk, rnd);
     if (!bonus) return q;
     var r2 = mulberry32(idx * 104729 + 977), b;            /* 보너스: 기본 문항과 다른 유형 */
+    if (idx % 2 === 0) { b = qInterview(pk, r2); if (b) return b; }   /* 짝수 날은 면접 한 줄 질문 */
     for (i = 0; i < 4; i++) { b = fn[(start + 2 + i) % 4](pk, r2); if (b && (!q || b.kind !== q.kind)) return b; }
     return null;
   }
@@ -5117,7 +5137,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     return h;
   }
   function qBlock(q, rec, bonus) {
-    var h = '<div class="disc-qno">' + (bonus ? '🎁 보너스 문제' : '오늘의 퀴즈 · 1문항 (하루 한 번, 다시 풀 수 없어요)') + '</div><div class="disc-qtext">' + esc(q.q) + '</div><div class="disc-qhint">💡 ' + esc(q.hint) + '</div><div class="disc-opts">';
+    var h = '<div class="disc-qno">' + (bonus ? (q.kind === 'INTERVIEW' ? '🎁 보너스 · 면접 한 줄 질문' : '🎁 보너스 문제') : '오늘의 퀴즈 · 1문항 (하루 한 번, 다시 풀 수 없어요)') + '</div><div class="disc-qtext">' + esc(q.q) + '</div><div class="disc-qhint">💡 ' + esc(q.hint) + '</div><div class="disc-opts">';
     q.opts.forEach(function (o, i) {
       var cls = rec ? (i === q.ans ? ' ok' : (i === rec.c ? ' bad' : '')) : '';
       h += '<button type="button" class="disc-opt' + cls + '" data-disc-ans="' + i + '" data-b="' + (bonus ? 1 : 0) + '"' + (rec ? ' disabled' : '') + '><span class="n">' + (i + 1) + '</span><span class="t">' + esc(o) + '</span></button>';
