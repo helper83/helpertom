@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-v24';
+const CACHE = 'helpertom-v25';
 const FILES = [
   './',
   './index.html',
@@ -12,6 +12,22 @@ self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.all(FILES.map(u => fetch(new Request(u, { cache: 'reload' })).then(r => r.ok ? c.put(u, r) : null).catch(() => null)))));
   self.skipWaiting();
 });
+
+// v12.124: DB를 나눈 data/ 조각은 설치 직후 백그라운드로 미리 받아 두어 오프라인에서도 쓸 수 있게 한다(실패해도 설치에는 영향 없음)
+async function precacheShards() {
+  try {
+    const meta = await (await fetch('data/shards.json', { cache: 'no-cache' })).json();
+    const c = await caches.open(CACHE);
+    const urls = meta.files.map(f => f + '?v=' + meta.ver);
+    for (let i = 0; i < urls.length; i += 6) {
+      await Promise.all(urls.slice(i, i + 6).map(async u => {
+        if (await c.match(u)) return;
+        try { const r = await fetch(u); if (r.ok) await c.put(u, r); } catch (_) {}
+      }));
+    }
+  } catch (_) {}
+}
+self.addEventListener('message', e => { if (e.data === 'precache-shards') e.waitUntil(precacheShards()); });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
@@ -35,6 +51,14 @@ self.addEventListener('fetch', e => {
         return r;
       }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
     );
+    return;
+  }
+  // data/ 조각: 캐시 우선, 없으면 받아서 저장
+  if (/\/data\/(ind|pub)\/[^/]+\.js$/.test(new URL(e.request.url).pathname)) {
+    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(n => {
+      if (n.ok) { const copy = n.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}); }
+      return n;
+    })));
     return;
   }
   e.respondWith(
