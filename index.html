@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v12.121 (2026-11-12): 오늘의 발견 다시 모으기(최근 7일)·재미 배지 2종·보너스 문제(주말/3일 연속) -->
 <!-- v12.120 (2026-11-12): 오늘의 발견에 스탬프북(발견 도감·배지)과 오늘의 퀴즈(하루 1문항, 오늘의 카드에서 자동 출제) 추가. 전체 초기화에 오늘의 발견 기록 포함. 동의 문구 consent-2026-11-v4. -->
 <!-- v12.119 (2026-11-12): 오늘의 발견 — 공공기관은 중앙 기관만 선정, 팝업 [찜 하기]·[카카오톡 공유] 추가, 이용 요약(노출·더 알아보기·찜·공유·진단 시작 경로)을 동의한 진단 응답에만 익명 포함(동의 문구 consent-2026-11-v3). -->
 <!-- v12.118 (2026-11-12): 홈 "오늘의 발견"(산업·공공기관·직무 1개씩) 카드 + 하루 1회 자동 팝업 추가. 한국시간 날짜로 순환 선정, 검증 완료 항목만 노출, 더 알아보기는 기존 상세로 이동. -->
@@ -928,6 +929,13 @@ body.disc-open{overflow:hidden}
 .disc-chips2 button{min-height:44px;padding:4px 12px;border:1px solid var(--line2);border-radius:999px;background:var(--sunk);font-size:13px;cursor:pointer}
 .disc-tabs{gap:6px}
 @media(max-width:380px){.disc-badges{grid-template-columns:repeat(2,1fr)}.disc-tab{font-size:13px;padding:0 2px}}
+.disc-bonus{margin-top:16px;padding:10px 12px;border:1.5px dashed var(--signal);border-radius:12px;background:var(--signal-tint)}
+.disc-bonus.lock{font-size:14px;color:var(--ink2)}
+.disc-bonus .disc-qno{color:var(--signal-ink);font-weight:700}
+.disc-past{display:flex;flex-direction:column;gap:6px}
+.disc-past button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:48px;padding:8px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--surface);font-size:14px;text-align:left;cursor:pointer}
+.disc-past button b{font-size:12px;color:var(--ok)}
+.disc-past .d{font-weight:700;flex:none}
 </style>
 </head>
 <body>
@@ -4838,7 +4846,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 })();
 </script>
 <script>
-/* v12.120 오늘의 발견 + 스탬프북 + 오늘의 퀴즈 — 서버 없이 한국시간 날짜로 선정·출제 */
+/* v12.121 오늘의 발견 + 스탬프북(다시 모으기) + 오늘의 퀴즈(보너스 문제) — 서버 없이 한국시간 날짜로 선정·출제 */
 (function () {
   var KEY = 'visionhr_disc_v1', LOGKEY = 'visionhr_disc_log_v1', BOOKKEY = 'visionhr_disc_book_v1', QUIZKEY = 'visionhr_disc_quiz_v1';
   var TYPES = [
@@ -4849,7 +4857,9 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   var QTAB = { k: 'QUIZ', label: '퀴즈', letter: '퀴', tc: '--t4' };
   var BOOKTAB = { k: 'BOOK', label: '스탬프북', letter: '북', tc: '--t5' };
   var STAR = { IND: 'INDUSTRY', PUB: 'PUBLIC', JOB: 'JOB' };
-  var POOL = null, PSET = null, NG = null, TODAY = null, ACTIVE = 'IND', VIEW = 'DAY', NEW = {}, LAST_FOCUS = null;
+  var POOL = null, PSET = null, NG = null, TODAY = null, ACTIVE = 'IND', VIEW = 'DAY', OFF = 0, NEW = {}, LAST_FOCUS = null;
+
+  function curIdx() { return TODAY.idx - OFF; }   /* 보고 있는 날(오늘 또는 다시 모으기 중인 지난 날) */
 
   /* ---- 한국시간 날짜 ---- */
   function kstToday() {
@@ -4990,10 +5000,13 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     return finish('FIELD', 'IND', pk.IND, '다음 중 「' + ind.name + '」 산업에 속하는 분야는?', correct, d, rnd,
       '“' + correct + '”은(는) 「' + ind.name + '」 산업이 다루는 분야입니다. 나머지 보기는 다른 산업의 분야입니다.', '‘산업’ 카드의 「이런 분야를 다룹니다」에 답이 있어요');
   }
-  function quizFor(idx) {
+  function quizFor(idx, bonus) {
     var pk = pickFor(idx), rnd = mulberry32(idx * 7919 + 13), fn = [qJob, qCompany, qMinistry, qField], start = idx % 4, q = null, i;
     for (i = 0; i < 4 && !q; i++) q = fn[(start + i) % 4](pk, rnd);
-    return q;
+    if (!bonus) return q;
+    var r2 = mulberry32(idx * 104729 + 977), b;            /* 보너스: 기본 문항과 다른 유형 */
+    for (i = 0; i < 4; i++) { b = fn[(start + 2 + i) % 4](pk, r2); if (b && (!q || b.kind !== q.kind)) return b; }
+    return null;
   }
   function quizGet() { var q = LS.get(QUIZKEY, {}); return (q && typeof q === 'object' && !Array.isArray(q)) ? q : {}; }
 
@@ -5023,13 +5036,15 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var q = quizGet();
     if (b.seen && b.seen.d === TODAY.s && b.seen.k.IND && b.seen.k.PUB && b.seen.k.JOB && q[TODAY.s] && !b.full[TODAY.s]) b.full[TODAY.s] = 1;
   }
-  function recordFound(type, code) {
+  function recordFound(type, code, past) {
     var b = bookGet(), isNew = !b[type][code];
-    if (isNew) b[type][code] = TODAY.s;
-    if (!b.seen || b.seen.d !== TODAY.s) b.seen = { d: TODAY.s, k: {} };
-    b.seen.k[type] = 1; checkFull(b); LS.set(BOOKKEY, b);
+    if (isNew) { b[type][code] = TODAY.s; if (past) b.re = (b.re || 0) + 1; }
+    if (!past) { if (!b.seen || b.seen.d !== TODAY.s) b.seen = { d: TODAY.s, k: {} }; b.seen.k[type] = 1; checkFull(b); }   /* 완주는 오늘 카드만 */
+    LS.set(BOOKKEY, b);
     return isNew;
   }
+  function projStreak() { var s = st(); return s.last === TODAY.s ? (s.streak || 1) : (s.last === dateStr(TODAY.idx - 1) ? (Number(s.streak) || 0) + 1 : 1); }
+  function bonusOpen() { var d = new Date(TODAY.idx * 86400000).getUTCDay(); return d === 0 || d === 6 || projStreak() >= 3; }
   function touch() {
     var s = st();
     if (s.last !== TODAY.s) { s.streak = (s.last === dateStr(TODAY.idx - 1)) ? (Number(s.streak) || 0) + 1 : 1; s.last = TODAY.s; }
@@ -5039,7 +5054,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function foundCount(b, k) { var ps = poolSets()[k], n = 0; Object.keys(b[k]).forEach(function (c) { if (ps[c]) n++; }); return n; }
   function stats() {
     var b = bookGet(), s = st(), l = logGet(), f = { IND: foundCount(b, 'IND'), PUB: foundCount(b, 'PUB'), JOB: foundCount(b, 'JOB') };
-    return { b: b, f: f, total: f.IND + f.PUB + f.JOB, full: Object.keys(b.full).length, best: Math.max(s.best || 0, s.streak || 0), cur: s.last === TODAY.s || s.last === dateStr(TODAY.idx - 1) ? (s.streak || 0) : 0, qn: l.quizN || 0, qok: l.quizOk || 0 };
+    return { b: b, f: f, total: f.IND + f.PUB + f.JOB, full: Object.keys(b.full).length, best: Math.max(s.best || 0, s.streak || 0), cur: s.last === TODAY.s || s.last === dateStr(TODAY.idx - 1) ? (s.streak || 0) : 0, qn: l.quizN || 0, qok: l.quizOk || 0, re: b.re || 0, bonusOk: b.bonusOk || 0 };
   }
   var BADGES = [
     { t: '3일 연속', d: '3일 연속 방문', ok: function (x) { return x.best >= 3; } },
@@ -5052,20 +5067,22 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     { t: '퀴즈 5승', d: '퀴즈 정답 5개', ok: function (x) { return x.qok >= 5; } },
     { t: '퀴즈 20승', d: '퀴즈 정답 20개', ok: function (x) { return x.qok >= 20; } },
     { t: '완주 3일', d: '카드 3개+퀴즈를 한 날 3번', ok: function (x) { return x.full >= 3; } },
-    { t: '완주 7일', d: '카드 3개+퀴즈를 한 날 7번', ok: function (x) { return x.full >= 7; } }
+    { t: '완주 7일', d: '카드 3개+퀴즈를 한 날 7번', ok: function (x) { return x.full >= 7; } },
+    { t: '보너스 첫 정답', d: '🎁 보너스 문제 정답 1개', ok: function (x) { return x.bonusOk >= 1; } },
+    { t: '다시 모으기 5', d: '놓친 날 카드 5개 되찾기', ok: function (x) { return x.re >= 5; } }
   ];
 
   /* ---- 홈 카드 ---- */
   function renderHome() {
     var head = document.getElementById('discHead'), list = document.getElementById('discList'); if (!head || !list) return;
-    var s = st(), pk = pickFor(TODAY.idx), x = stats(), qd = quizGet()[TODAY.s], q = quizFor(TODAY.idx);
+    var s = st(), pk = pickFor(TODAY.idx), x = stats(), all = quizGet(), qd = all[TODAY.s], q = quizFor(TODAY.idx), bq = bonusOpen() && quizFor(TODAY.idx, true), bd = all[TODAY.s + '#b'];
     head.innerHTML = '오늘의 발견 · ' + esc(dayInfo(TODAY.idx)) + (s.streak > 0 && s.last === TODAY.s ? '<span class="disc-streak">🔥 ' + s.streak + '일 연속</span>' : '');
     var h = TYPES.map(function (t) {
       var code = pk[t.k]; if (!code) return '';
       var c = card(t.k, code);
       return row(t.k, t.tc, t.letter, t.label + ' · ' + c.name, clip(c.line, 60));
     }).join('');
-    if (q) h += row('QUIZ', QTAB.tc, QTAB.letter, '오늘의 퀴즈', qd ? (qd.ok ? '정답을 맞혔어요 ✓ 스탬프 획득' : '오늘 퀴즈 완료 · 해설 보기') : '1문항 · 오늘의 카드를 읽고 풀어 보세요');
+    if (q) h += row('QUIZ', QTAB.tc, QTAB.letter, '오늘의 퀴즈', (qd ? (qd.ok ? '정답을 맞혔어요 ✓' : '오늘 퀴즈 완료') + (bq ? (bd ? ' · 🎁 보너스 완료' : ' · 🎁 보너스 문제가 열렸어요') : '') : '1문항' + (bq ? ' + 🎁 보너스' : '') + ' · 오늘의 카드를 읽고 풀어 보세요'));
     h += row('BOOK', BOOKTAB.tc, BOOKTAB.letter, '내 스탬프북', '산업 ' + x.f.IND + '/' + pools().IND.length + ' · 공공기관 ' + x.f.PUB + '/' + pools().PUB.length + ' · 직무 ' + x.f.JOB + '/' + pools().JOB.length);
     list.innerHTML = h;
   }
@@ -5076,7 +5093,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   /* ---- 팝업 ---- */
   function modal() { return document.getElementById('discModal'); }
   function tabHtml() {
-    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat([QTAB]).map(function (x) {
+    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat(OFF > 0 ? [] : [QTAB]).map(function (x) {
       return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x.tc + ')" data-disc-tab="' + x.k + '" aria-selected="' + (x.k === ACTIVE) + '">' + x.label + '</button>';
     }).join('') + '</div>';
   }
@@ -5086,9 +5103,9 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       (VIEW === 'DAY' ? '<button type="button" class="disc-x" data-disc-book aria-label="내 스탬프북">📒</button>' : '') + '<button type="button" class="disc-x" data-disc-close aria-label="닫기">✕</button></div>';
   }
   function dayView() {
-    var pk = pickFor(TODAY.idx), s = st(), tab = ACTIVE === 'QUIZ' ? QTAB : TYPES.filter(function (x) { return x.k === ACTIVE; })[0];
-    var sub = esc(dayInfo(TODAY.idx)) + (s.streak > 0 ? ' · 🔥 ' + s.streak + '일 연속' : '');
-    var h = band('오늘의 발견', sub, tab.tc) + tabHtml();
+    var idx = curIdx(), pk = pickFor(idx), s = st(), past = OFF > 0, tab = ACTIVE === 'QUIZ' ? QTAB : TYPES.filter(function (x) { return x.k === ACTIVE; })[0];
+    var sub = esc(dayInfo(idx)) + (past ? ' · 다시 모으기' : (s.streak > 0 ? ' · 🔥 ' + s.streak + '일 연속' : ''));
+    var h = band(past ? '지난 발견' : '오늘의 발견', sub, tab.tc) + tabHtml();
     if (ACTIVE === 'QUIZ') return h + quizBody(s) + '</div>';
     var code = pk[ACTIVE], c = card(ACTIVE, code);
     h += '<div class="disc-body" role="tabpanel"><div class="disc-name">' + esc(c.name) + (NEW[ACTIVE] ? '<span class="disc-new">✨ 새 스탬프</span>' : '') + '</div><div class="disc-tag">' + esc(c.tag) + '</div><p class="disc-line">' + esc(c.line) + '</p>';
@@ -5096,19 +5113,27 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     if (c.chips.length) h += '<div class="disc-pt"><h4>' + esc(c.chipLabel) + '</h4><div class="disc-chips">' + c.chips.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>';
     if (c.url) h += '<div class="disc-pt"><a class="disc-link" href="' + esc(c.url) + '" target="_blank" rel="noopener noreferrer">공식 홈페이지 ↗</a></div>';
     h += '</div><div class="disc-foot"><button type="button" class="btn primary" data-disc-go="' + ACTIVE + '" data-code="' + esc(code) + '">' + esc(tab.label) + ' 더 알아보기</button>';
-    h += '<div class="row2">' + starButton(STAR[ACTIVE], code, c.name) + '<button type="button" class="btn ghost" data-disc-share>카카오톡 공유</button></div>' + offHtml(s) + '</div></div>';
+    h += '<div class="row2">' + starButton(STAR[ACTIVE], code, c.name) + '<button type="button" class="btn ghost" data-disc-share>카카오톡 공유</button></div>' + (past ? '<button type="button" class="btn ghost" data-disc-today>← 오늘의 발견으로</button>' : '') + offHtml(s) + '</div></div>';
+    return h;
+  }
+  function qBlock(q, rec, bonus) {
+    var h = '<div class="disc-qno">' + (bonus ? '🎁 보너스 문제' : '오늘의 퀴즈 · 1문항 (하루 한 번, 다시 풀 수 없어요)') + '</div><div class="disc-qtext">' + esc(q.q) + '</div><div class="disc-qhint">💡 ' + esc(q.hint) + '</div><div class="disc-opts">';
+    q.opts.forEach(function (o, i) {
+      var cls = rec ? (i === q.ans ? ' ok' : (i === rec.c ? ' bad' : '')) : '';
+      h += '<button type="button" class="disc-opt' + cls + '" data-disc-ans="' + i + '" data-b="' + (bonus ? 1 : 0) + '"' + (rec ? ' disabled' : '') + '><span class="n">' + (i + 1) + '</span><span class="t">' + esc(o) + '</span></button>';
+    });
+    h += '</div>';
+    if (rec) h += '<div class="disc-res ' + (rec.ok ? 'ok' : 'bad') + (bonus ? ' bonus' : '') + '" role="status"><b>' + (rec.ok ? '정답입니다! 🎉' + (bonus ? ' 보너스 성공' : ' 스탬프를 받았어요') : '아쉬워요. 정답은 ' + (q.ans + 1) + '번이에요') + '</b><p>' + esc(q.explain) + '</p></div>';
     return h;
   }
   function quizBody(s) {
-    var q = quizFor(TODAY.idx), rec = quizGet()[TODAY.s];
+    var q = quizFor(TODAY.idx), all = quizGet(), rec = all[TODAY.s];
     if (!q) return '<div class="disc-body"><p class="disc-line">오늘은 출제할 수 있는 문항이 없어요. 내일 다시 만나요.</p></div><div class="disc-foot">' + offHtml(s) + '</div>';
-    var h = '<div class="disc-body" role="tabpanel"><div class="disc-qno">오늘의 퀴즈 · 1문항 (하루 한 번, 다시 풀 수 없어요)</div><div class="disc-qtext">' + esc(q.q) + '</div><div class="disc-qhint">💡 ' + esc(q.hint) + '</div><div class="disc-opts">';
-    q.opts.forEach(function (o, i) {
-      var cls = rec ? (i === q.ans ? ' ok' : (i === rec.c ? ' bad' : '')) : '';
-      h += '<button type="button" class="disc-opt' + cls + '" data-disc-ans="' + i + '"' + (rec ? ' disabled' : '') + '><span class="n">' + (i + 1) + '</span><span class="t">' + esc(o) + '</span></button>';
-    });
-    h += '</div>';
-    if (rec) h += '<div class="disc-res ' + (rec.ok ? 'ok' : 'bad') + '" role="status"><b>' + (rec.ok ? '정답입니다! 🎉 스탬프를 받았어요' : '아쉬워요. 정답은 ' + (q.ans + 1) + '번이에요') + '</b><p>' + esc(q.explain) + '</p></div>';
+    var h = '<div class="disc-body" role="tabpanel">' + qBlock(q, rec, false), bq = quizFor(TODAY.idx, true);
+    if (bq) {
+      if (bonusOpen()) h += '<div class="disc-bonus">' + qBlock(bq, all[TODAY.s + '#b'], true) + '</div>';
+      else h += '<div class="disc-bonus lock">🔒 <b>보너스 문제</b> — 3일 연속 방문하거나 주말(토·일)에 열려요. 지금 ' + projStreak() + '일째예요.</div>';
+    }
     h += '</div><div class="disc-foot">';
     h += rec ? '<button type="button" class="btn primary" data-disc-tab="' + q.type + '">관련 카드 다시 보기</button><button type="button" class="btn ghost" data-disc-book>내 스탬프북 보기</button>' : '<button type="button" class="btn ghost" data-disc-tab="' + q.type + '">힌트: 관련 카드 보러 가기</button>';
     return h + offHtml(s) + '</div>';
@@ -5123,7 +5148,13 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       var tot = pools()[a[0]].length, n = x.f[a[0]], pct = tot ? Math.round(n / tot * 100) : 0;
       h += '<div class="disc-bar"><div class="lab"><span>' + a[1] + '</span><b>' + n + ' / ' + tot + '</b></div><div class="bar" role="img" aria-label="' + a[1] + ' ' + n + '개 발견, 전체 ' + tot + '개"><i style="width:' + pct + '%"></i></div></div>';
     });
-    h += '<h3 class="disc-h3">배지</h3><div class="disc-badges">' + BADGES.map(function (g) { var on = g.ok(x); return '<div class="disc-badge' + (on ? ' on' : '') + '"><span aria-hidden="true">' + (on ? '🏅' : '🔒') + '</span><b>' + esc(g.t) + '</b><small>' + esc(g.d) + '</small></div>'; }).join('') + '</div>';
+    h += '<h3 class="disc-h3">놓친 날 다시 모으기 <small class="muted">(최근 7일)</small></h3><p class="muted small" style="margin:0 0 6px">지난 카드는 스탬프만 받아요. 연속 기록과 퀴즈는 오늘만 해당돼요.</p><div class="disc-past">';
+    for (var off = 1; off <= 7; off++) {
+      var ppk = pickFor(TODAY.idx - off), allIn = true;
+      var marks = TYPES.map(function (t) { var got = ppk[t.k] && b[t.k][ppk[t.k]]; if (!got) allIn = false; return t.label + (got ? ' ✓' : ' ○'); });
+      h += '<button type="button" data-disc-past="' + off + '"><span class="d">' + esc(dayInfo(TODAY.idx - off)) + '</span><span>' + esc(marks.join(' · ')) + '</span>' + (allIn ? '<b>모두 모음</b>' : '') + '</button>';
+    }
+    h += '</div><h3 class="disc-h3">배지</h3><p class="muted small" style="margin:0 0 6px">배지는 재미로 모으는 기록이에요.</p><div class="disc-badges">' + BADGES.map(function (g) { var on = g.ok(x); return '<div class="disc-badge' + (on ? ' on' : '') + '"><span aria-hidden="true">' + (on ? '🏅' : '🔒') + '</span><b>' + esc(g.t) + '</b><small>' + esc(g.d) + '</small></div>'; }).join('') + '</div>';
     h += '<h3 class="disc-h3">발견한 항목 <small class="muted">(눌러서 상세 보기)</small></h3>';
     [['IND', '산업'], ['PUB', '공공기관'], ['JOB', '직무']].forEach(function (a) {
       var codes = Object.keys(b[a[0]]).filter(function (c) { return poolSets()[a[0]][c]; }).sort(function (m, n) { return b[a[0]][n] < b[a[0]][m] ? -1 : b[a[0]][n] > b[a[0]][m] ? 1 : 0; });
@@ -5135,7 +5166,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function render() { var m = modal(); m.innerHTML = VIEW === 'BOOK' ? bookView() : dayView(); }
   function showTab(k) {
     ACTIVE = k;
-    if (k !== 'QUIZ') { var code = pickFor(TODAY.idx)[k]; if (code) NEW[k] = recordFound(k, code) || NEW[k]; }
+    if (k !== 'QUIZ') { var code = pickFor(curIdx())[k]; if (code) NEW[k] = recordFound(k, code, OFF > 0) || NEW[k]; }
     render();
     var f = modal().querySelector('.disc-tab[aria-selected="true"]'); if (f && VIEW === 'DAY') f.focus();
   }
@@ -5148,9 +5179,9 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     if (!TODAY) TODAY = kstToday();
     if (!(m.classList.contains('hidden'))) { /* 이미 열려 있음 */ } else LAST_FOCUS = document.activeElement;
     if (type === 'BOOK') { VIEW = 'BOOK'; render(); show(); return; }
-    VIEW = 'DAY'; NEW = {}; ACTIVE = type || 'IND';
-    if (ACTIVE !== 'QUIZ') { var code = pickFor(TODAY.idx)[ACTIVE]; if (code) NEW[ACTIVE] = recordFound(ACTIVE, code); }
-    render(); show(); logBump('view'); touch();
+    VIEW = 'DAY'; NEW = {}; OFF = 0; ACTIVE = type || 'IND';
+    if (ACTIVE !== 'QUIZ') { var code = pickFor(TODAY.idx)[ACTIVE]; if (code) NEW[ACTIVE] = recordFound(ACTIVE, code, false); }
+    logBump('view'); touch(); render(); show();
   }
   function close() {
     var m = modal(); if (!m || m.classList.contains('hidden')) return;
@@ -5158,20 +5189,21 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     try { if (LAST_FOCUS && LAST_FOCUS.focus) LAST_FOCUS.focus(); } catch (e) { }
     renderHome();
   }
-  function answer(i) {
-    var q = quizFor(TODAY.idx), all = quizGet(); if (!q || all[TODAY.s]) return;
-    var ok = (i === q.ans) ? 1 : 0; all[TODAY.s] = { c: i, ok: ok };
-    Object.keys(all).sort().slice(0, Math.max(0, Object.keys(all).length - 30)).forEach(function (k) { delete all[k]; });
+  function answer(i, bonus) {
+    var q = quizFor(TODAY.idx, !!bonus), all = quizGet(), key = bonus ? TODAY.s + '#b' : TODAY.s;
+    if (!q || all[key] || (bonus && !bonusOpen())) return;
+    var ok = (i === q.ans) ? 1 : 0; all[key] = { c: i, ok: ok };
+    var ks = Object.keys(all).sort(); ks.slice(0, Math.max(0, ks.length - 40)).forEach(function (k) { delete all[k]; });
     LS.set(QUIZKEY, all); logBump('quiz', ok);
-    var b = bookGet(); checkFull(b); LS.set(BOOKKEY, b);
+    var b = bookGet(); if (bonus && ok) b.bonusOk = (b.bonusOk || 0) + 1; checkFull(b); LS.set(BOOKKEY, b);
     render(); renderHome();
-    var r = modal().querySelector('.disc-res'); if (r) { r.setAttribute('tabindex', '-1'); r.focus(); }
+    var r = modal().querySelector(bonus ? '.disc-res.bonus' : '.disc-res'); if (r) { r.setAttribute('tabindex', '-1'); r.focus(); }
   }
   function share() {
-    var pk = pickFor(TODAY.idx), t = TYPES.filter(function (x) { return x.k === ACTIVE; })[0]; if (!t) return;
+    var pk = pickFor(curIdx()), t = TYPES.filter(function (x) { return x.k === ACTIVE; })[0]; if (!t) return;
     var c = card(ACTIVE, pk[ACTIVE]), url = String(location.href).split('#')[0].split('?')[0];
     if (!/^https?:/.test(url)) url = 'https://helper83.github.io/helpertom/';
-    var text = '오늘의 발견 · ' + t.label + ' ' + c.name + '\n' + clip(c.line, 60) + '\n(헬퍼탐 · 비전HR컨설팅)';
+    var text = (OFF > 0 ? '지난 발견' : '오늘의 발견') + ' · ' + t.label + ' ' + c.name + '\n' + clip(c.line, 60) + '\n(헬퍼탐 · 비전HR컨설팅)';
     function copied() {
       try { navigator.clipboard.writeText(text + '\n' + url).then(function () { logBump('share'); toast('내용과 링크를 복사했습니다. 카카오톡 대화창에 붙여넣어 보내세요'); }, function () { toast('복사하지 못했습니다. 주소창의 링크를 직접 공유해 주세요'); }); }
       catch (e) { toast('복사하지 못했습니다. 주소창의 링크를 직접 공유해 주세요'); }
@@ -5186,9 +5218,16 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       var t = e.target;
       if (t === m || t.closest('[data-disc-close]')) { close(); return; }
       var tab = t.closest('[data-disc-tab]'); if (tab) { VIEW = 'DAY'; showTab(tab.getAttribute('data-disc-tab')); return; }
-      var ans = t.closest('[data-disc-ans]'); if (ans) { answer(Number(ans.getAttribute('data-disc-ans'))); return; }
+      var ans = t.closest('[data-disc-ans]'); if (ans) { answer(Number(ans.getAttribute('data-disc-ans')), ans.getAttribute('data-b') === '1'); return; }
       if (t.closest('[data-disc-book]')) { open('BOOK'); return; }
-      if (t.closest('[data-disc-day]')) { VIEW = 'DAY'; showTab(ACTIVE === 'BOOK' ? 'IND' : ACTIVE); show(); return; }
+      var past = t.closest('[data-disc-past]');
+      if (past) {
+        OFF = Number(past.getAttribute('data-disc-past')) || 0; VIEW = 'DAY'; NEW = {};
+        var ppk = pickFor(TODAY.idx - OFF), bk = bookGet(), firstMiss = TYPES.filter(function (x) { return ppk[x.k] && !bk[x.k][ppk[x.k]]; })[0];
+        showTab(firstMiss ? firstMiss.k : 'IND'); show(); return;
+      }
+      if (t.closest('[data-disc-today]')) { OFF = 0; NEW = {}; showTab(ACTIVE === 'QUIZ' ? 'IND' : ACTIVE); return; }
+      if (t.closest('[data-disc-day]')) { VIEW = 'DAY'; OFF = 0; NEW = {}; showTab(ACTIVE === 'QUIZ' ? 'IND' : ACTIVE); show(); return; }
       var it = t.closest('[data-disc-item]');
       if (it) { var p = it.getAttribute('data-disc-item').split('|'); close(); if (p[0] === 'IND') goIndustry(p[1]); else if (p[0] === 'PUB') goPublic(p[1]); else goJob(p[1]); return; }
       var go = t.closest('[data-disc-go]');
@@ -5241,6 +5280,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   };
   window.discPickFor = pickFor;                                  /* 점검용 */
   window.discQuizFor = quizFor;
+  window.discBonusOpen = bonusOpen;
   window.discPoolSizes = function () { var p = pools(); return { IND: p.IND.length, PUB: p.PUB.length, JOB: p.JOB.length }; };
 })();
 </script>
