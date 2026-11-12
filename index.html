@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- v12.119 (2026-11-12): 오늘의 발견 — 공공기관은 중앙 기관만 선정, 팝업 [찜 하기]·[카카오톡 공유] 추가, 이용 요약(노출·더 알아보기·찜·공유·진단 시작 경로)을 동의한 진단 응답에만 익명 포함(동의 문구 consent-2026-11-v3). -->
+<!-- v12.118 (2026-11-12): 홈 "오늘의 발견"(산업·공공기관·직무 1개씩) 카드 + 하루 1회 자동 팝업 추가. 한국시간 날짜로 순환 선정, 검증 완료 항목만 노출, 더 알아보기는 기존 상세로 이동. -->
 <!-- v12.113 (2026-10-07): 상단·PDF 문구 "운영 비전HR컨설팅" → "비전HR컨설팅" -->
 <!-- v12.112 (2026-10-07): 로고 색상을 로열블루 그라데이션 + 금빛 포인트로 변경 -->
 <!-- v12.111 (2026-10-07): 로고 시안 6(상승 화살표 H)로 교체 — 헤더·파비콘·홈화면 아이콘 -->
@@ -852,6 +854,44 @@ body{background:var(--bg)!important}
 select,input[type=number],input[type=search],input[type=text],textarea{font-size:16px}
 @media(max-width:1100px){.btn,.btn.sm,#qToggleBtn{min-height:44px}}
 /* QA-APPSKILL:END */
+/* v12.118 오늘의 발견 */
+.disc-modal{position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.5);display:flex;align-items:flex-end;justify-content:center}
+.disc-modal.hidden{display:none}
+.disc-card{--tcd:color-mix(in srgb,var(--tc) 78%,#000);background:var(--surface);color:var(--ink);width:100%;max-width:520px;max-height:92vh;max-height:92dvh;display:flex;flex-direction:column;border-radius:16px 16px 0 0;overflow:hidden;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(min-width:641px){.disc-modal{align-items:center;padding:24px}.disc-card{border-radius:16px;max-height:86vh}}
+.disc-band{background:var(--tcd);color:#fff;padding:12px 12px 12px 16px;display:flex;align-items:center;gap:10px}
+.disc-band h2{color:#fff;font-size:18px;margin:0;line-height:1.3}
+.disc-band h2:focus{outline:none}
+.disc-band .grow{flex:1;min-width:0}
+.disc-band small{display:block;font-size:13px;font-weight:400;line-height:1.4}
+.disc-x{flex:none;min-width:44px;min-height:44px;border:0;background:rgba(255,255,255,.2);color:#fff;border-radius:10px;font-size:18px;cursor:pointer}
+.disc-tabs{display:flex;gap:8px;padding:12px 16px 0}
+.disc-tab{--tcd:color-mix(in srgb,var(--tc) 78%,#000);flex:1;min-height:44px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.disc-tab[aria-selected="true"]{background:var(--tcd);border-color:var(--tcd);color:#fff}
+.disc-body{padding:8px 16px 12px;overflow:auto;flex:1;-webkit-overflow-scrolling:touch}
+.disc-name{font-size:20px;font-weight:700;line-height:1.35;margin:8px 0 2px}
+.disc-tag{font-size:13px;color:var(--muted)}
+.disc-line{font-size:15px;margin:8px 0 6px}
+.disc-pt{border-top:1px solid var(--line2);padding:10px 0 2px;margin-top:8px}
+.disc-pt h4{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--ink)}
+.disc-pt h4::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--tc);margin-right:6px}
+.disc-pt p{margin:0 0 8px;font-size:14px;line-height:1.55}
+.disc-pt ul{margin:0 0 8px;padding-left:18px;font-size:14px;line-height:1.55}
+.disc-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.disc-chips span{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sunk);border:1px solid var(--line2);color:var(--ink2)}
+.disc-foot{padding:10px 16px 14px;border-top:1px solid var(--line2);display:flex;flex-direction:column;gap:8px}
+.disc-foot .btn{width:100%;min-height:44px;font-size:15px;font-weight:700}
+.disc-foot .row2{display:flex;gap:8px}
+.disc-foot .row2 .btn,.disc-foot .row2 .star-btn{flex:1;min-height:44px;justify-content:center;font-size:15px;font-weight:700}
+.disc-link{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600}
+.disc-foot .btn.ghost{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px}
+.disc-off{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);min-height:44px;cursor:pointer}
+.disc-off input{width:20px;height:20px;flex:none}
+.disc-streak{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:var(--signal-tint);color:var(--signal-ink);font-size:12px;font-weight:700;letter-spacing:0}
+body.disc-open{overflow:hidden}
+#discList .hrow .hx span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#discList .hgo{flex:none;color:var(--faint);font-size:20px}
+@media print{.disc-modal,#discSec{display:none!important}}
 </style>
 </head>
 <body>
@@ -887,6 +927,9 @@ select,input[type=number],input[type=search],input[type=text],textarea{font-size
       <h1 id="h-home">학과·산업·직무, 어디서부터 볼까요?</h1>
       <p class="muted">60개 산업과 107개 직무를 전부 볼 필요는 없습니다. 지금 나에게 맞는 출발점 하나를 선택하세요.</p>
     </div>
+    <div class="hsec no-print" id="discHead" aria-live="polite"></div>
+    <div class="hlist no-print" id="discList" role="list"></div>
+    <span id="discSec" hidden></span>
     <div class="hsec">활용 방법</div>
     <div id="guideBox" class="hlist">
       <div class="guide-free" style="border:1.5px solid var(--primary);background:var(--sunk);border-radius:var(--r-md);padding:10px 12px;margin:0 0 8px;font-size:14px;line-height:1.55"><b>순서는 정해져 있지 않습니다.</b> 아래 항목은 참고용이며 순서가 없습니다. 학과·산업(민간기업·공공기관)·직무·진단 중 가장 궁금한 곳에서 <b>원하는 대로 시작</b>하고, 필요하면 다른 탐색으로 오가세요. 어디서 시작하든 ☆ 찜한 항목은 진로 결정에 모입니다.</div>
@@ -2969,11 +3012,11 @@ const CLOUD_CONFIG = {
  * 개인정보보호법 제15조 제2항 고지 4항목(목적·항목·보유기간·거부권 및 불이익)을 화면에 표시.
  * 동의 거부 시에도 진단·추천·준비계획은 동일하게 제공(선택 동의). */
 const CONSENT_CONFIG = {
-  version: 'consent-2026-09-v2',
+  version: 'consent-2026-11-v3',
   controller: '비전HR컨설팅(헬퍼탐 운영)',
   contact: 'hp83@naver.com',
   purpose: '진로·취업 탐색 진단이 얼마나 정확한지 확인하고 추천을 개선하기 위한 통계·연구',
-  items: '익명 진단ID, 64문항 응답, 34개 세부특성 점수, 추천 산업·직무·조합 결과, 결과 체감 평가(흥미·가치·준비도 판정과 추천 후보별 일치도 1~5점, 유용성, 개선 의견)와 선택 입력한 학년·전공계열, 응답 일시, 앱 버전',
+  items: '익명 진단ID, 64문항 응답, 34개 세부특성 점수, 추천 산업·직무·조합 결과, 결과 체감 평가(흥미·가치·준비도 판정과 추천 후보별 일치도 1~5점, 유용성, 개선 의견)와 선택 입력한 학년·전공계열, 응답 일시, 앱 버전, 오늘의 발견 이용 요약(노출·더 알아보기·찜·공유 횟수와 진단 시작 경로. 어떤 항목을 봤는지는 포함하지 않음)',
   notCollected: '이름·학번·연락처·이메일 등 개인을 식별할 수 있는 정보는 수집하지 않습니다.',
   retention: '수집일로부터 3년 또는 연구 목적 달성 시까지 보관 후 파기',
   refusal: '동의하지 않을 권리가 있으며, 동의하지 않아도 진단·추천·진로 결정·로드맵 등 모든 기능을 동일하게 이용할 수 있습니다. 동의 철회 시 이후 전송이 중단되며, 이미 전송된 기록의 삭제는 문의처로 익명 진단ID와 함께 요청할 수 있습니다.'
@@ -3175,7 +3218,9 @@ function cloudPack(rec){
     topIndustries:rec.topIndustries||[],
     topCombos:rec.topCombos||[],
     feedback:rec.feedback||{},
-    consent:(function(){const s=consentState()||{};return {agreed:!!s.agreed,at:s.at||'',version:s.version||CONSENT_CONFIG.version};})()
+    consent:(function(){const s=consentState()||{};return {agreed:!!s.agreed,at:s.at||'',version:s.version||CONSENT_CONFIG.version};})(),
+    /* v12.119: 새 동의 문구(v3)에 동의한 경우에만 오늘의 발견 이용 요약을 익명으로 포함 */
+    discovery:(function(){const s=consentState()||{};try{return (s.agreed&&s.version===CONSENT_CONFIG.version&&typeof discSummary==='function')?discSummary():null;}catch(e){return null;}})()
   };
 }
 function cloudQueueUpsert(payload){
@@ -4551,6 +4596,7 @@ function initializeApp() {
   renderProgress();
   openPage('homePage');
   $('loading').classList.add('off');
+  try { if (typeof discInit === 'function') discInit(); } catch (e) { /* 오늘의 발견 오류가 앱을 막지 않게 */ }
   window.addEventListener('resize', function () {
     document.documentElement.style.setProperty('--head-h', ($('siteHeader').offsetHeight + 6) + 'px');
   });
@@ -4754,7 +4800,253 @@ var _rp=window.renderPrepare;window.renderPrepare=function(){var x=_rp.apply(thi
 if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventListener('DOMContentLoaded',function(){try{build()}catch(e){}});
 })();
 </script>
+<script>
+/* v12.118 오늘의 발견 — 산업·공공기관·직무를 하루에 하나씩 소개 (서버 없이 날짜로 선정) */
+(function () {
+  var KEY = 'visionhr_disc_v1';
+  var TYPES = [
+    { k: 'IND', label: '산업', letter: '산', tc: '--t1', salt: 11 },
+    { k: 'PUB', label: '공공기관', letter: '공', tc: '--t2', salt: 22 },
+    { k: 'JOB', label: '직무', letter: '직', tc: '--t3', salt: 33 }
+  ];
+  var STAR = { IND: 'INDUSTRY', PUB: 'PUBLIC', JOB: 'JOB' };
+  var LOGKEY = 'visionhr_disc_log_v1';
+  var POOL = null, TODAY = null, ACTIVE = 'IND', LAST_FOCUS = null;
+
+  /* ---- 이용 요약(이 기기에만 저장 · 동의한 진단 응답에만 익명 포함) ---- */
+  function logGet() { var l = LS.get(LOGKEY, {}); if (!l || typeof l !== 'object' || Array.isArray(l)) l = {}; l.go = l.go || { IND: 0, PUB: 0, JOB: 0 }; return l; }
+  function logBump(ev, k) {
+    if (!TODAY) TODAY = kstToday();
+    var l = logGet();
+    if (!l.firstAt) l.firstAt = TODAY.s;
+    if (ev === 'view') { l.views = (l.views || 0) + 1; if (l.lastViewDay !== TODAY.s) { l.viewDays = (l.viewDays || 0) + 1; l.lastViewDay = TODAY.s; } }
+    else if (ev === 'go') { l.go[k] = (l.go[k] || 0) + 1; }
+    else if (ev === 'star') { l.star = (l.star || 0) + 1; }
+    else if (ev === 'share') { l.share = (l.share || 0) + 1; }
+    else if (ev === 'diag') { if (!l.diagStartAt) { l.diagStartAt = TODAY.s; l.diagAfterGo = (l.go.IND + l.go.PUB + l.go.JOB) > 0; } }
+    LS.set(LOGKEY, l);
+  }
+
+  /* ---- 한국시간 기준 날짜 ---- */
+  function kstToday() {
+    var s;
+    try { s = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date()); }
+    catch (e) { var d = new Date(Date.now() + 9 * 3600000); s = d.toISOString().slice(0, 10); }
+    var idx = Math.floor(Date.parse(s + 'T00:00:00Z') / 86400000);
+    return { s: s, idx: idx };
+  }
+  function dayInfo(idx) {
+    var d = new Date(idx * 86400000), w = ['일', '월', '화', '수', '목', '금', '토'][d.getUTCDay()];
+    return (d.getUTCMonth() + 1) + '/' + d.getUTCDate() + '(' + w + ')';
+  }
+  function dateStr(idx) { return new Date(idx * 86400000).toISOString().slice(0, 10); }
+
+  /* ---- 중복 없이 순환하는 날짜 선정 ---- */
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function shuffled(n, cycle, salt) {
+    var rnd = mulberry32(cycle * 1000 + salt), idx = [], i, j, t;
+    for (i = 0; i < n; i++) idx.push(i);
+    for (i = n - 1; i > 0; i--) { j = Math.floor(rnd() * (i + 1)); t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+    return idx;
+  }
+  function pickOfDay(list, salt, dayIdx) {
+    var n = list.length; if (!n) return null;
+    var cycle = Math.floor(dayIdx / n), pos = dayIdx % n, idx = shuffled(n, cycle, salt), t;
+    /* 주기가 바뀌는 날 전날과 같은 항목이 나오지 않게 첫 두 칸을 맞바꿈 */
+    if (pos < 2 && n > 2 && cycle > 0 && idx[0] === shuffled(n, cycle - 1, salt)[n - 1]) { t = idx[0]; idx[0] = idx[1]; idx[1] = t; }
+    return list[idx[pos]];
+  }
+
+  /* ---- 선정 풀: 검증이 끝난 항목만 ---- */
+  function jobCodesOf(pk) { return (pk.jobs || []).map(function (j) { return typeof j === 'string' ? j : j.c; }).filter(Boolean); }
+  function buildPools() {
+    var ind = DB.industries.filter(function (i) { var p = industryPkg(i.code); return p && p.industry && p.industry.description && (p.industry.products || []).length >= 3; }).map(function (i) { return i.code; });
+    var job = DB.jobs.filter(function (j) { var p = jobPkg(j.code); return p && p.job && p.job.description && (p.job.entryTasks || []).length >= 2; }).map(function (j) { return j.code; });
+    var pub = [];
+    ['CENTRAL'].forEach(function (t) {   /* 공공기관은 중앙 기관 중심 */
+      (DB.public[t] || []).forEach(function (o) {
+        var pk = DB.publicPackages[o.pCode]; if (!pk) return;
+        var st = String(pk.jobAuditStatus || '');
+        if (!st || /^부분 검증|^NCS 표준 패턴/.test(st)) return;      /* 감사상태 누락·부분 검증 제외 */
+        if (!(pk.purpose || pk.studentIntro) || !pk.officialUrl) return;
+        var jc = jobCodesOf(pk); if (!jc.length || !jc.every(function (c) { return JOB_BY[c]; })) return;   /* 직무코드 미매핑 제외 */
+        pub.push(o.pCode);
+      });
+    });
+    return { IND: ind, PUB: pub, JOB: job };
+  }
+  function pickFor(idx) {
+    if (!POOL) POOL = buildPools();
+    var out = {};
+    TYPES.forEach(function (t) { out[t.k] = pickOfDay(POOL[t.k], t.salt, idx); });
+    return out;
+  }
+
+  /* ---- 카드 내용 조립 ---- */
+  function clip(s, n) { s = String(s || '').replace(/\s+/g, ' ').trim(); if (s.length <= n) return s; var c = s.slice(0, n); var k = Math.max(c.lastIndexOf(' '), c.lastIndexOf(',')); return (k > n * 0.6 ? c.slice(0, k) : c) + '…'; }
+  function nameOfRel(v) { return String(v || '').replace(/^[FJ]\d{2}\s*/, ''); }
+  function card(type, code) {
+    var d = { type: type, code: code, name: '', tag: '', line: '', pts: [], chips: [], chipLabel: '', url: '' };
+    if (type === 'IND') {
+      var p = industryPkg(code), ind = p.industry, cos = (p.companies || []).slice(0, 3).map(function (c) { return c.name; });
+      var rj = splitList(ind.relatedJobs).slice(0, 3).map(nameOfRel);
+      d.name = ind.name; d.tag = (ind.group || '산업') + (ind.entryLevel ? ' · 신입 진입 난이도 ' + ind.entryLevel : ''); d.line = ind.description;
+      d.pts.push({ h: '이런 분야를 다룹니다', t: (ind.products || []).slice(0, 5).join(' · ') });
+      if (cos.length) d.pts.push({ h: '대표 기업', t: cos.join(' · ') });
+      if (rj.length) d.pts.push({ h: '연결되는 직무', t: rj });
+      d.chips = splitList(ind.relatedMajors).slice(0, 5); d.chipLabel = '관련 전공';
+    } else if (type === 'JOB') {
+      var q = jobPkg(code), job = q.job, ab = splitList(job.abilities).slice(0, 5);
+      d.name = job.name; d.tag = (job.group || '직무') + (job.entryLevel ? ' · ' + job.entryLevel : ''); d.line = job.description;
+      d.pts.push({ h: '신입이 처음 맡는 일', t: (job.entryTasks || []).slice(0, 2) });
+      d.pts.push({ h: '필요한 역량', t: ab.length ? ab.join(' · ') : (job.skills || []).slice(0, 2) });
+      var cert = (job.certifications || []).slice(0, 2); if (cert.length) d.pts.push({ h: '자격·준비', t: cert });
+      d.chips = splitList(job.majors).slice(0, 5); d.chipLabel = '관련 전공';
+    } else {
+      var o = PUBLIC_BY[code], pk = DB.publicPackages[code], central = o.publicType === 'CENTRAL';
+      var biz = String(pk.business || '').replace(/^\s*[o○ㅇ·\-]\s*/, '').split(/\s+[o○\-]\s+/).slice(0, 2).join(' · ');
+      var jt = (pk.jobs || []).map(function (j) { return typeof j === 'string' ? (JOB_BY[j] ? JOB_BY[j].name : '') : (j.t || ''); }).filter(Boolean).slice(0, 3);
+      d.name = o.name;
+      d.tag = (central ? [o.type, o.ministry] : [o.type, o.localGov || o.region]).filter(Boolean).join(' · ');
+      d.line = clip(pk.purpose || pk.studentIntro, 80);
+      if (biz) d.pts.push({ h: '주요 사업', t: clip(biz, 100) });
+      if (jt.length) d.pts.push({ h: '채용 직무 예시', t: jt });
+      d.pts.push({ h: '기관 정보', t: [o.category, o.region, o.employees ? '직원 ' + Number(o.employees).toLocaleString('ko-KR') + '명(자료 기준)' : ''].filter(Boolean).join(' · ') });
+      d.chips = jobCodesOf(pk).slice(0, 4).map(function (c) { return JOB_BY[c].name; }); d.chipLabel = '연결 직무';
+      d.url = /^https?:\/\//.test(pk.officialUrl) ? pk.officialUrl : '';
+    }
+    return d;
+  }
+
+  /* ---- 저장 상태(연속 일수·자동 열림) ---- */
+  function st() { var s = LS.get(KEY, {}); return (s && typeof s === 'object' && !Array.isArray(s)) ? s : {}; }
+  function save(s) { LS.set(KEY, s); }
+  function touch() {
+    var s = st();
+    if (s.last !== TODAY.s) { s.streak = (s.last === dateStr(TODAY.idx - 1)) ? (Number(s.streak) || 0) + 1 : 1; s.last = TODAY.s; save(s); }
+    renderHome();
+  }
+
+  /* ---- 홈 카드 ---- */
+  function renderHome() {
+    var head = document.getElementById('discHead'), list = document.getElementById('discList'); if (!head || !list) return;
+    var s = st(), pk = pickFor(TODAY.idx);
+    head.innerHTML = '오늘의 발견 · ' + esc(dayInfo(TODAY.idx)) + (s.streak > 0 && s.last === TODAY.s ? '<span class="disc-streak">🔥 ' + s.streak + '일 연속</span>' : '');
+    list.innerHTML = TYPES.map(function (t) {
+      var code = pk[t.k]; if (!code) return '';
+      var c = card(t.k, code);
+      return '<button type="button" class="hrow" style="--tc:var(' + t.tc + ')" data-disc="' + t.k + '"><span class="hic"><b style="font-size:18px">' + t.letter + '</b></span><span class="hx"><b>' + esc(t.label) + ' · ' + esc(c.name) + '</b><span>' + esc(clip(c.line, 60)) + '</span></span><span class="hgo" aria-hidden="true">›</span></button>';
+    }).join('');
+  }
+
+  /* ---- 팝업 ---- */
+  function modal() { return document.getElementById('discModal'); }
+  function render() {
+    var m = modal(), pk = pickFor(TODAY.idx), t = TYPES.filter(function (x) { return x.k === ACTIVE; })[0], code = pk[ACTIVE];
+    var c = card(ACTIVE, code), s = st();
+    var h = '<div class="disc-card" style="--tc:var(' + t.tc + ')" role="document">';
+    h += '<div class="disc-band"><div class="grow"><h2 id="discTitle" tabindex="-1">오늘의 발견</h2><small>' + esc(dayInfo(TODAY.idx)) + (s.streak > 0 ? ' · 🔥 ' + s.streak + '일 연속' : '') + '</small></div><button type="button" class="disc-x" data-disc-close aria-label="닫기">✕</button></div>';
+    h += '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.map(function (x) {
+      return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x.tc + ')" data-disc-tab="' + x.k + '" aria-selected="' + (x.k === ACTIVE) + '">' + x.label + '</button>';
+    }).join('') + '</div>';
+    h += '<div class="disc-body" role="tabpanel"><div class="disc-name">' + esc(c.name) + '</div><div class="disc-tag">' + esc(c.tag) + '</div><p class="disc-line">' + esc(c.line) + '</p>';
+    c.pts.forEach(function (p) {
+      h += '<div class="disc-pt"><h4>' + esc(p.h) + '</h4>' + (Array.isArray(p.t) ? '<ul>' + p.t.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '<p>' + esc(p.t) + '</p>') + '</div>';
+    });
+    if (c.chips.length) h += '<div class="disc-pt"><h4>' + esc(c.chipLabel) + '</h4><div class="disc-chips">' + c.chips.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>';
+    if (c.url) h += '<div class="disc-pt"><a class="disc-link" href="' + esc(c.url) + '" target="_blank" rel="noopener noreferrer">공식 홈페이지 ↗</a></div>';
+    h += '</div><div class="disc-foot"><button type="button" class="btn primary" data-disc-go="' + ACTIVE + '" data-code="' + esc(code) + '">' + esc(t.label) + ' 더 알아보기</button>';
+    h += '<div class="row2">' + starButton(STAR[ACTIVE], code, c.name) + '<button type="button" class="btn ghost" data-disc-share>카카오톡 공유</button></div>';
+    h += '<label class="disc-off"><input type="checkbox" id="discOff"' + (s.off ? ' checked' : '') + '><span>앞으로 앱을 열 때 자동으로 띄우지 않기 (홈에서 언제든 볼 수 있어요)</span></label></div></div>';
+    m.innerHTML = h;
+  }
+  function open(type, auto) {
+    var m = modal(); if (!m) return;
+    if (!TODAY) TODAY = kstToday();
+    ACTIVE = type || 'IND';
+    LAST_FOCUS = document.activeElement;
+    render(); m.classList.remove('hidden'); document.body.classList.add('disc-open');
+    logBump('view');
+    touch();
+    var tt = document.getElementById('discTitle'); if (tt) tt.focus();
+  }
+  function close() {
+    var m = modal(); if (!m || m.classList.contains('hidden')) return;
+    m.classList.add('hidden'); m.innerHTML = ''; document.body.classList.remove('disc-open');
+    try { if (LAST_FOCUS && LAST_FOCUS.focus) LAST_FOCUS.focus(); } catch (e) { }
+  }
+
+  function share() {
+    var pk = pickFor(TODAY.idx), t = TYPES.filter(function (x) { return x.k === ACTIVE; })[0], c = card(ACTIVE, pk[ACTIVE]);
+    var url = String(location.href).split('#')[0].split('?')[0];
+    if (!/^https?:/.test(url)) url = 'https://helper83.github.io/helpertom/';
+    var text = '오늘의 발견 · ' + t.label + ' ' + c.name + '\n' + clip(c.line, 60) + '\n(헬퍼탐 · 비전HR컨설팅)';
+    function copied() {
+      try { navigator.clipboard.writeText(text + '\n' + url).then(function () { logBump('share'); toast('내용과 링크를 복사했습니다. 카카오톡 대화창에 붙여넣어 보내세요'); }, function () { toast('복사하지 못했습니다. 주소창의 링크를 직접 공유해 주세요'); }); }
+      catch (e) { toast('복사하지 못했습니다. 주소창의 링크를 직접 공유해 주세요'); }
+    }
+    if (navigator.share) {
+      navigator.share({ title: '헬퍼탐 오늘의 발견', text: text, url: url }).then(function () { logBump('share'); }, function (e) { if (!(e && e.name === 'AbortError')) copied(); });
+    } else copied();
+  }
+
+  function bind() {
+    var m = modal();
+    m.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t === m || t.closest('[data-disc-close]')) { close(); return; }
+      var tab = t.closest('[data-disc-tab]'); if (tab) { ACTIVE = tab.getAttribute('data-disc-tab'); render(); var f = m.querySelector('.disc-tab[aria-selected="true"]'); if (f) f.focus(); return; }
+      var go = t.closest('[data-disc-go]');
+      if (go) { var k = go.getAttribute('data-disc-go'), code = go.getAttribute('data-code'); logBump('go', k); close(); if (k === 'IND') goIndustry(code); else if (k === 'PUB') goPublic(code); else goJob(code); return; }
+      if (t.closest('[data-disc-share]')) { share(); return; }
+      var star = t.closest('[data-star]');
+      if (star) { setTimeout(function () { var p = star.getAttribute('data-star').split('|'); if (hasInterest(p[0], p[1])) logBump('star'); }, 0); return; }
+    });
+    m.addEventListener('change', function (e) { if (e.target && e.target.id === 'discOff') { var s = st(); s.off = !!e.target.checked; save(s); } });
+    document.addEventListener('keydown', function (e) {
+      if (m.classList.contains('hidden')) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') {
+        var f = Array.prototype.slice.call(m.querySelectorAll('button,a[href],input')).filter(function (x) { return x.offsetParent !== null; });
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === m.querySelector('#discTitle'))) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    var list = document.getElementById('discList');
+    if (list) list.addEventListener('click', function (e) { var b = e.target.closest('[data-disc]'); if (b) open(b.getAttribute('data-disc')); });
+  }
+
+  window.discInit = function () {
+    TODAY = kstToday();
+    if (!modal()) return;
+    bind(); renderHome();
+    var _op = window.openPage;
+    if (typeof _op === 'function' && !_op.__disc) {   /* 진단 탭을 처음 여는 순간을 '진단 시작'으로 기록 */
+      window.openPage = function (id) { var r = _op.apply(this, arguments); try { if (id === 'diagnosisPage') logBump('diag'); } catch (e) { } return r; };
+      window.openPage.__disc = 1;
+    }
+    var s = st();
+    if (!s.off && s.shown !== TODAY.s) {
+      s.shown = TODAY.s; save(s);
+      setTimeout(function () {
+        var home = document.getElementById('homePage'), wish = document.getElementById('wishModal');
+        if (home && home.classList.contains('active') && !(wish && !wish.classList.contains('hidden'))) open('IND', true);
+      }, 600);
+    }
+  };
+  window.discOpen = open;
+  window.discSummary = function () {   /* 진단 응답(동의 사용자)에 붙는 익명 요약 */
+    var l = logGet(); if (!l.firstAt) return null;
+    return { v: 1, firstAt: l.firstAt, viewDays: l.viewDays || 0, views: l.views || 0, go: l.go, star: l.star || 0, share: l.share || 0, diagStartAt: l.diagStartAt || '', diagAfterGo: !!l.diagAfterGo };
+  };
+  window.discPickFor = function (idx) { var p = pickFor(idx); return p; };   /* 점검용 */
+  window.discPoolSizes = function () { if (!POOL) POOL = buildPools(); return { IND: POOL.IND.length, PUB: POOL.PUB.length, JOB: POOL.JOB.length }; };
+})();
+</script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<div id="discModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="discTitle"></div>
 <div id="wishModal" class="wish-modal hidden" role="dialog" aria-modal="true" aria-labelledby="wishTitle">
   <div class="wish-card">
     <div class="wish-head"><h2 id="wishTitle">의견 보내기</h2><button type="button" class="btn ghost sm" onclick="closeWish()" aria-label="닫기">닫기 ✕</button></div>
