@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v12.127 (2026-11-13): 요정 안내 강화 — (1) '▶ 이 화면 안내' 단계별 투어(요소를 강조하고 설명, 이전/다음) 홈·학과·산업·공공기관·직무·진단·진로 결정·로드맵 (2) 기능을 처음 쓸 때 요정의 한마디(☆찜·결과 보기·학과 추천·검색·목록 선택·준비 기간·PDF 저장·진로 결정에 반영·탭 이동) (3) 말풍선 안내 방식 선택(처음 한 번만/화면마다 짧게/안 함). -->
 <!-- v12.126 (2026-11-13): 꾸미기 추가 — (1) 도우미 요정(별이·꽃님·잎새·달이·몽실 중 선택, 화면별 사용법 말풍선, 켜기/끄기·위치) (2) 색상 6종(스카이·민트·라벤더·선셋·로즈·오션) (3) 글꼴 3종(IBM Plex 내장·기기 기본 고딕·명조). 설정은 이 기기에만 저장, 초기화 버튼에 포함. -->
 <!-- v12.125 (2026-11-13): 오늘의 발견 '스탬프북'을 '퍼즐'로 교체 — 카드 1장·퀴즈 정답 1개=조각 1개, 내 집·자동차·햄버거·우주선·나무·기차 중 선택, 1주(14조각)/2주(28조각) 코스, 완성작 갤러리·퍼즐 배지 3종, 기존 스탬프 수는 조각으로 자동 이어짐 -->
 <!-- v12.124 (2026-11-12): 앱 품질 개편 — (1) DB 분리·지연 로딩: 산업 기업 상세·공공기관 패키지를 data/ 조각으로 옮겨 처음 받는 파일 15.3MB→약 4.5MB (tools/split_db.py, sw.js 사전 캐시), (2) 학교 이름 제거(코드·주석·데이터 표지), (3) IBM Plex Sans KR 웹폰트 내장(OFL), (4) 자동 수정 4건: 헤더 '비전HR컨설팅(hp83@naver.com)' 메일 링크·글자 14px 정리·입력 16px/터치 44px·접기 헤더 44px -->
@@ -1052,6 +1053,8 @@ body.disc-open #fxWrap{display:none}
 .lk-grid button:focus-visible{outline:3px solid var(--focus,#7db6e2);outline-offset:2px}
 .lk-dot{width:28px;height:28px;border-radius:50%;display:block;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
 .lk-fx{display:block;line-height:0}
+.fx-hl{outline:3px solid var(--primary-ink)!important;outline-offset:3px;border-radius:10px;box-shadow:0 0 0 7px var(--pf,#DCEBF8)!important;position:relative;transition:box-shadow .2s}
+@media print{.fx-hl{outline:0!important;box-shadow:none!important}}
 </style>
 </head>
 <body>
@@ -5844,13 +5847,36 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   };
   var GUIDE = ['① 진단으로 나를 알아보고 (선택: 학과 탐색)', '② 산업·직무를 둘러보며 ☆ 찜하기', '③ “진로 결정”에서 목표 1개 정하기', '④ “내 로드맵”에서 오늘의 실행 체크하기', '순서는 정해져 있지 않아요. 궁금한 곳부터 시작해도 괜찮아요.'];
   var ACTIONS = { homePage: ['진단 시작하기', 'diagnosisPage'], diagnosisPage: ['학과 탐색 보기', 'majorPage'], majorPage: ['산업 탐색 가기', 'industryPage'], industryPage: ['직무 탐색 가기', 'jobPage'], publicPage: ['직무 탐색 가기', 'jobPage'], jobPage: ['진로 결정 가기', 'preparePage'], preparePage: ['내 로드맵 보기', 'roadmapPage'] };
+  var TOUR = {
+    homePage: [['.home-top', '시작 화면', '학과·산업·직무·진단 중 어디서 시작해도 돼요. 화면 아래(PC는 위쪽) 탭으로 이동해요.'], ['#dsList', '오늘의 실행', '진로 결정을 마치면 오늘 할 일이 여기에 나와요. 하루 1개씩 체크해 보세요.'], ['#discList', '오늘의 발견·퀴즈·퍼즐', '카드를 열거나 퀴즈를 맞히면 퍼즐 조각이 하나씩 붙어요. 재미로 즐겨 보세요.'], ['#lookRow', '꾸미기', '요정, 색상, 글꼴을 내 취향대로 바꿀 수 있어요.'], ['#guideBox', '활용 방법', '처음이라면 여기서 전체 흐름을 먼저 확인해 보세요.']],
+    majorPage: [['#majorInput', '학과 입력', '학과 이름을 입력하거나 목록에서 골라요. 일부만 입력해도 괜찮아요.'], ['#majorBrowse', '학과 둘러보기', '이름이 가물가물하면 분류별로 훑어볼 수도 있어요.'], ['#majorResult', '추천 결과', '연결이 높은 산업·직무가 5개씩 나와요. 마음에 들면 ☆ 찜하기!']],
+    industryPage: [['#industrySearch', '이름으로 찾기', '기업 이름이나 산업 이름 일부만 입력해도 바로 찾아 줘요.'], ['#industryGroupGrid', '산업 생태계 고르기', '큰 생태계를 고르면 세부 산업으로 좁혀져요.'], ['#industrySelectWrap', '세부 산업 선택', '목록에서 산업을 고르면 아래에 상세가 열려요.'], ['#industryDetail', '상세 보기', '대표기업, 실제 채용 직무, 하는 일을 볼 수 있어요. ☆ 찜하기도 잊지 마세요.']],
+    publicPage: [['#publicSearch', '기관 이름으로 찾기', '기관 이름 일부만 입력해도 찾아 줘요.'], ['#publicSubtypeGrid', '기관 유형 고르기', '중앙·지방 등 유형을 먼저 고르면 단계별로 좁혀져요.'], ['#publicSectorGrid', '사업분야 고르기', '하는 일이 비슷한 기관끼리 묶여 있어요.'], ['#publicDetail', '기관 상세', '기관이 하는 일과 채용 직무를 볼 수 있어요.']],
+    jobPage: [['#jobSearch', '직무 이름으로 찾기', '직무 이름 일부만 입력해도 찾아 줘요.'], ['#jobGroupGrid', '직무 대영역 고르기', '큰 영역을 고르면 세부 직무로 좁혀져요.'], ['#jobSelectWrap', '직무 선택', '목록에서 직무를 고르면 아래에 상세가 열려요.'], ['#jobDetail', '직무 상세', '역할·업무·역량·성과·신입 진입경로를 확인해요. 회사마다 범위가 다르니 채용공고도 꼭 보세요.']],
+    diagnosisPage: [['#consentGate', '응답 수집 동의(선택)', '동의하지 않아도 진단은 모두 쓸 수 있어요. 선택은 자유예요.'], ['#diagnosisQuestions', '64문항', '정답이 없어요. “지금의 나” 기준으로 솔직하게 골라 주세요.'], ['#diagRunRow', '결과 보기', '다 답하면 눌러요. 빈 문항이 있으면 알려 줘요.'], ['#diagnosisResult', '진단 결과', '잘 맞는 산업·직무 TOP5와 PDF 저장이 여기에 나와요.']],
+    preparePage: [['#interestSummary', '내가 찜한 목록', '산업·직무·기관에서 ☆ 찜한 항목이 모여 있어요.'], ['#prepareDiagnosisSummary', '진단 요약', '진단 결과와 찜한 목록을 비교해서 목표를 골라요.'], ['#planIndustrySelect', '목표 정하기', '산업과 직무(또는 기관)를 하나씩 정해요.'], ['#planMonths', '준비 기간·시간', '기간, 주당 시간, 시작일을 넣으면 맞춤 로드맵이 만들어져요.']],
+    roadmapPage: [['#planResult', '내 로드맵', '주차별 과제가 나와요. “오늘의 실행”에서 오늘 할 일을 체크하세요.'], ['button[onclick^="printPlan"]', 'PDF로 저장', '인쇄 창에서 “PDF로 저장”을 고르면 파일로 보관할 수 있어요.']]
+  };
+  var HINTS = [
+    ['click', '[data-star]', 'star', '☆을 누르면 “찜”에 담겨요. 담은 목록은 “진로 결정” 탭에서 비교해 목표를 정해요.'],
+    ['click', 'button[onclick^="runDiagnosis"]', 'run', '응답을 바탕으로 잘 맞는 산업·직무 TOP5를 계산해 줘요. 결과는 PDF로도 저장할 수 있어요.'],
+    ['click', 'button[onclick^="majorSearch"]', 'major', '학과와 연결된 산업·직무를 추천해 줘요. 마음에 드는 항목은 ☆ 찜하기!'],
+    ['click', '#qToggleBtn', 'qtoggle', '문항을 접고 펼 수 있어요. 응답은 그대로 유지돼요.'],
+    ['click', '.action-link[onclick^="startPlan"]', 'plan', '이 산업·직무가 목표 후보로 들어가요. “진로 결정” 탭에서 이어서 정해요.'],
+    ['click', 'button[onclick^="printPlan"]', 'print', '인쇄 창에서 “PDF로 저장”을 고르면 파일로 보관할 수 있어요.'],
+    ['change', '#industrySelect,#jobSelect,#publicSelect,#publicRegionSelect', 'sel', '고르면 아래에 상세가 열려요. 스크롤을 내려서 하는 일과 채용 직무를 확인해 보세요.'],
+    ['change', '#planMonths,#planWeeklyHours,#planStartDate', 'term', '기간·주당 시간·시작일에 맞춰 주차별 로드맵이 만들어져요. 다 정했다면 “내 로드맵”으로!'],
+    ['focusin', '#industrySearch,#jobSearch,#publicSearch,#majorInput', 'search', '이름 일부만 입력해도 찾아 줘요. 예: 반도체, 공정, 간호'],
+    ['click', '.stop[data-page]', 'tab', '아래 탭을 누르면 해당 단계로 이동해요. 순서는 정해져 있지 않아요. 궁금한 곳부터 가 보세요.']
+  ];
+  var TOUR_S = null, HL = null;
   var W = null, B = null, BTN = null, MODAL = null, tipIdx = 0, hideT = null, showT = null, curPage = 'homePage', LAST_FOCUS = null, auto = false;
 
   function esc2(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function look() { var l = LS.get(LKEY, {}); if (!l || typeof l !== 'object' || Array.isArray(l)) l = {}; return l; }
   function fst() {
     var f = LS.get(FKEY, {}); if (!f || typeof f !== 'object' || Array.isArray(f)) f = {};
-    if (f.on === undefined) f.on = true; if (!CH_BY[f.ch]) f.ch = 'star'; if (f.tips === undefined) f.tips = true; if (f.side !== 'L') f.side = 'R';
+    if (f.on === undefined) f.on = true; if (!CH_BY[f.ch]) f.ch = 'star'; if (f.mode !== 'first' && f.mode !== 'always' && f.mode !== 'off') f.mode = (f.tips === false ? 'off' : 'first'); f.tips = f.mode !== 'off'; if (f.side !== 'L') f.side = 'R'; if (!f.feat || typeof f.feat !== 'object') f.feat = {};
     if (!f.seen || typeof f.seen !== 'object') f.seen = {}; return f;
   }
   function applyLook() {
@@ -5908,25 +5934,56 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       h += '<p>' + esc2(c.hi) + '</p><p class="fx-sub">내가 마음에 들면 그대로 쓰고, 다른 요정이 좋으면 바꿀 수 있어요.</p><div class="fx-act"><button type="button" class="fx-b pri" data-fx="close">이대로 시작</button><button type="button" class="fx-b" data-fx="look">요정 고르기</button></div>';
     } else if (mode === 'guide') {
       h += '<p><b>앱 사용법 한눈에</b></p><ul class="fx-list">' + GUIDE.map(function (g) { return '<li>' + esc2(g) + '</li>'; }).join('') + '</ul><div class="fx-act"><button type="button" class="fx-b" data-fx="menu">← 뒤로</button></div>';
+    } else if (mode === 'tour' && TOUR_S) {
+      var st = TOUR_S.steps[TOUR_S.i], n = TOUR_S.steps.length, last = TOUR_S.i === n - 1;
+      h += '<p><b>' + esc2(st[1]) + '</b> <span class="fx-sub">' + (TOUR_S.i + 1) + '/' + n + '</span></p><p>' + esc2(st[2]) + '</p><div class="fx-act">' + (TOUR_S.i > 0 ? '<button type="button" class="fx-b" data-fx="tprev">← 이전</button>' : '') + (last ? '<button type="button" class="fx-b pri" data-fx="tend">안내 끝내기</button>' : '<button type="button" class="fx-b pri" data-fx="tnext">다음 →</button>') + '</div>';
     } else {
-      var t = tipsFor(), msg = t[tipIdx % t.length], a = ACTIONS[curPage];
-      h += '<p>' + esc2(msg) + '</p><div class="fx-act">' + (t.length > 1 ? '<button type="button" class="fx-b" data-fx="next">다른 팁 ' + ((tipIdx % t.length) + 1) + '/' + t.length + '</button>' : '') +
-        (a ? '<button type="button" class="fx-b pri" data-fx="go" data-p="' + a[1] + '">' + esc2(a[0]) + '</button>' : '') + '</div>' +
+      var t = tipsFor(), msg = t[tipIdx % t.length], a = ACTIONS[curPage], hasTour = !!(TOUR[curPage] && TOUR[curPage].length);
+      h += '<p>' + esc2(msg) + '</p><div class="fx-act">' + (hasTour ? '<button type="button" class="fx-b pri" data-fx="tour">▶ 이 화면 안내</button>' : '') + (t.length > 1 ? '<button type="button" class="fx-b" data-fx="next">다른 팁 ' + ((tipIdx % t.length) + 1) + '/' + t.length + '</button>' : '') +
+        (a ? '<button type="button" class="fx-b' + (hasTour ? '' : ' pri') + '" data-fx="go" data-p="' + a[1] + '">' + esc2(a[0]) + '</button>' : '') + '</div>' +
         '<div class="fx-act sm"><button type="button" class="fx-b" data-fx="guide">앱 사용법</button><button type="button" class="fx-b" data-fx="look">🎨 꾸미기</button><button type="button" class="fx-b" data-fx="off">요정 숨기기</button></div>';
     }
     return h;
   }
-  function openBubble(mode) { if (!B) return; clearTimeout(hideT); B.innerHTML = bubbleHtml(mode); B.hidden = false; BTN.setAttribute('aria-expanded', 'true'); W.classList.add('fx-open'); }
-  function closeBubble() { if (!B) return; clearTimeout(hideT); B.hidden = true; BTN.setAttribute('aria-expanded', 'false'); W.classList.remove('fx-open'); auto = false; }
+  function openBubble(mode) { if (!B) return; clearTimeout(hideT); if (mode !== 'tour') { clearHl(); TOUR_S = null; } B.innerHTML = bubbleHtml(mode); B.hidden = false; BTN.setAttribute('aria-expanded', 'true'); W.classList.add('fx-open'); }
+  function closeBubble() { if (!B) return; clearTimeout(hideT); clearHl(); TOUR_S = null; B.hidden = true; BTN.setAttribute('aria-expanded', 'false'); W.classList.remove('fx-open'); auto = false; }
   function onBubble(e) {
     var t = e.target.closest('[data-fx]'); if (!t) return; var a = t.getAttribute('data-fx');
     if (a === 'close') { var f = fst(); if (!f.intro) { f.intro = 1; LS.set(FKEY, f); } closeBubble(); BTN.focus(); }
+    else if (a === 'tour') { tourStart(); }
+    else if (a === 'tnext') { if (TOUR_S && TOUR_S.i < TOUR_S.steps.length - 1) { TOUR_S.i++; tourShow(); var nb = B.querySelector('[data-fx="tnext"],[data-fx="tend"]'); if (nb) nb.focus(); } }
+    else if (a === 'tprev') { if (TOUR_S && TOUR_S.i > 0) { TOUR_S.i--; tourShow(); var pb = B.querySelector('[data-fx="tnext"],[data-fx="tend"]'); if (pb) pb.focus(); } }
+    else if (a === 'tend') { closeBubble(); BTN.focus(); try { toast('안내를 마쳤어요. 요정을 누르면 언제든 다시 볼 수 있어요'); } catch (x) { } }
     else if (a === 'next') { tipIdx++; openBubble('menu'); var n = B.querySelector('[data-fx="next"]'); if (n) n.focus(); }
     else if (a === 'guide') { openBubble('guide'); var g = B.querySelector('[data-fx="menu"]'); if (g) g.focus(); }
     else if (a === 'menu') { openBubble('menu'); }
     else if (a === 'go') { var p = t.getAttribute('data-p'); closeBubble(); try { if (p === 'industryPage' && typeof openIndustryTab === 'function') openIndustryTab(); else openPage(p); window.scrollTo(0, 0); } catch (x) { } }
     else if (a === 'look') { var f2 = fst(); if (!f2.intro) { f2.intro = 1; LS.set(FKEY, f2); } closeBubble(); openLook(); }
     else if (a === 'off') { var f3 = fst(); f3.on = false; f3.intro = 1; LS.set(FKEY, f3); closeBubble(); paintBtn(); try { toast('요정을 숨겼어요. 홈의 “꾸미기”에서 다시 켤 수 있어요'); } catch (x) { } }
+  }
+  function clearHl() { if (HL) { HL.classList.remove('fx-hl'); HL = null; } }
+  function tourVisible(sel) { var e = document.querySelector('.page.active ' + sel) || document.querySelector(sel); if (!e) return null; var r = e.getBoundingClientRect(); return (e.getClientRects().length && r.height > 4) ? e : null; }
+  function tourBuild() { return (TOUR[curPage] || []).filter(function (st) { return tourVisible(st[0]); }); }
+  function tourShow() {
+    clearHl(); var st = TOUR_S.steps[TOUR_S.i], e = st && tourVisible(st[0]);
+    if (e) { HL = e; e.classList.add('fx-hl'); var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; var top = e.getBoundingClientRect().top; window.scrollBy({ top: top - hh - 14, behavior: window.matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' }); }
+    openBubble('tour');
+  }
+  function tourStart() { var steps = tourBuild(); if (!steps.length) { openBubble('menu'); try { toast('이 화면은 안내할 항목이 아직 없어요'); } catch (e) { } return; } TOUR_S = { i: 0, steps: steps }; tourShow(); }
+  function hintShow(key, text) {
+    var f = fst(); if (!f.on || f.mode === 'off' || f.feat[key] || !B || !B.hidden || modalOpen()) return;
+    f.feat[key] = 1; LS.set(FKEY, f); var c = CH_BY[f.ch]; clearTimeout(hideT);
+    B.innerHTML = '<div class="fx-top"><b>' + esc2(c.n) + '의 한마디</b><button type="button" class="fx-x" data-fx="close" aria-label="말풍선 닫기">✕</button></div><p>' + esc2(text) + '</p>';
+    B.hidden = false; BTN.setAttribute('aria-expanded', 'true'); W.classList.add('fx-open'); auto = true;
+    hideT = setTimeout(function () { if (auto) closeBubble(); }, 8000);
+  }
+  function bindHints() {
+    HINTS.forEach(function (h) {
+      document.addEventListener(h[0], function (e) {
+        var t = e.target; if (!t || !t.closest || !t.closest(h[1])) return;
+        setTimeout(function () { try { hintShow(h[2], h[3]); } catch (x) { } }, 350);
+      }, true);
+    });
   }
   function busy() { return document.body.classList.contains('disc-open'); }
   function pageNow() { var p = document.querySelector('.page.active'); return p ? p.id : 'homePage'; }
@@ -5936,15 +5993,18 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     if (!W) return; curPage = pageNow(); tipIdx = 0; clearTimeout(showT);
     if (!B.hidden && !auto) { openBubble('menu'); return; }
     var f = fst(); if (!f.on) { return; }
-    if (f.intro && !(f.tips && !f.seen[curPage])) { if (!B.hidden && auto) closeBubble(); return; }
+    var firstSeen = f.mode !== 'off' && !f.seen[curPage], again = f.mode === 'always' && f.seen[curPage];
+    if (f.intro && !firstSeen && !again) { if (!B.hidden && auto) closeBubble(); return; }
     var tries = 0;
     function attempt() {
       if (modalOpen()) { if (++tries < 40) showT = setTimeout(attempt, 1000); return; }
+      if (!B.hidden) return;
       var ff = fst(); if (!ff.on) return;
       if (!ff.intro) { auto = true; openBubble('intro'); hideT = setTimeout(function () { if (auto) { var f4 = fst(); f4.intro = 1; LS.set(FKEY, f4); closeBubble(); } }, 14000); return; }
-      if (!ff.tips || ff.seen[curPage]) return;
-      ff.seen[curPage] = 1; LS.set(FKEY, ff); auto = true; tipIdx = 0; openBubble('menu');
-      hideT = setTimeout(function () { if (auto) closeBubble(); }, 10000);
+      if (ff.mode === 'off') return;
+      if (ff.seen[curPage] && ff.mode !== 'always') return;
+      var first = !ff.seen[curPage]; ff.seen[curPage] = 1; LS.set(FKEY, ff); auto = true; tipIdx = 0; openBubble('menu');
+      hideT = setTimeout(function () { if (auto) closeBubble(); }, first ? 10000 : 6000);
     }
     showT = setTimeout(attempt, 900);
   }
@@ -5956,7 +6016,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     h += '<h3 class="disc-h3" style="margin-top:4px">🧚 도우미 요정</h3>';
     h += '<label class="lk-sw"><input type="checkbox" data-lk="fon"' + (f.on ? ' checked' : '') + '><span>요정 도우미 켜기</span></label>';
     h += '<div class="lk-grid c5" role="group" aria-label="요정 고르기">' + CHARS.map(function (c) { return '<button type="button" data-lk="ch" data-v="' + c.k + '" aria-pressed="' + (f.ch === c.k) + '"><span class="lk-fx">' + fairySvg(c, 52) + '</span><b>' + c.n + '</b></button>'; }).join('') + '</div>';
-    h += '<label class="lk-sw"><input type="checkbox" data-lk="ftips"' + (f.tips ? ' checked' : '') + '><span>처음 보는 화면에서 말풍선으로 안내받기</span></label>';
+    h += '<h3 class="disc-h3" style="font-size:14px;margin:10px 0 4px">말풍선 안내 방식</h3><div class="lk-grid c3" role="group" aria-label="안내 방식">' + [['first', '처음 한 번만'], ['always', '화면마다 짧게'], ['off', '안 함']].map(function (a) { return '<button type="button" data-lk="mode" data-v="' + a[0] + '" aria-pressed="' + (f.mode === a[0]) + '"><b>' + a[1] + '</b></button>'; }).join('') + '</div>';
     h += '<div class="lk-grid c2" role="group" aria-label="요정 위치">' + [['R', '오른쪽 아래'], ['L', '왼쪽 아래']].map(function (a) { return '<button type="button" data-lk="side" data-v="' + a[0] + '" aria-pressed="' + (f.side === a[0]) + '"><b>' + a[1] + '</b></button>'; }).join('') + '</div>';
     h += '<h3 class="disc-h3">🎨 색상</h3><div class="lk-grid c3" role="group" aria-label="색상 고르기">' + THEMES.map(function (t) { return '<button type="button" data-lk="th" data-v="' + t.k + '" aria-pressed="' + (th === t.k) + '"><span class="lk-dot" style="background:' + t.c + '"></span><b>' + t.n + '</b></button>'; }).join('') + '</div>';
     h += '<h3 class="disc-h3">🔤 글꼴</h3><div class="lk-grid c1" role="group" aria-label="글꼴 고르기">' + FONTS.map(function (x) { return '<button type="button" data-lk="fo" data-v="' + x.k + '" aria-pressed="' + (fo === x.k) + '" style="font-family:' + x.f + '"><b>' + x.n + '</b><span>가나다라마 헬퍼탐 Abc 123</span></button>'; }).join('') + '</div>';
@@ -5982,13 +6042,13 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       else if (a === 'th') { l = look(); l.c = v; LS.set(LKEY, l); applyLook(); renderLook(); keepFocus('[data-lk="th"][data-v="' + v + '"]'); }
       else if (a === 'fo') { l = look(); l.f = v; LS.set(LKEY, l); applyLook(); renderLook(); keepFocus('[data-lk="fo"][data-v="' + v + '"]'); }
       else if (a === 'ch') { f = fst(); f.ch = v; LS.set(FKEY, f); paintBtn(); renderLook(); keepFocus('[data-lk="ch"][data-v="' + v + '"]'); }
+      else if (a === 'mode') { f = fst(); f.mode = v; f.tips = v !== 'off'; LS.set(FKEY, f); renderLook(); keepFocus('[data-lk="mode"][data-v="' + v + '"]'); }
       else if (a === 'side') { f = fst(); f.side = v; LS.set(FKEY, f); paintBtn(); renderLook(); keepFocus('[data-lk="side"][data-v="' + v + '"]'); }
       else if (a === 'reset') { if (!window.confirm('색상·글꼴·요정 설정을 기본값으로 되돌릴까요?')) return; LS.del(LKEY); LS.del(FKEY); applyLook(); paintBtn(); renderLook(); }
     });
     MODAL.addEventListener('change', function (e) {
       var a = e.target && e.target.getAttribute('data-lk'); if (!a) return; var f = fst();
       if (a === 'fon') { f.on = !!e.target.checked; f.intro = 1; LS.set(FKEY, f); paintBtn(); }
-      else if (a === 'ftips') { f.tips = !!e.target.checked; LS.set(FKEY, f); }
     });
     document.addEventListener('keydown', function (e) {
       if (MODAL.classList.contains('hidden') || e.key !== 'Tab') return;
@@ -6002,7 +6062,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   window.openLook = openLook;
   window.fxInit = function () {
     MODAL = document.getElementById('lookModal'); if (!MODAL) return;
-    applyLook(); build(); bindLook();
+    applyLook(); build(); bindLook(); bindHints();
     var row = document.getElementById('lookRow'); if (row) row.addEventListener('click', openLook);
     var _op = window.openPage; window.openPage = function () { var r = _op.apply(this, arguments); try { onPage(); } catch (e) { } return r; };
     curPage = pageNow(); onPage();
