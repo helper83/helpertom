@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-v34';
+const CACHE = 'helpertom-v35';
 const FILES = [
   './',
   './index.html',
@@ -51,6 +51,14 @@ self.addEventListener('fetch', e => {
         return r;
       }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
     );
+    return;
+  }
+  // v12.137: 사진 퍼즐 목록(manifest.json)은 네트워크 우선 → 사진을 추가·교체해도 바로 반영, 오프라인이면 캐시 사용
+  if (/\/data\/puzzles\/manifest\.json$/.test(new URL(e.request.url).pathname)) {
+    e.respondWith(fetch(e.request, { cache: 'no-cache' }).then(n => {
+      if (n.ok) { const copy = n.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}); }
+      return n;
+    }).catch(() => caches.match(e.request)));
     return;
   }
   // data/ 조각: 캐시 우선, 없으면 받아서 저장
