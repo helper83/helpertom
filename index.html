@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.134 (2026-11-13): 프리미엄 퍼즐 5종(황금 소원 나무·가을 호숫가 마을[9~11월]·달빛 고성·설산 호수[12~2월]·동화 속 성) 총 14종, 시즌 한정 잠금, 배지 모음 PNG 저장·공유, 마일스톤 3/6/10/14, 하이멜로디 글꼴 굵게 · 홈/학과/직무/진단 상단 선택 버튼을 진로 결정 버튼과 같은 모양(제목+설명)으로 통일, 홈 기본은 제일 왼쪽(오늘의 발견) -->
 <!-- v12.133 (2026-11-13): 요정 안내가 보고 있는 화면(홈 4버튼·학과 A/B·직무 A/B·진단 문항/결과)에 맞춰 바뀜 · 퍼즐 그림 9종 고급화(내 집·자동차·햄버거·우주선·벚꽃 나무·기차·열기구·딸기 케이크·창가 고양이) · 시작 전 완성 모습 미리보기와 그림 선택 · 완성 시 실버/골드 인증 배지 + 수집가·탐험가·퍼즐 마스터 배지 · 글꼴 2종 추가(주아·하이멜로디, SIL OFL, data/fonts 지연 로딩) -->
 <!-- v12.132 (2026-11-13): 진단 상단 '문항 풀기 / 내 결과' 버튼을 앱의 문항·결과 모드와 연동 — 저장된 결과가 있으면 진단 탭을 열 때 '내 결과'로 바로 열림(새로고침 후에도). 진로 결정·로드맵은 기존 2버튼(목표 정하기/내 로드맵) 유지로 전 탭 구성 통일. -->
 <!-- v12.131 (2026-11-13): 첫 방문 시 홈은 '활용 방법'부터 보여 주고(이후 '오늘의 발견'), 학과·직무·진단 화면 상단에도 산업 탐색처럼 2버튼 선택(학과 입력·추천/분류로 둘러보기, 직무대영역/이름으로 찾기, 문항 풀기/내 결과). 인쇄 시에는 모두 출력. -->
@@ -994,7 +995,7 @@ body .learn .src a{display:inline-flex;align-items:center;min-height:44px;paddin
 .pz-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .pz-themes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
 .pz-themes button,.pz-weeks button{min-height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:14px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--ink)}
-.pz-themes button{flex-direction:column;gap:2px;padding:5px}.pz-th{display:block;width:100%}.pz-th .pz-svg{max-width:none;margin:0 0 2px;border-radius:9px;border:0}.pz-ck{font-style:normal;font-size:12px;color:var(--ok);font-weight:700}
+.pz-themes button{flex-direction:column;gap:2px;padding:5px}.pz-th{display:block;width:100%}.pz-th .pz-svg{max-width:none;margin:0 0 2px;border-radius:9px;border:0}.pz-th{position:relative}.pz-pr{position:absolute;left:4px;top:4px;font-style:normal;font-size:11px;font-weight:700;color:#7a4b00;background:linear-gradient(135deg,#fff3b8,#f2c44f);border-radius:8px;padding:1px 6px;box-shadow:0 1px 3px rgba(0,0,0,.25)}.pz-themes button.pz-lock .pz-th{filter:grayscale(.9);opacity:.55}.pz-ck{font-style:normal;font-size:12px;color:var(--ok);font-weight:700}
 .pz-prev{display:flex;gap:10px;align-items:center;margin:8px 0}.pz-prev>.pz-svg{flex:1 1 52%;max-width:210px;margin:0;box-shadow:0 6px 16px rgba(24,33,47,.14)}.pz-prev-t{flex:1 1 44%;display:flex;flex-direction:column;gap:4px;min-width:0}.pz-prev-t small{font-size:12px;color:var(--muted)}.pz-prev-b{display:flex;gap:6px;align-items:center;font-size:12px;line-height:1.4}
 .pz-bd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.pz-bd figure{margin:0;text-align:center;font-size:12px;color:var(--ink2)}.pz-bdsvg{display:block;margin:0 auto 2px;max-width:100%;height:auto;filter:drop-shadow(0 3px 4px rgba(24,33,47,.18))}.pz-bdsvg.lock{filter:none;opacity:.75}
 .pz-goalrow{display:flex;gap:10px;align-items:center;margin:8px 0;font-size:13px;line-height:1.5}.pz-done{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.pz-done-b{display:flex;gap:4px;flex:none}.pz-done-t{flex:1 1 180px;min-width:0}
@@ -1020,8 +1021,11 @@ html[data-font="serif"]{--font:"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","
 html[data-font="jua"]{--font:"Jua HT","IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 html[data-font="melody"]{--font:"Hi Melody HT","IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 html[data-font="jua"] body,html[data-font="melody"] body{font-synthesis:none}
-html[data-font="melody"] body{font-size:16px;line-height:1.65}
-.lk-grid button[data-v="melody"] span{font-size:17px}
+html[data-font="melody"] body{font-size:17px;line-height:1.65;-webkit-text-stroke:.55px currentColor}
+html[data-font="melody"] h1,html[data-font="melody"] h2,html[data-font="melody"] h3,html[data-font="melody"] b,html[data-font="melody"] button{-webkit-text-stroke:.8px currentColor}
+html[data-font="melody"] input,html[data-font="melody"] select,html[data-font="melody"] textarea{-webkit-text-stroke:.4px currentColor}
+html[data-font="melody"] .fb{font-size:13px}
+.lk-grid button[data-v="melody"] span{font-size:18px;-webkit-text-stroke:.6px currentColor}.lk-grid button[data-v="melody"] b{font-size:16px;-webkit-text-stroke:.8px currentColor}
 body{transition:background-color .2s}
 #fxWrap{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:18px;z-index:95;display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:calc(100vw - 24px)}
 #fxWrap[hidden]{display:none}
@@ -1126,15 +1130,13 @@ body.disc-open #fxWrap{display:none}
 @media (prefers-reduced-motion:reduce){.gm-shake .disc-card,.gm-opt{animation:none!important;transition:none!important}}
 @media (max-width:360px){.gm-m{grid-template-columns:1fr}.gm-bar{grid-template-columns:100px 1fr 18px}}
 @media print{#gameModal{display:none!important}}
-.kindbar.kind4{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 12px}
-.kindbar.kind4 button{padding:8px 2px}
-.kindbar.kind4 button b{font-size:14px}
+.kindbar.kind4{margin:0 0 12px}
 @media (max-width:480px){.kindbar.kind4{grid-template-columns:1fr 1fr}.kindbar.kind4 button{min-height:48px}}
 #homePage .hp[hidden]{display:none}
 @media print{#homePage .hp[hidden]{display:block}#homeKind{display:none}}
 .kt-hide{display:none!important}
 .kindbar.kt{margin:12px 0}
-.kindbar.kt button{min-height:48px}
+.kindbar.kt button{min-height:52px}
 @media print{.kindbar.kt{display:none!important}}
 </style>
 </head>
@@ -1167,10 +1169,10 @@ body.disc-open #fxWrap{display:none}
 <main id="mainContent" tabindex="-1">
   <section id="homePage" class="page active" aria-labelledby="h-home">
     <div class="kindbar kind4 no-print" id="homeKind" role="group" aria-label="홈 바로가기">
-      <button type="button" data-hk="DISC" aria-pressed="true"><b>오늘의 발견</b></button>
-      <button type="button" data-hk="DS" aria-pressed="false"><b>오늘의 실행</b></button>
-      <button type="button" data-hk="GUIDE" aria-pressed="false"><b>활용 방법</b></button>
-      <button type="button" data-hk="LOOK" aria-pressed="false"><b>내 취향</b></button>
+      <button type="button" data-hk="DISC" aria-pressed="true"><b>오늘의 발견</b><small>카드 · 퀴즈 · 게임 · 퍼즐</small></button>
+      <button type="button" data-hk="DS" aria-pressed="false"><b>오늘의 실행</b><small>오늘 할 일 체크</small></button>
+      <button type="button" data-hk="GUIDE" aria-pressed="false"><b>활용 방법</b><small>처음 사용 안내</small></button>
+      <button type="button" data-hk="LOOK" aria-pressed="false"><b>내 취향</b><small>요정 · 색상 · 글꼴</small></button>
     </div>
     <div class="home-top">
       <div class="step-tag">헬퍼손 산업직무 탐색기 · 대학생 진로·취업 탐색</div>
@@ -5560,6 +5562,45 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function sp(x, y, s, c) { return '<path d="M' + x + ' ' + (y - s) + 'Q' + x + ' ' + y + ' ' + (x + s) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + s) + 'Q' + x + ' ' + y + ' ' + (x - s) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - s) + 'Z" fill="' + (c || '#fff') + '"/>'; }
   function ht(x, y, s, c) { return '<path transform="translate(' + x + ' ' + y + ') scale(' + s + ')" d="M0 5 C-7 -1 -6 -6 -2.5 -6 C-1 -6 0 -5 0 -3.6 C0 -5 1 -6 2.5 -6 C6 -6 7 -1 0 5Z" fill="' + (c || '#ff6f91') + '"/>'; }
   var PUZ = [
+    { k: 'gtree', e: '🌟', n: '황금 소원 나무', pr: 1, tag: '별빛 아래 황금빛으로 빛나는 소원 나무', defs: G('s', '#080c2b', '#232a6e') + G('go', '#fff3b0', '#d9a21e') + G('tk', '#f0c14a', '#8f5f12', true) + '<filter id="§f" x="-50%" y="-50%" width="200%" height="200%"><filter/><feGaussianBlur stdDeviation="3"/></filter>'.replace('<filter/>', ''), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="80" cy="54" r="56" fill="#f5c542" opacity=".14" filter="url(#§f)"/><g fill="#ffe9a0"><circle cx="14" cy="16" r="1.2"/><circle cx="40" cy="30" r="1"/><circle cx="62" cy="10" r="1.3"/><circle cx="104" cy="14" r="1"/><circle cx="130" cy="30" r="1.4"/><circle cx="148" cy="12" r="1"/><circle cx="20" cy="60" r="1"/><circle cx="144" cy="64" r="1.2"/></g><rect x="5" y="5" width="150" height="110" rx="9" fill="none" stroke="#e8c35a" stroke-width=".8" opacity=".7"/>',
+      '<path d="M0 98 Q40 90 80 96 T160 94 V120 H0Z" fill="#070a24"/><g stroke="#f5c542" stroke-width="1" opacity=".55" fill="none" stroke-linecap="round"><path d="M16 106 H50 M60 110 H108 M118 106 H146 M30 114 H70 M90 114 H132"/></g>',
+      '<path d="M70 100 Q74 82 74 64 H86 Q86 82 92 100 Q80 95 70 100Z" fill="url(#§tk)"/><path d="M80 78 Q62 68 52 54 M82 72 Q100 64 110 50 M80 66 Q80 56 80 44 M78 84 Q60 84 48 76 M82 84 Q100 84 112 74" stroke="url(#§tk)" stroke-width="3.4" fill="none" stroke-linecap="round"/>',
+      '<g fill="#e0a820"><circle cx="48" cy="48" r="17"/><circle cx="112" cy="46" r="17"/><circle cx="80" cy="30" r="22"/><circle cx="34" cy="64" r="11"/><circle cx="128" cy="62" r="11"/><circle cx="64" cy="40" r="14"/><circle cx="98" cy="40" r="14"/></g>',
+      '<g fill="url(#§go)"><circle cx="58" cy="44" r="14"/><circle cx="102" cy="42" r="14"/><circle cx="80" cy="26" r="17"/><circle cx="44" cy="58" r="9"/><circle cx="118" cy="56" r="9"/><circle cx="80" cy="46" r="12"/></g><g fill="#fff" opacity=".55"><circle cx="72" cy="20" r="3"/><circle cx="52" cy="38" r="2.4"/><circle cx="104" cy="36" r="2.6"/><circle cx="88" cy="44" r="2"/></g>',
+      '<g fill="#f0c14a"><path d="M24 100 q0 -10 8 -14 l-2 -6 3 2 1 -5 3 5 3 -2 -2 6 q8 4 8 14z"/><circle cx="31" cy="84" r="2.6"/><path d="M28 80 l-3 -5 M32 80 l1 -6 M35 80 l3 -4" stroke="#f0c14a" stroke-width="1.2"/><path d="M26 98 v6 M30 98 v6 M38 98 v6 M42 98 v6" stroke="#f0c14a" stroke-width="1.6"/><path d="M122 100 q0 -9 7 -12 l-2 -5 3 2 1 -5 3 5 3 -2 -2 6 q7 3 7 11z"/><circle cx="128" cy="85" r="2.4"/><path d="M125 82 l-3 -5 M129 82 l1 -6 M132 82 l3 -4" stroke="#f0c14a" stroke-width="1.2"/><path d="M124 98 v6 M128 98 v6 M136 98 v6 M140 98 v6" stroke="#f0c14a" stroke-width="1.6"/></g>',
+      '<circle cx="80" cy="40" r="30" fill="#ffd86b" opacity=".22" filter="url(#§f)"/><g fill="#ffe27a"><circle cx="30" cy="40" r="1.8"/><circle cx="142" cy="46" r="1.8"/><circle cx="58" cy="76" r="1.6"/><circle cx="108" cy="80" r="1.6"/><circle cx="96" cy="68" r="1.4"/></g>' + sp(26, 28, 5, '#fff3b0') + sp(134, 24, 6, '#fff3b0') + sp(18, 82, 3.4, '#ffe27a') + sp(146, 84, 3.4, '#ffe27a') + sp(80, 8, 4, '#fff')] },
+    { k: 'autumn', e: '🍁', n: '가을 호숫가 마을', pr: 1, s: [9, 10, 11], sn: '가을 시즌 · 9~11월', tag: '단풍이 물든 고요한 호숫가', defs: G('s', '#ffcf94', '#fff1d9') + G('l', '#7db7bd', '#3f7f8f') + G('mt', '#b9a89a', '#8fa192') + '<filter id="§f" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>', parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="118" cy="30" r="22" fill="#fff4cc" opacity=".6" filter="url(#§f)"/><circle cx="118" cy="30" r="10" fill="#fff0b0"/><path d="M0 70 L24 44 L46 62 L72 34 L100 62 L124 46 L160 72 V90 H0Z" fill="url(#§mt)"/><path d="M72 34 L62 46 L72 44 L82 48Z" fill="#fff" opacity=".7"/><rect y="62" width="160" height="14" fill="#fff" opacity=".25"/>',
+      '<path d="M0 76 Q30 60 60 76 T120 74 T160 70 V96 H0Z" fill="#6f9a5a"/><g><circle cx="14" cy="72" r="9" fill="#e8742a"/><circle cx="28" cy="68" r="8" fill="#f2a03a"/><circle cx="46" cy="74" r="8" fill="#c9402e"/><circle cx="122" cy="70" r="9" fill="#f2a03a"/><circle cx="138" cy="66" r="9" fill="#e8742a"/><circle cx="152" cy="72" r="8" fill="#c9402e"/></g>',
+      '<rect y="84" width="160" height="36" fill="url(#§l)"/><g opacity=".5"><path d="M34 88 L48 100 L62 88Z" fill="#c9402e"/><path d="M96 88 L112 104 L128 88Z" fill="#f2a03a"/></g><g stroke="#fff" stroke-width="1" opacity=".5" fill="none" stroke-linecap="round"><path d="M20 98 H60 M80 106 H130 M40 112 H96 M110 96 H148"/></g>',
+      '<g><rect x="50" y="66" width="22" height="18" fill="#f7e6c8"/><path d="M46 68 L61 54 L76 68Z" fill="#9a4a32"/><rect x="58" y="74" width="6" height="10" fill="#7a4b2a"/><rect x="80" y="62" width="18" height="22" fill="#fff1d6"/><path d="M77 64 L89 50 L101 64Z" fill="#b2573a"/><rect x="86" y="72" width="6" height="12" fill="#7a4b2a"/><rect x="102" y="70" width="16" height="14" fill="#f7e6c8"/><path d="M99 72 L110 60 L121 72Z" fill="#9a4a32"/><rect x="110" y="40" width="8" height="26" fill="#fff"/><path d="M108 42 L114 28 L120 42Z" fill="#7d8fb0"/><circle cx="114" cy="48" r="2" fill="#ffd54a"/></g><rect x="40" y="84" width="84" height="3" fill="#6b4a32"/>',
+      '<rect x="28" y="76" width="5" height="22" fill="#6b4a2e"/><circle cx="26" cy="68" r="14" fill="#e8742a"/><circle cx="38" cy="72" r="10" fill="#f2a03a"/><circle cx="20" cy="76" r="8" fill="#c9402e"/><rect x="132" y="78" width="5" height="20" fill="#6b4a2e"/><circle cx="134" cy="70" r="13" fill="#c9402e"/><circle cx="144" cy="76" r="9" fill="#e8742a"/>',
+      '<g><path d="M70 98 q10 8 22 0z" fill="#a8693a"/><path d="M80 98 V88" stroke="#6b4a32" stroke-width="1.4"/><path d="M80 88 l8 4 -8 2z" fill="#fff"/></g>' + sp(100, 20, 4, '#fff') + '<g fill="#e8742a"><ellipse cx="46" cy="30" rx="3" ry="1.6" transform="rotate(30 46 30)"/><ellipse cx="86" cy="22" rx="3" ry="1.6" transform="rotate(-20 86 22)"/><ellipse cx="60" cy="48" rx="3" ry="1.6"/></g><g fill="#c9402e"><ellipse cx="108" cy="52" rx="3" ry="1.6" transform="rotate(40 108 52)"/><ellipse cx="12" cy="42" rx="3" ry="1.6"/></g><path d="M130 18 q3 -4 6 0 q3 -4 6 0" stroke="#6b5a4a" stroke-width="1.4" fill="none" stroke-linecap="round"/>' + ht(22, 24, .9, '#ff9a6a')] },
+    { k: 'moon', e: '🌙', n: '달빛 고성', pr: 1, tag: '붉은 등불이 켜진 달밤의 고성', defs: G('s', '#15143f', '#d98a5a') + G('rf', '#3a2a58', '#ffb36b') + '<filter id="§f" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>', parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="118" cy="32" r="28" fill="#ffcf7a" opacity=".3" filter="url(#§f)"/><circle cx="118" cy="32" r="16" fill="#ffe2a0"/><circle cx="113" cy="28" r="3" fill="#f6c878" opacity=".7"/><circle cx="123" cy="38" r="2" fill="#f6c878" opacity=".7"/><g fill="#fff"><circle cx="16" cy="14" r="1"/><circle cx="46" cy="24" r="1.2"/><circle cx="74" cy="10" r="1"/><circle cx="30" cy="40" r="1"/><circle cx="96" cy="26" r="1.1"/></g>',
+      '<path d="M0 78 L20 56 L42 72 L66 48 L92 70 L116 56 L140 70 L160 60 V96 H0Z" fill="#2c2250" opacity=".9"/><path d="M0 88 L30 70 L58 84 L90 66 L124 84 L160 72 V100 H0Z" fill="#1f1840"/>',
+      '<rect y="92" width="160" height="28" fill="url(#§rf)"/><path d="M118 92 V120" stroke="#ffe2a0" stroke-width="10" opacity=".35" stroke-linecap="round"/><g stroke="#ffd9a0" stroke-width="1" opacity=".5" fill="none" stroke-linecap="round"><path d="M30 100 H70 M90 106 H140 M50 114 H100"/></g>',
+      '<g fill="#2a1d40"><rect x="62" y="66" width="36" height="28"/><rect x="66" y="52" width="28" height="16"/><rect x="71" y="40" width="18" height="14"/></g><g fill="#3a2a56"><path d="M52 68 Q80 60 108 68 L100 62 H60Z"/><path d="M58 54 Q80 46 102 54 L96 48 H64Z"/><path d="M64 42 Q80 34 96 42 L90 36 H70Z"/><path d="M80 24 L88 36 H72Z"/></g><g fill="#c9a24a"><rect x="50" y="68" width="60" height="1.6"/><rect x="56" y="54" width="48" height="1.6"/><rect x="62" y="42" width="36" height="1.6"/></g><g fill="#ffd36b"><rect x="70" y="74" width="5" height="7"/><rect x="85" y="74" width="5" height="7"/><rect x="77" y="58" width="6" height="6"/><rect x="77" y="44" width="6" height="5"/></g>',
+      '<g><path d="M20 82 V74 M34 86 V76 M126 86 V76 M140 82 V74" stroke="#4a3322" stroke-width="1.4"/><g fill="#ff5a3c"><ellipse cx="20" cy="74" rx="4" ry="5"/><ellipse cx="34" cy="76" rx="4" ry="5"/><ellipse cx="126" cy="76" rx="4" ry="5"/><ellipse cx="140" cy="74" rx="4" ry="5"/></g><g fill="#ffb36b" opacity=".35" filter="url(#§f)"><circle cx="20" cy="74" r="8"/><circle cx="34" cy="76" r="8"/><circle cx="126" cy="76" r="8"/><circle cx="140" cy="74" r="8"/></g></g>',
+      '<path d="M0 92 Q22 72 44 92Z" fill="#241a3c"/><path d="M6 92 V86 M38 92 V86" stroke="#c9a24a" stroke-width="1.4"/><path d="M146 92 V70 M146 80 l-12 -4 12 -2 M146 72 l12 -4 -12 -2" stroke="#1b1330" stroke-width="3"/><path d="M146 86 l-14 -4 14 -2 M146 78 l14 -4" stroke="#1b1330" stroke-width="3"/>',
+      '<g><ellipse cx="46" cy="34" rx="3" ry="4" fill="#ffb36b"/><ellipse cx="60" cy="18" rx="2.4" ry="3.2" fill="#ffb36b"/><ellipse cx="30" cy="52" rx="2.4" ry="3.2" fill="#ff8a5a"/><ellipse cx="88" cy="22" rx="2" ry="2.8" fill="#ffd36b"/></g><g fill="#ffb36b" opacity=".4" filter="url(#§f)"><circle cx="46" cy="34" r="6"/><circle cx="60" cy="18" r="5"/></g>' + sp(142, 14, 4, '#fff') + sp(12, 28, 3, '#ffe2a0') + '<path d="M96 40 Q108 36 118 42 M10 70 Q22 66 30 72" stroke="#fff" stroke-width="1.6" opacity=".25" fill="none" stroke-linecap="round"/>'] },
+    { k: 'snow', e: '🏔️', n: '설산 호수', pr: 1, s: [12, 1, 2], sn: '겨울 시즌 · 12~2월', tag: '눈 덮인 산과 맑은 호수', defs: G('s', '#5fb0ff', '#eaf6ff') + G('l', '#59b3e6', '#1f6fb3') + G('mt', '#ffffff', '#bcd9f2'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="126" cy="26" r="20" fill="#fff" opacity=".5"/><circle cx="126" cy="26" r="10" fill="#fffbe0"/><g fill="#fff"><ellipse cx="28" cy="22" rx="16" ry="5.5"/><ellipse cx="40" cy="18" rx="10" ry="5"/><ellipse cx="96" cy="32" rx="12" ry="4"/></g>',
+      '<path d="M0 74 L36 34 L58 56 L88 22 L124 60 L142 44 L160 62 V80 H0Z" fill="url(#§mt)"/><path d="M88 22 L124 60 L100 50 L92 70 L80 52 L70 62Z" fill="#a8c9e8" opacity=".6"/><path d="M36 34 L58 56 L44 52 L38 66 L28 48Z" fill="#a8c9e8" opacity=".55"/>',
+      '<path d="M0 82 H160 V88 H0Z" fill="#2f6f4a"/><g fill="#215a3c"><path d="M6 84 l6 -20 6 20z"/><path d="M18 84 l5 -16 5 16z"/><path d="M30 84 l6 -22 6 22z"/><path d="M118 84 l6 -18 6 18z"/><path d="M132 84 l5 -22 5 22z"/><path d="M146 84 l6 -18 6 18z"/></g><g fill="#fff" opacity=".85"><path d="M12 70 l-3 6 h6z M36 70 l-3 6 h6z M137 70 l-3 6 h6z"/></g>',
+      '<rect y="86" width="160" height="34" fill="url(#§l)"/><path d="M0 74 L36 34 L58 56 L88 22 L124 60 L142 44 L160 62 V80 H0Z" fill="#fff" opacity=".35" transform="translate(0 168) scale(1 -1)"/><g stroke="#fff" stroke-width="1" opacity=".5" fill="none" stroke-linecap="round"><path d="M16 96 H56 M84 104 H128 M40 112 H100 M110 94 H150"/></g>',
+      '<path d="M0 100 Q40 92 80 100 T160 104 V120 H0Z" fill="#6bbf7a"/><g><circle cx="18" cy="108" r="2" fill="#ffd54a"/><circle cx="30" cy="112" r="2" fill="#ff8fb3"/><circle cx="46" cy="106" r="2" fill="#fff"/><circle cx="124" cy="112" r="2" fill="#ffd54a"/><circle cx="140" cy="108" r="2" fill="#b79cff"/></g><path d="M100 104 q8 -10 20 -4 q-6 8 -20 4z" fill="#8f98a8"/>',
+      '<g transform="translate(74 98)"><path d="M0 4 Q14 -2 28 4 Q14 8 0 4z" fill="#e5484d"/><path d="M6 3 Q14 -1 22 3" stroke="#fff" stroke-width="1.2" fill="none"/><circle cx="14" cy="-2" r="2.6" fill="#ffcf8a"/><path d="M14 0 V3" stroke="#2f6fd0" stroke-width="2.4"/></g>',
+      '<path d="M120 36 q3 -4 6 0 q3 -4 6 0 M30 48 q3 -4 6 0 q3 -4 6 0" stroke="#4a5a78" stroke-width="1.4" fill="none" stroke-linecap="round"/>' + sp(96, 96, 4, '#fff') + sp(48, 100, 3, '#fff') + sp(134, 100, 4, '#fff') + sp(70, 14, 4, '#fff') + sp(148, 56, 3, '#fff')] },
+    { k: 'castle', e: '🏰', n: '동화 속 성', pr: 1, tag: '무지개가 뜬 꿈의 성', defs: G('s', '#c9b6ff', '#ffe3f1') + G('w', '#ffffff', '#ffdbe9') + G('bl', '#7aa9ff', '#3f62d6') + G('gh', '#9ee0a0', '#5cba74'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><g fill="none" stroke-width="3" opacity=".75"><path d="M10 96 A70 70 0 0 1 150 96" stroke="#ff8a8a"/><path d="M16 96 A64 64 0 0 1 144 96" stroke="#ffc46b"/><path d="M22 96 A58 58 0 0 1 138 96" stroke="#fff08a"/><path d="M28 96 A52 52 0 0 1 132 96" stroke="#8ae0a0"/><path d="M34 96 A46 46 0 0 1 126 96" stroke="#8ac4ff"/></g><g fill="#fff"><ellipse cx="24" cy="30" rx="16" ry="5.5"/><ellipse cx="38" cy="26" rx="10" ry="5"/><ellipse cx="124" cy="22" rx="14" ry="5"/></g>',
+      '<path d="M0 92 Q40 76 80 90 T160 86 V120 H0Z" fill="url(#§gh)"/><path d="M68 120 Q76 104 84 96 Q92 104 100 120Z" fill="#fff3d8"/>',
+      '<rect x="56" y="50" width="48" height="46" fill="url(#§w)"/><rect x="38" y="44" width="18" height="52" fill="url(#§w)"/><rect x="104" y="44" width="18" height="52" fill="url(#§w)"/><rect x="71" y="26" width="18" height="40" fill="url(#§w)"/><g fill="#ffd0e2"><rect x="56" y="46" width="6" height="6"/><rect x="68" y="46" width="6" height="6"/><rect x="86" y="46" width="6" height="6"/><rect x="98" y="46" width="6" height="6"/></g>',
+      '<path d="M34 46 L47 18 L60 46Z" fill="url(#§bl)"/><path d="M100 46 L113 18 L126 46Z" fill="url(#§bl)"/><path d="M68 28 L80 0 L92 28Z" fill="url(#§bl)"/><g stroke="#8a6a1a" stroke-width="1"><path d="M47 18 V8 M113 18 V8 M80 0 V-4"/></g><g fill="#ff6f91"><path d="M47 8 l8 3 -8 3z"/><path d="M113 8 l8 3 -8 3z"/></g><path d="M78 6 L88 8 L78 11Z" fill="#ffd54a"/>',
+      '<path d="M72 96 V82 Q72 74 80 74 Q88 74 88 82 V96Z" fill="#8a5a3c"/><circle cx="85" cy="86" r="1.2" fill="#ffd54a"/><g fill="#ffe9a8"><rect x="76" y="34" width="8" height="10" rx="4"/><rect x="43" y="54" width="8" height="12" rx="4"/><rect x="109" y="54" width="8" height="12" rx="4"/><rect x="60" y="62" width="7" height="9" rx="3.5"/><rect x="93" y="62" width="7" height="9" rx="3.5"/></g>',
+      '<g><rect x="22" y="80" width="4" height="14" fill="#7a4f33"/><circle cx="24" cy="74" r="12" fill="#ff9fbe"/><circle cx="18" cy="78" r="7" fill="#ffc2d9"/><rect x="134" y="80" width="4" height="14" fill="#7a4f33"/><circle cx="136" cy="74" r="12" fill="#ff9fbe"/><circle cx="142" cy="78" r="7" fill="#ffc2d9"/></g><path d="M6 60 Q30 66 56 58 M104 58 Q130 66 154 60" stroke="#fff" stroke-width="1.2" fill="none"/><g><path d="M14 62 l3 6 3 -6z" fill="#ff6f91"/><path d="M30 64 l3 6 3 -6z" fill="#ffd54a"/><path d="M46 62 l3 6 3 -6z" fill="#7aa9ff"/><path d="M114 62 l3 6 3 -6z" fill="#7aa9ff"/><path d="M130 64 l3 6 3 -6z" fill="#ffd54a"/><path d="M146 62 l3 6 3 -6z" fill="#ff6f91"/></g>',
+      '<g><path d="M30 100 q4 -6 8 0 q-4 4 -8 0z" fill="#ffb3cf"/><circle cx="34" cy="100" r="1" fill="#fff"/></g>' + ht(14, 40, 1.4, '#ff8fb3') + ht(146, 46, 1.1, '#ff8fb3') + sp(100, 12, 5, '#fff') + sp(20, 12, 4, '#fff') + sp(148, 80, 4, '#fff') + sp(60, 12, 3, '#fff7c9') + '<path d="M108 6 L128 -2" stroke="#fff" stroke-width="2" opacity=".6" stroke-linecap="round"/>'] },
     { k: 'house', e: '🏠', n: '내 집', tag: '아늑한 정원이 있는 우리 집', defs: G('s', '#bfe3ff', '#fff3df') + G('g', '#8fd694', '#59b567') + G('w', '#fff6e4', '#f3d7a8') + G('r', '#f4958a', '#d35a54') + G('t', '#7ad383', '#3f9d4a'), parts: [
       '<rect width="160" height="120" fill="url(#§s)"/><circle cx="130" cy="26" r="19" fill="#fff3b8" opacity=".55"/><circle cx="130" cy="26" r="11" fill="#ffe27a"/><g fill="#fff" opacity=".92"><ellipse cx="34" cy="24" rx="16" ry="6"/><ellipse cx="46" cy="20" rx="11" ry="6"/><ellipse cx="96" cy="14" rx="13" ry="5"/></g><path d="M0 84 Q40 66 80 80 T160 74 V120 H0Z" fill="#b9e8b0"/>',
       '<path d="M0 94 Q80 84 160 94 V120 H0Z" fill="url(#§g)"/><path d="M70 120 Q74 106 80 98 Q86 106 92 120Z" fill="#f4e6cf"/><ellipse cx="80" cy="112" rx="5" ry="2" fill="#e6d4b8"/><ellipse cx="82" cy="104" rx="3.4" ry="1.4" fill="#e6d4b8"/>',
@@ -5659,7 +5700,8 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     if (r.done) { NEWDONE = r.done; try { toast('🎉 ' + PUZ_BY[r.done].n + ' 퍼즐 완성! 인증 배지를 받았어요'); } catch (e) { } }
   }
   var PZ_TIER = { 1: { n: '실버', c: ['#ffffff', '#d3dae8', '#8b95ad'] }, 2: { n: '골드', c: ['#fff3b8', '#f2c44f', '#b98412'] } };
-  var PZ_MS = [[3, '수집가', ['#ffe0c2', '#d98e52', '#8a4f25']], [6, '탐험가', ['#e6dcff', '#9b82e6', '#5a3fae']], [9, '퍼즐 마스터', ['#dff6ff', '#74c2f0', '#2f78c0']]];
+  var PZ_MS = [[3, '수집가', ['#ffe0c2', '#d98e52', '#8a4f25']], [6, '탐험가', ['#e6dcff', '#9b82e6', '#5a3fae']], [10, '아티스트', ['#dff6ff', '#74c2f0', '#2f78c0']], [14, '퍼즐 마스터', ['#fff3b8', '#f2c44f', '#b98412']]];
+  function pzOpen(q) { if (!q.s) return true; var m = new Date().getMonth() + 1; return q.s.indexOf(m) >= 0; }
   function tk() { return 'z' + (++PZK) + '_'; }
   function tz(str, t) { return String(str).split('§').join(t); }
   var JIG = '<g fill="none" stroke="#fff" stroke-width="1" opacity=".55"><path d="M0 40H160M0 80H160M40 0V120M80 0V120M120 0V120"/><circle cx="20" cy="40" r="3.2"/><circle cx="60" cy="80" r="3.2"/><circle cx="100" cy="40" r="3.2"/><circle cx="140" cy="80" r="3.2"/><circle cx="40" cy="20" r="3.2"/><circle cx="80" cy="100" r="3.2"/><circle cx="120" cy="20" r="3.2"/></g>';
@@ -5696,7 +5738,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var h = '<div class="pz-pick"><p class="muted small" style="margin:0">' + heading + '</p>' +
       '<div class="pz-prev">' + pzSvg(cur, 0, 1, true) + '<div class="pz-prev-t"><b>' + cur.e + ' ' + esc(cur.n) + '</b><small>' + esc(cur.tag) + '</small><div class="pz-prev-b">' + bdSvg(cur, tier, 52) + '<span>완성하면<br><b>' + PZ_TIER[tier].n + ' 인증 배지</b>를 받아요</span></div></div></div>' +
       '<div class="pz-themes" role="group" aria-label="퍼즐 그림 고르기">' +
-      PUZ.map(function (q) { return '<button type="button" data-pz-t="' + q.k + '" aria-pressed="' + (PICK.t === q.k) + '"><span class="pz-th">' + pzSvg(q, 0, 1, true) + '</span><b>' + esc(q.n) + '</b>' + (best[q.k] ? '<i class="pz-ck">✓ ' + PZ_TIER[best[q.k].w === 1 ? 1 : 2].n + ' 배지</i>' : '') + '</button>'; }).join('') +
+      PUZ.map(function (q) { var op = pzOpen(q); return '<button type="button" data-pz-t="' + q.k + '" aria-pressed="' + (PICK.t === q.k) + '"' + (op ? '' : ' aria-disabled="true" class="pz-lock"') + '><span class="pz-th">' + pzSvg(q, 0, 1, true) + (q.pr ? '<i class="pz-pr">★ 프리미엄</i>' : '') + '</span><b>' + esc(q.n) + '</b>' + (op ? '' : '<i class="pz-ck" style="color:var(--muted)">🔒 ' + esc(q.sn) + '</i>') + (best[q.k] ? '<i class="pz-ck">✓ ' + PZ_TIER[best[q.k].w === 1 ? 1 : 2].n + ' 배지</i>' : '') + '</button>'; }).join('') +
       '</div><div class="pz-weeks" role="group" aria-label="완성 기간">' +
       [[1, '1주 코스', '14조각 · 실버 배지'], [2, '2주 코스', '28조각 · 골드 배지']].map(function (a) { return '<button type="button" data-pz-w="' + a[0] + '" aria-pressed="' + (PICK.w === a[0]) + '"><b>' + a[1] + '</b><small>' + a[2] + '</small></button>'; }).join('') +
       '</div><div class="row2"><button type="button" class="btn primary" data-pz-start>이 그림으로 시작하기</button>' + (canCancel ? '<button type="button" class="btn ghost" data-pz-cancel>취소</button>' : '') + '</div></div>';
@@ -5708,7 +5750,31 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var h = '<h3 class="disc-h3">인증 배지 <small class="muted">' + (n + msN) + ' / ' + tot + '개 모음</small></h3><p class="muted small" style="margin:0 0 6px">퍼즐을 완성할 때마다 배지가 생겨요. 2주 코스는 골드, 1주 코스는 실버예요.</p><div class="pz-bd">';
     PUZ.forEach(function (q) { var d = best[q.k]; h += '<figure>' + (d ? bdSvg(q, d.w === 1 ? 1 : 2, 84) : bdSvg(q, 2, 84, true)) + '<figcaption><b>' + esc(q.n) + '</b>' + (d ? '<br>' + PZ_TIER[d.w === 1 ? 1 : 2].n + (d.d ? ' · ' + esc(String(d.d).slice(5)) : '') : '<br>잠김') + '</figcaption></figure>'; });
     PZ_MS.forEach(function (m) { var ok = n >= m[0]; h += '<figure>' + msSvg(m, 84, !ok) + '<figcaption><b>' + esc(m[1]) + '</b><br>' + (ok ? '달성!' : '퍼즐 ' + m[0] + '개 완성') + '</figcaption></figure>'; });
-    return h + '</div>';
+    h += '</div>' + (n + msN ? '<div class="row2"><button type="button" class="btn ghost" data-pz-save>🖼️ 내 배지 이미지로 저장·공유</button></div>' : '');
+    return h;
+  }
+  /* 배지 모음을 PNG 한 장으로 만들어 저장하거나(공유창 지원 기기는 공유) 내려받는다 */
+  function pzSaveImg() {
+    var best = pzBest(), n = pzCount(), items = [];
+    PUZ.forEach(function (q) { var d = best[q.k]; if (d) items.push([bdSvg(q, d.w === 1 ? 1 : 2, 96), q.n + ' · ' + PZ_TIER[d.w === 1 ? 1 : 2].n]); });
+    PZ_MS.forEach(function (m) { if (n >= m[0]) items.push([msSvg(m, 96), m[1]]); });
+    if (!items.length) { try { toast('아직 받은 배지가 없어요'); } catch (e) { } return; }
+    var cols = 3, cw = 120, rows = Math.ceil(items.length / cols), W = cols * cw + 20, H = 76 + rows * 132 + 34, g = '';
+    items.forEach(function (it, i) { var x = 10 + (i % cols) * cw + 12, y = 64 + Math.floor(i / cols) * 132; g += it[0].replace('<svg ', '<svg x="' + x + '" y="' + y + '" ') + '<text x="' + (x + 48) + '" y="' + (y + 112) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2a44" font-family="sans-serif">' + esc(it[1]) + '</text>'; });
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><defs><linearGradient id="bgp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eaf3ff"/><stop offset="1" stop-color="#fff5f8"/></linearGradient></defs><rect width="' + W + '" height="' + H + '" rx="18" fill="url(#bgp)"/><text x="' + (W / 2) + '" y="34" text-anchor="middle" font-size="19" font-weight="800" fill="#1f2a44" font-family="sans-serif">헬퍼탐 퍼즐 인증 배지 ' + items.length + '개</text><text x="' + (W / 2) + '" y="52" text-anchor="middle" font-size="12" fill="#5b6675" font-family="sans-serif">' + esc(String(TODAY ? TODAY.s : '')) + '</text>' + g + '<text x="' + (W / 2) + '" y="' + (H - 12) + '" text-anchor="middle" font-size="11" fill="#7a8599" font-family="sans-serif">비전HR컨설팅 · 헬퍼탐</text></svg>';
+    var img = new Image(), url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    img.onload = function () {
+      var c = document.createElement('canvas'); c.width = W * 2; c.height = H * 2; var cx = c.getContext('2d'); cx.scale(2, 2); cx.drawImage(img, 0, 0, W, H);
+      c.toBlob(function (b) {
+        if (!b) { try { toast('이미지를 만들지 못했어요'); } catch (e) { } return; }
+        var name = '헬퍼탐_인증배지_' + String(TODAY ? TODAY.s : '').replace(/-/g, '') + '.png';
+        try { var f = new File([b], name, { type: 'image/png' }); if (navigator.canShare && navigator.canShare({ files: [f] })) { navigator.share({ files: [f], title: '헬퍼탐 인증 배지' }).catch(function () { }); return; } } catch (e) { }
+        var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+        try { toast('배지 이미지를 저장했어요'); } catch (e) { }
+      }, 'image/png');
+    };
+    img.onerror = function () { try { toast('이미지를 만들지 못했어요'); } catch (e) { } };
+    img.src = url;
   }
   var PICKING = false;
   function pzSection() {
@@ -5723,7 +5789,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       h += '<div class="pz-done" role="status"><div class="pz-done-b">' + bdSvg(PUZ_BY[NEWDONE], nd && nd.w === 1 ? 1 : 2, 76) + (ms ? msSvg(ms, 76) : '') + '</div><div class="pz-done-t">🎉 <b>' + esc(PUZ_BY[NEWDONE].n) + ' 퍼즐을 완성했어요!</b> ' + (nd && nd.w === 1 ? '실버' : '골드') + ' 인증 배지를 받았어요.' + (ms ? ' 그리고 <b>' + esc(ms[1]) + '</b> 배지까지 달성!' : '') + ' 새 그림을 골라 다음 배지에 도전해 보세요.</div></div>'; NEWDONE = null;
     }
     if (!z.cur || PICKING) {
-      if (!PICKED) { var doneT = {}; z.done.forEach(function (d) { doneT[d.t] = 1; }); var nt = PUZ.filter(function (q) { return !doneT[q.k]; })[0]; if (nt) PICK.t = nt.k; }
+      if (!PICKED) { var doneT = {}; z.done.forEach(function (d) { doneT[d.t] = 1; }); var nt = PUZ.filter(function (q) { return !doneT[q.k] && pzOpen(q); })[0]; if (nt) PICK.t = nt.k; }
       if (!z.cur) h += '<p class="muted small" style="margin:0 0 6px">모은 조각 ' + r.p + '개가 새 퍼즐에 바로 들어가요. 퍼즐은 재미로 모으는 놀이예요.</p>';
       return h + pzChooser(z.cur ? '퍼즐을 바꿔도 모은 조각은 그대로 이어져요.' : '만들고 싶은 퍼즐과 기간을 골라 보세요.', !!z.cur);
     }
@@ -5899,9 +5965,10 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       }
       if (t.closest('[data-disc-today]')) { OFF = 0; NEW = {}; showTab(ACTIVE === 'QUIZ' ? 'IND' : ACTIVE); return; }
       if (t.closest('[data-disc-day]')) { VIEW = 'DAY'; OFF = 0; NEW = {}; showTab(ACTIVE === 'QUIZ' ? 'IND' : ACTIVE); show(); return; }
-      var pt = t.closest('[data-pz-t]'); if (pt) { PICKED = true; PICK.t = pt.getAttribute('data-pz-t'); render(); var f1 = modal().querySelector('[data-pz-t="' + PICK.t + '"]'); if (f1) f1.focus(); return; }
+      var pt = t.closest('[data-pz-t]'); if (pt && pt.getAttribute('aria-disabled') === 'true') { try { toast(PUZ_BY[pt.getAttribute('data-pz-t')].sn + '에 열려요'); } catch (x) { } return; } if (pt) { PICKED = true; PICK.t = pt.getAttribute('data-pz-t'); render(); var f1 = modal().querySelector('[data-pz-t="' + PICK.t + '"]'); if (f1) f1.focus(); return; }
       var pw = t.closest('[data-pz-w]'); if (pw) { PICK.w = Number(pw.getAttribute('data-pz-w')) === 1 ? 1 : 2; render(); var f2 = modal().querySelector('[data-pz-w="' + PICK.w + '"]'); if (f2) f2.focus(); return; }
       if (t.closest('[data-pz-change]')) { var zc = pzGet().cur; if (zc) { PICK = { t: zc.t, w: zc.w }; PICKED = true; } PICKING = true; render(); var f3 = modal().querySelector('[data-pz-start]'); if (f3) f3.focus(); return; }
+      if (t.closest('[data-pz-save]')) { pzSaveImg(); return; }
       if (t.closest('[data-pz-cancel]')) { PICKING = false; render(); return; }
       if (t.closest('[data-pz-start]')) { var z0 = pzGet(); z0.cur = { t: PICK.t, w: PICK.w === 1 ? 1 : 2 }; LS.set(PZKEY, z0); PICKING = false; PICKED = false; pzAfter(); render(); renderHome(); var tt2 = document.getElementById('discTitle'); if (tt2) tt2.focus(); return; }
       var it = t.closest('[data-disc-item]');
@@ -6191,7 +6258,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     window.__homeKind = k; if (typeof window.fxCtx === 'function') window.fxCtx();
     if (focus) { var t = document.getElementById('hp-' + k); if (t) { var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; var r = bar.getBoundingClientRect(); if (r.top < hh || r.top > window.innerHeight * 0.5) window.scrollBy({ top: r.top - hh - 8, behavior: 'auto' }); } }
   }
-  try { if (!LS.get('visionhr_home_seen_v1', 0)) { LS.set('visionhr_home_seen_v1', 1); setHome('GUIDE', false); } } catch (e) { }
+  try { if (!LS.get('visionhr_home_seen_v1', 0)) { LS.set('visionhr_home_seen_v1', 1); setHome('DISC', false); } } catch (e) { }
   bar.addEventListener('click', function (e) { var b = e.target.closest('[data-hk]'); if (b) setHome(b.getAttribute('data-hk'), true); });
   window.setHomeKind = setHome;
 })();
@@ -6515,8 +6582,8 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 /* v12.131 탭 상단 선택 버튼: 학과·직무·진단 화면을 산업 탐색(민간기업/공공기관)처럼 2개 버튼으로 나눠 보기 */
 (function () {
   var CFG = {
-    majorPage: { label: '학과 탐색 구분', tabs: [['A', '학과 입력·추천', ['#majorPage .search', '#majorSuggest']], ['B', '분류로 둘러보기', ['#majorPage .step']]] },
-    jobPage: { label: '직무 탐색 구분', tabs: [['A', '직무대영역으로 고르기', ['#jobPage .step', '#jobCrumb', '#jobSelectWrap']], ['B', '이름으로 찾기', ['#jobPage .search', '#jobSearchResults']]] }
+    majorPage: { label: '학과 탐색 구분', tabs: [['A', '학과 입력·추천', ['#majorPage .search', '#majorSuggest'], '학과 이름으로 추천받기'], ['B', '분류로 둘러보기', ['#majorPage .step'], '계열별로 학과 찾기']] },
+    jobPage: { label: '직무 탐색 구분', tabs: [['A', '직무대영역으로 고르기', ['#jobPage .step', '#jobCrumb', '#jobSelectWrap'], '영역 → 직무 → 상세'], ['B', '이름으로 찾기', ['#jobPage .search', '#jobSearchResults'], '직무명 일부로 검색']] }
   };
   var CUR = {}, PRINTING = false; window.__ktCur = CUR;
   function els(sels) { var o = []; sels.forEach(function (q) { Array.prototype.forEach.call(document.querySelectorAll(q), function (e) { o.push(e); }); }); return o; }
@@ -6533,7 +6600,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function build(pid) {
     var c = CFG[pid], head = document.querySelector('#' + pid + ' .page-head'); if (!head || document.getElementById('kt-' + pid)) return;
     var bar = document.createElement('div'); bar.className = 'kindbar kt no-print'; bar.id = 'kt-' + pid; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', c.label);
-    bar.innerHTML = c.tabs.map(function (t, i) { return '<button type="button" data-kt="' + t[0] + '" aria-pressed="' + (i === 0) + '"><b>' + t[1] + '</b></button>'; }).join('');
+    bar.innerHTML = c.tabs.map(function (t, i) { return '<button type="button" data-kt="' + t[0] + '" aria-pressed="' + (i === 0) + '"><b>' + t[1] + '</b><small>' + t[3] + '</small></button>'; }).join('');
     head.parentNode.insertBefore(bar, head.nextSibling);
     bar.addEventListener('click', function (e) { var b = e.target.closest('[data-kt]'); if (b) set(pid, b.getAttribute('data-kt'), false); });
   }
@@ -6543,7 +6610,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function diagBar() {
     var sec = document.getElementById('diagnosisPage'); if (!sec || document.getElementById('kt-diagnosisPage')) return;
     var bar = document.createElement('div'); bar.className = 'kindbar kt no-print'; bar.id = 'kt-diagnosisPage'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', '진단 구분');
-    bar.innerHTML = '<button type="button" data-kt="A" aria-pressed="true"><b>문항 풀기</b></button><button type="button" data-kt="B" aria-pressed="false"><b>내 결과</b></button>';
+    bar.innerHTML = '<button type="button" data-kt="A" aria-pressed="true"><b>문항 풀기</b><small>64문항 · 약 10분</small></button><button type="button" data-kt="B" aria-pressed="false"><b>내 결과</b><small>적합 산업·직무 TOP5</small></button>';
     sec.insertBefore(bar, sec.firstChild);
     bar.addEventListener('click', function (e) {
       var b = e.target.closest('[data-kt]'); if (!b) return;
