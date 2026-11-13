@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.165 (2026-11-14): 챌린지·게임 화면 위에도 산업·기관·직무·챌린지·기사 탭 줄 표시(눌러서 오늘의 발견으로 바로 이동) -->
 <!-- v12.164 (2026-11-14): "오늘의 산업 기사" → "오늘의 기사", 직무·중앙 공공기관 기사 추가(data/news/extra.json, 홈·기사 탭·진로 결정 찜한 항목) -->
@@ -5272,9 +5273,8 @@ function data(){var v=readPlanInput();var d={nick:($g('gsNick')?$g('gsNick').val
  try{if(v.p){var pp=$g('planPublicSelect');d.pub=pp&&pp.selectedIndex>=0?pp.options[pp.selectedIndex].text:''}}catch(e){}
  try{if(v.i&&v.j){var t=EDGE_TEXT[edgeOf(v.i,v.j).score]||EDGE_TEXT[0];d.link=t[1]}}catch(e){}return d}
 function build(){var box=$g('goalShare');if(!box||box.getAttribute('data-b'))return;box.setAttribute('data-b','1');
- box.appendChild(el('h3','','수업 나눔 · 강사에게 보내기'));
+ box.appendChild(el('h3','','내 선택 공유하기'));
  if(!CFG.url){box.appendChild(el('p','gs-note','보내기 기능이 아직 연결되지 않았어요. 강사에게 문의하세요. 보내지 않아도 수업 진행에는 지장이 없어요.'));return}
- box.appendChild(el('p','gs-note','내가 정한 목표를 강사의 수업 화면(구글 슬라이드)으로 보냅니다. 보내기 전에 미리보기로 확인하세요. 고친 뒤 다시 보내면 내 슬라이드가 새 내용으로 바뀌어요.'));
  var l1=el('label','label','닉네임 (실명 금지 · 12자 이내)');l1.setAttribute('for','gsNick');var n=el('input');n.type='text';n.id='gsNick';n.maxLength=12;n.placeholder='예: 파란여우';n.value=ls(K_NICK);n.addEventListener('input',function(){ss(K_NICK,n.value)});
  var wf=WH.map(function(x){var l=el('label','label',x[1]+' (80자 이내)');l.setAttribute('for','gsW'+x[0]);var i=el('input');i.type='text';i.id='gsW'+x[0];i.maxLength=80;i.placeholder=x[2];i.value=ls(K_WHY+x[0]);i.addEventListener('input',function(){ss(K_WHY+x[0],i.value)});return [l,i]});
  var st=el('span','gs-st');var prev=el('div');
