@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.131 (2026-11-13): 첫 방문 시 홈은 '활용 방법'부터 보여 주고(이후 '오늘의 발견'), 학과·직무·진단 화면 상단에도 산업 탐색처럼 2버튼 선택(학과 입력·추천/분류로 둘러보기, 직무대영역/이름으로 찾기, 문항 풀기/내 결과). 인쇄 시에는 모두 출력. -->
 <!-- v12.127 (2026-11-13): 요정 안내 강화 — (1) '▶ 이 화면 안내' 단계별 투어(요소를 강조하고 설명, 이전/다음) 홈·학과·산업·공공기관·직무·진단·진로 결정·로드맵 (2) 기능을 처음 쓸 때 요정의 한마디(☆찜·결과 보기·학과 추천·검색·목록 선택·준비 기간·PDF 저장·진로 결정에 반영·탭 이동) (3) 말풍선 안내 방식 선택(처음 한 번만/화면마다 짧게/안 함). -->
 <!-- v12.126 (2026-11-13): 꾸미기 추가 — (1) 도우미 요정(별이·꽃님·잎새·달이·몽실 중 선택, 화면별 사용법 말풍선, 켜기/끄기·위치) (2) 색상 6종(스카이·민트·라벤더·선셋·로즈·오션) (3) 글꼴 3종(IBM Plex 내장·기기 기본 고딕·명조). 설정은 이 기기에만 저장, 초기화 버튼에 포함. -->
 <!-- v12.125 (2026-11-13): 오늘의 발견 '스탬프북'을 '퍼즐'로 교체 — 카드 1장·퀴즈 정답 1개=조각 1개, 내 집·자동차·햄버거·우주선·나무·기차 중 선택, 1주(14조각)/2주(28조각) 코스, 완성작 갤러리·퍼즐 배지 3종, 기존 스탬프 수는 조각으로 자동 이어짐 -->
@@ -1119,6 +1120,10 @@ body.disc-open #fxWrap{display:none}
 @media (max-width:480px){.kindbar.kind4{grid-template-columns:1fr 1fr}.kindbar.kind4 button{min-height:48px}}
 #homePage .hp[hidden]{display:none}
 @media print{#homePage .hp[hidden]{display:block}#homeKind{display:none}}
+.kt-hide{display:none!important}
+.kindbar.kt{margin:12px 0}
+.kindbar.kt button{min-height:48px}
+@media print{.kindbar.kt{display:none!important}}
 </style>
 </head>
 <body>
@@ -4387,7 +4392,7 @@ function resetAllAppData() {
   if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 응답 수집 동의, 오늘의 발견 기록(퍼즐·퀴즈·게임), 꾸미기 설정(요정·색상·글꼴)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
   [KEYS.interests, KEYS.answers, KEYS.result, KEYS.plan, KEYS.guide, KEYS.major, 'visionhr_diagnosis_result_v1','visionhr_diagnosis_result_v2','visionhr_diag_answers_v1', KEYS.schedule,
     PLAN_CHECK_KEY, SCHED_OPEN_KEY, 'visionhr_sched_days_v1', VALIDATION_KEY, CLOUD_CONFIG.queueKey, CLOUD_CONFIG.consentKey,
-    'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1', 'visionhr_disc_game_v1', 'visionhr_look_v1', 'visionhr_fairy_v1'].forEach(function (k) { LS.del(k); });
+    'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1', 'visionhr_disc_game_v1', 'visionhr_home_seen_v1', 'visionhr_look_v1', 'visionhr_fairy_v1'].forEach(function (k) { LS.del(k); });
   window.location.reload();
 }
 
@@ -6102,6 +6107,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     window.__homeKind = k; if (typeof window.fxCtx === 'function') window.fxCtx();
     if (focus) { var t = document.getElementById('hp-' + k); if (t) { var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; var r = bar.getBoundingClientRect(); if (r.top < hh || r.top > window.innerHeight * 0.5) window.scrollBy({ top: r.top - hh - 8, behavior: 'auto' }); } }
   }
+  try { if (!LS.get('visionhr_home_seen_v1', 0)) { LS.set('visionhr_home_seen_v1', 1); setHome('GUIDE', false); } } catch (e) { }
   bar.addEventListener('click', function (e) { var b = e.target.closest('[data-hk]'); if (b) setHome(b.getAttribute('data-hk'), true); });
   window.setHomeKind = setHome;
 })();
@@ -6397,5 +6403,56 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 })();
 </script>
 
+<script>
+/* v12.131 탭 상단 선택 버튼: 학과·직무·진단 화면을 산업 탐색(민간기업/공공기관)처럼 2개 버튼으로 나눠 보기 */
+(function () {
+  var CFG = {
+    majorPage: { label: '학과 탐색 구분', tabs: [['A', '학과 입력·추천', ['#majorPage .search', '#majorSuggest']], ['B', '분류로 둘러보기', ['#majorPage .step']]] },
+    jobPage: { label: '직무 탐색 구분', tabs: [['A', '직무대영역으로 고르기', ['#jobPage .step', '#jobCrumb', '#jobSelectWrap']], ['B', '이름으로 찾기', ['#jobPage .search', '#jobSearchResults']]] },
+    diagnosisPage: { label: '진단 구분', tabs: [['A', '문항 풀기', ['#diagnosisPage .warn', '#consentGate', '#diagBar', '#diagnosisQuestions', '#diagRunRow']], ['B', '내 결과', ['#diagnosisResult']]] }
+  };
+  var CUR = {}, PRINTING = false;
+  function els(sels) { var o = []; sels.forEach(function (q) { Array.prototype.forEach.call(document.querySelectorAll(q), function (e) { o.push(e); }); }); return o; }
+  function apply(pid) {
+    var c = CFG[pid], cur = CUR[pid] || c.tabs[0][0];
+    c.tabs.forEach(function (t) { els(t[2]).forEach(function (e) { e.classList.toggle('kt-hide', !PRINTING && t[0] !== cur); }); });
+    var bar = document.getElementById('kt-' + pid);
+    if (bar) Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-kt') === cur ? 'true' : 'false'); });
+  }
+  function set(pid, k, scroll) {
+    CUR[pid] = k; apply(pid); if (typeof window.fxCtx === 'function') window.fxCtx();
+    if (scroll) { var bar = document.getElementById('kt-' + pid), hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; if (bar) { var r = bar.getBoundingClientRect(); if (r.top < hh || r.top > window.innerHeight * 0.5) window.scrollBy({ top: r.top - hh - 8, behavior: 'auto' }); } }
+  }
+  function build(pid) {
+    var c = CFG[pid], head = document.querySelector('#' + pid + ' .page-head'); if (!head || document.getElementById('kt-' + pid)) return;
+    var bar = document.createElement('div'); bar.className = 'kindbar kt no-print'; bar.id = 'kt-' + pid; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', c.label);
+    bar.innerHTML = c.tabs.map(function (t, i) { return '<button type="button" data-kt="' + t[0] + '" aria-pressed="' + (i === 0) + '"><b>' + t[1] + '</b></button>'; }).join('');
+    head.parentNode.insertBefore(bar, head.nextSibling);
+    bar.addEventListener('click', function (e) { var b = e.target.closest('[data-kt]'); if (b) set(pid, b.getAttribute('data-kt'), false); });
+  }
+  function wrap(name, fn) { var o = window[name]; if (typeof o !== 'function') return; window[name] = function () { var self = this, a = arguments; return fn(function () { return o.apply(self, a); }, a); }; }
+  function init() {
+    Object.keys(CFG).forEach(function (pid) { build(pid); apply(pid); });
+    wrap('majorSearch', function (call) { set('majorPage', 'A', false); return call(); });
+    wrap('toggleQuestions', function (call) { set('diagnosisPage', 'A', false); return call(); });
+    wrap('jumpToMissing', function (call) { set('diagnosisPage', 'A', false); return call(); });
+    wrap('runDiagnosis', function (call) {
+      var r = call(); var res = document.getElementById('diagnosisResult');
+      if (res && res.textContent.trim().length > 20) { set('diagnosisPage', 'B', false); var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; window.scrollTo({ top: Math.max(0, res.getBoundingClientRect().top + window.pageYOffset - hh - 70), behavior: 'auto' }); }
+      return r;
+    });
+    wrap('clearDiagnosis', function (call) { var r = call(); set('diagnosisPage', 'A', false); return r; });
+    var op = window.openPage;
+    window.openPage = function (id) {
+      var r = op.apply(this, arguments);
+      try { if (id === 'diagnosisPage' && !CUR.diagnosisPage) { var res = document.getElementById('diagnosisResult'); if (res && res.textContent.trim().length > 20) set('diagnosisPage', 'B', false); } } catch (e) { }
+      return r;
+    };
+  }
+  window.addEventListener('beforeprint', function () { PRINTING = true; Object.keys(CFG).forEach(apply); });
+  window.addEventListener('afterprint', function () { PRINTING = false; Object.keys(CFG).forEach(apply); });
+  if (typeof window.fxInit === 'function' || document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
 </body>
 </html>
