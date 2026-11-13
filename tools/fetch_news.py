@@ -4,6 +4,8 @@
 - 기준 기간: 오늘 06:00(KST) 직전 24시간
 - 출처: Google News RSS(키 불필요) + 네이버 뉴스 검색 API(NAVER_CLIENT_ID/SECRET 이 있을 때만)
 - 산업당 최대 5건, 같은 언론사 최대 2건, 제목 중복 제거
+- 24시간 기준 2건 이하인 산업은 48시간으로 넓혀 다시 선정(결과의 ext 목록)
+- 산업별 검색어(q)·제목 매칭어(m)·제외어(x)는 tools/news_keywords.json 에서 관리
 """
 import json, os, re, sys, time, html, email.utils, urllib.request, urllib.parse
 import xml.etree.ElementTree as ET
@@ -11,7 +13,7 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KST = timezone(timedelta(hours=9))
-MAX_PER_IND, MAX_PER_PRESS = 5, 2
+MAX_PER_IND, MAX_PER_PRESS, MIN_OK = 5, 2, 3
 UA = 'Mozilla/5.0 (compatible; HelperTomNewsBot/1.0; +https://helper83.github.io/helpertom/)'
 NID, NSEC = os.environ.get('NAVER_CLIENT_ID', ''), os.environ.get('NAVER_CLIENT_SECRET', '')
 
@@ -23,6 +25,21 @@ def load_industries():
     if len(out) < 50:
         sys.exit('산업 목록을 읽지 못했습니다: %d건' % len(out))
     return out
+
+def load_keywords():
+    try:
+        d = json.load(open(os.path.join(ROOT, 'tools', 'news_keywords.json'), encoding='utf-8'))
+        return d.get('_global_exclude', []), d.get('industries', {})
+    except Exception as e:
+        print('! 키워드 파일을 읽지 못해 산업명 기반으로 진행: %s' % e, file=sys.stderr)
+        return [], {}
+
+def relevant(title, kw, gx):
+    t = title.lower()
+    if any(x.lower() in t for x in gx + kw.get('x', [])):
+        return False
+    keys = kw.get('q', []) + kw.get('m', [])
+    return True if not keys else any(k.lower() in t for k in keys)
 
 def terms_of(name):
     ts = []
@@ -87,8 +104,8 @@ def parse_naver(js):
             items.append({'t': t, 's': host or '네이버뉴스', 'dt': dt, 'u': u, 'k': 'n'})
     return items
 
-def google_items(terms):
-    q = ' OR '.join('"%s"' % t if ' ' in t else t for t in terms) + ' when:2d'
+def google_items(terms, excl=()):
+    q = '(' + ' OR '.join('"%s"' % t if ' ' in t else t for t in terms[:4]) + ')' + ''.join(' -"%s"' % x if ' ' in x else ' -%s' % x for x in list(excl)[:4]) + ' when:2d'
     url = 'https://news.google.com/rss/search?q=%s&hl=ko&gl=KR&ceid=KR:ko' % urllib.parse.quote(q)
     b = http_get(url)
     return parse_google(b) if b else []
@@ -98,7 +115,7 @@ def naver_items(terms):
         return []
     out = []
     for t in terms[:2]:
-        url = 'https://openapi.naver.com/v1/search/news.json?query=%s&display=30&sort=date' % urllib.parse.quote(t + ' 산업' if len(t) <= 3 else t)
+        url = 'https://openapi.naver.com/v1/search/news.json?query=%s&display=40&sort=date' % urllib.parse.quote(t + ' 산업' if len(t) <= 3 else t)
         b = http_get(url, {'X-Naver-Client-Id': NID, 'X-Naver-Client-Secret': NSEC})
         if b:
             try:
@@ -132,12 +149,20 @@ def pick(g, n, start, end):
 
 def main():
     inds = load_industries()
+    gx, KW = load_keywords()
     start, end = window()
     print('기준 기간: %s ~ %s (KST)' % (start.strftime('%m-%d %H:%M'), end.strftime('%m-%d %H:%M')))
-    result, total = {}, 0
+    result, total, ext = {}, 0, []
     for code, name in inds.items():
-        terms = terms_of(name)
-        sel = pick(google_items(terms), naver_items(terms), start, end)
+        kw = KW.get(code, {})
+        terms = kw.get('q') or terms_of(name)
+        g = [x for x in google_items(terms, kw.get('x', [])) if relevant(x['t'], kw, gx)]
+        n = [x for x in naver_items(terms) if relevant(x['t'], kw, gx)]
+        sel = pick(g, n, start, end)
+        if len(sel) < MIN_OK:   # 24시간 안에 2건 이하 → 48시간으로 확장
+            wide = pick(g, n, start - timedelta(days=1), end)
+            if len(wide) > len(sel):
+                sel = wide; ext.append(code)
         result[code] = [{'t': x['t'], 's': x['s'], 'd': x['dt'].strftime('%Y-%m-%dT%H:%M'), 'u': x['u']} for x in sel]
         total += len(sel)
         print('%s %-24s %d건' % (code, name, len(sel)))
@@ -145,12 +170,12 @@ def main():
     if total == 0:
         sys.exit('수집된 기사가 0건이라 기존 파일을 유지합니다.')
     doc = {'generated': datetime.now(KST).strftime('%Y-%m-%dT%H:%M'), 'window': {'from': start.strftime('%Y-%m-%dT%H:%M'), 'to': end.strftime('%Y-%m-%dT%H:%M')},
-           'sources': ['google'] + (['naver'] if NID and NSEC else []), 'items': result}
+           'sources': ['google'] + (['naver'] if NID and NSEC else []), 'ext': ext, 'items': result}
     path = os.path.join(ROOT, 'data', 'news', 'latest.json')
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(doc, f, ensure_ascii=False, separators=(',', ':'))
-    print('저장: %s (%d건)' % (path, total))
+    print('저장: %s (%d건, 48시간 확장 %d개 산업, 0건 %d개)' % (path, total, len(ext), sum(1 for v in result.values() if not v)))
 
 if __name__ == '__main__':
     main()
