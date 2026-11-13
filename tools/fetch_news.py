@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""헬퍼탐 오늘의 산업 기사 수집기 (GitHub Actions 매일 06:00 KST 실행)
+"""헬퍼탐 오늘의 기사 수집기 (GitHub Actions 매일 06:00 KST 실행)
 - 산업(F01~F60)별로 기사 제목·언론사·시각·링크만 모아 data/news/latest.json 에 저장 (본문은 저장하지 않음)
+- 직무(J01~)와 중앙 공공기관(C001~)은 data/news/extra.json 에 따로 저장 (기사가 있는 항목만, 항목당 최대 3건)
 - 기준 기간: 오늘 06:00(KST) 직전 24시간
 - 출처: Google News RSS(키 불필요) + 네이버 뉴스 검색 API(NAVER_CLIENT_ID/SECRET 이 있을 때만)
 - 산업당 최대 5건, 같은 언론사 최대 2건, 제목 중복 제거
@@ -25,6 +26,37 @@ def load_industries():
     if len(out) < 50:
         sys.exit('산업 목록을 읽지 못했습니다: %d건' % len(out))
     return out
+
+def load_jobs():
+    src = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
+    out = {}
+    for code, name in re.findall(r'"code":"(J\d{2,3})","name":"([^"]+)"', src):
+        out.setdefault(code, name)
+    return out
+
+def load_public():
+    src = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
+    out = {}
+    for code, name in re.findall(r'"pCode":"(C\d{3})","name":"([^"]+)"', src):
+        out.setdefault(code, name)
+    return out
+
+JOB_STOP = {'관리', '운영', '개발', '기획', '영업', '구매', '지원', '서비스', '연구', '분석', '설계', '제작', '교육', '사무', '행정'}
+JOB_CTX = '직무 OR 직업 OR 채용 OR 인력 OR 전문가'
+JOB_BAD = ['인사발령', '정기인사', '임원인사', '승진인사', '인사이동', '인사 발령', '부고', '결혼']
+
+def job_terms(name):
+    base = re.sub(r'\([^)]*\)', '', name)
+    ts = [t.strip() for t in re.split(r'[·,/]', base) if len(t.strip()) >= 2]
+    good = [t for t in ts if t not in JOB_STOP]
+    return (good or ts or [name])[:3]
+
+def pub_terms(name):
+    n = re.sub(r'^\s*[\(（㈜][^)）]*[\)）]\s*|㈜', '', name).strip()
+    alts = [n]
+    if n.startswith('한국') and len(n) - 2 >= 3:
+        alts.append(n[2:])
+    return n, alts
 
 def load_keywords():
     try:
@@ -104,8 +136,8 @@ def parse_naver(js):
             items.append({'t': t, 's': host or '네이버뉴스', 'dt': dt, 'u': u, 'k': 'n'})
     return items
 
-def google_items(terms, excl=()):
-    q = '(' + ' OR '.join('"%s"' % t if ' ' in t else t for t in terms[:4]) + ')' + ''.join(' -"%s"' % x if ' ' in x else ' -%s' % x for x in list(excl)[:4]) + ' when:2d'
+def google_items(terms, excl=(), ctx=''):
+    q = '(' + ' OR '.join('"%s"' % t if ' ' in t else t for t in terms[:4]) + ')' + (' (%s)' % ctx if ctx else '') + ''.join(' -"%s"' % x if ' ' in x else ' -%s' % x for x in list(excl)[:4]) + ' when:2d'
     url = 'https://news.google.com/rss/search?q=%s&hl=ko&gl=KR&ceid=KR:ko' % urllib.parse.quote(q)
     b = http_get(url)
     return parse_google(b) if b else []
@@ -128,7 +160,7 @@ def naver_items(terms):
 def norm(t):
     return re.sub(r'[^0-9A-Za-z가-힣]', '', t)[:24]
 
-def pick(g, n, start, end):
+def pick(g, n, start, end, limit=None):
     cand = [x for x in (n + g) if start <= x['dt'] < end]
     n_l = sorted([x for x in cand if x['k'] == 'n'], key=lambda x: x['dt'], reverse=True)
     g_l = [x for x in cand if x['k'] == 'g']          # 구글은 관련도 순서 유지
@@ -143,9 +175,25 @@ def pick(g, n, start, end):
         if key in seen or press.get(x['s'], 0) >= MAX_PER_PRESS:
             continue
         seen.add(key); press[x['s']] = press.get(x['s'], 0) + 1; out.append(x)
-        if len(out) >= MAX_PER_IND:
+        if len(out) >= (limit or MAX_PER_IND):
             break
     return sorted(out, key=lambda x: x['dt'], reverse=True)
+
+def collect_extra(entities, terms_fn, match_fn, ctx, start, end, limit=3, bad=()):
+    out, total = {}, 0
+    for code, name in entities.items():
+        terms, keys = terms_fn(name)
+        g = [x for x in google_items(terms, (), ctx) if match_fn(x['t'], keys) and not any(b in x['t'] for b in bad)]
+        sel = pick(g, [], start, end, limit)
+        if len(sel) < 2:
+            wide = pick(g, [], start - timedelta(days=1), end, limit)
+            if len(wide) > len(sel):
+                sel = wide
+        if sel:
+            out[code] = [{'t': x['t'], 's': x['s'], 'd': x['dt'].strftime('%Y-%m-%dT%H:%M'), 'u': x['u']} for x in sel]
+            total += len(sel)
+        time.sleep(0.4)
+    return out, total
 
 def main():
     inds = load_industries()
@@ -176,6 +224,18 @@ def main():
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(doc, f, ensure_ascii=False, separators=(',', ':'))
     print('저장: %s (%d건, 48시간 확장 %d개 산업, 0건 %d개)' % (path, total, len(ext), sum(1 for v in result.values() if not v)))
+    # 직무·중앙 공공기관 기사 (실패해도 산업 기사는 이미 저장됨)
+    try:
+        jobs = load_jobs(); pubs = load_public()
+        print('직무 %d개 · 중앙 공공기관 %d곳 수집 시작' % (len(jobs), len(pubs)))
+        jr, jt = collect_extra(jobs, lambda nm: (job_terms(nm), job_terms(nm)), lambda t, ks: any(k.lower() in t.lower() for k in ks), JOB_CTX, start, end, 3, JOB_BAD)
+        pr, pt = collect_extra(pubs, lambda nm: ([pub_terms(nm)[0]], pub_terms(nm)[1]), lambda t, ks: any(k.lower() in t.lower() for k in ks), '', start, end, 3)
+        ex = {'generated': doc['generated'], 'window': doc['window'], 'jobs': jr, 'pub': pr}
+        with open(os.path.join(ROOT, 'data', 'news', 'extra.json'), 'w', encoding='utf-8') as f:
+            json.dump(ex, f, ensure_ascii=False, separators=(',', ':'))
+        print('저장: extra.json (직무 %d개 %d건 · 공공기관 %d곳 %d건)' % (len(jr), jt, len(pr), pt))
+    except Exception as e:
+        print('! 직무·공공기관 기사 수집 실패: %s' % e, file=sys.stderr)
 
 if __name__ == '__main__':
     main()

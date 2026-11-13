@@ -1,4 +1,4 @@
-name: 오늘의 산업 기사 수집
+name: 오늘의 기사 수집
 on:
   schedule:
     - cron: '0 21 * * *'   # 매일 06:00 KST (UTC 21:00)
@@ -25,5 +25,5 @@ jobs:
         run: |
           git config user.name "helpertom-news-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/news/latest.json
+          git add data/news/latest.json data/news/extra.json
           git diff --cached --quiet && echo "변경 없음" || (git commit -m "기사 갱신 $(TZ=Asia/Seoul date +%F)" && git pull --rebase origin main && git push)
