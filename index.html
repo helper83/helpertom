@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.168 (2026-11-14): 진로 결정 탭에서 오늘의 기사(목표 산업 기사·찜한 항목 기사) 제거 -->
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.165 (2026-11-14): 챌린지·게임 화면 위에도 산업·기관·직무·챌린지·기사 탭 줄 표시(눌러서 오늘의 발견으로 바로 이동) -->
@@ -1488,7 +1489,6 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
         </div>
         <p id="planSelectNote" class="muted small" style="display:none;margin:8px 0 0"></p>
         <div id="goalSummary" class="goal-box">산업과 직무를 고르면 두 선택이 얼마나 연결되는지 함께 보여 드립니다.</div>
-        <div id="newsBox" class="news-box no-print"></div>
         <div id="goalShare" class="goal-share no-print"></div>
       </div>
       <div class="prep-step no-print">
@@ -3911,8 +3911,7 @@ function renderPrepare() {
       return '<span class="chip"><button type="button" class="go" data-go="' + esc(goFn) + '" data-id="' + esc(x.id) + '" onclick="interestGo(this)">' + esc(x.name) + '</button><button type="button" aria-label="' + esc(x.name) + ' 빼기" data-type="' + esc(type) + '" data-id="' + esc(x.id) + '" onclick="interestRemove(this)">×</button></span>';
     }).join('') + '</div>' : '<p class="muted small" style="margin:0">아직 없습니다. 탐색 단계에서 ☆를 눌러 담으세요.</p>') + '</div>';
   };
-  $('interestSummary').innerHTML = '<div class="int-grid">' + sec('INDUSTRY', '관심 산업', 'goIndustry') + sec('PUBLIC', '관심 공공기관', 'goPublic') + sec('JOB', '관심 직무', 'goJob') + '</div><div id="likedNews" class="news-box no-print"></div>';
-  try { renderLikedNews(); } catch (e) { }
+  $('interestSummary').innerHTML = '<div class="int-grid">' + sec('INDUSTRY', '관심 산업', 'goIndustry') + sec('PUBLIC', '관심 공공기관', 'goPublic') + sec('JOB', '관심 직무', 'goJob') + '</div>';
   try { renderHomeNews(); } catch (e) { }
   /* 2. 진단 */
   const d = STATE.diagnosis;
@@ -4060,7 +4059,6 @@ function renderHomeNews() {
 }
 window.__HT_NEWS = { all: newsAll, group: newsGroupHtml, foot: newsFootHtml, liked: newsLikedCodes };
 function updateGoalSummary() {
-  try { renderNews(); } catch (e) { }
   const v = readPlanInput();
   const box = $('goalSummary');
   if (!v.i || !v.j) { box.innerHTML = '산업과 직무를 모두 고르면 두 선택이 얼마나 연결되는지 보여 드립니다.'; return; }
