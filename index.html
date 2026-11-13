@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.163 (2026-11-14): 오늘의 발견 설명 "산업/기관/직무/챌린지/기사"로 변경 — 홈 버튼 문구·팝업 탭(공공기관→기관)·도우미 안내 문구 -->
 <!-- v12.162 (2026-11-14): 홈 바로가기 "오늘의 발견" 설명 문구를 "산업/직무/챌린지/기사"로 변경 -->
 <!-- v12.161 (2026-11-14): 오늘의 발견 팝업 탭 구성 변경 — 퀴즈 탭 → 챌린지 탭(오늘의 챌린지 화면으로 이동), 기사 탭 추가(오늘의 산업·찜한 산업 기사) -->
 <!-- v12.160 (2026-11-14): 홈 탭(오늘의 발견 화면)에 "오늘의 산업 기사" 추가 — 찜한 산업 → 목표 산업 → 기사 많은 산업 순, 산업당 2건 -->
@@ -1225,7 +1226,7 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
 <main id="mainContent" tabindex="-1">
   <section id="homePage" class="page active" aria-labelledby="h-home">
     <div class="kindbar kind4 no-print" id="homeKind" role="group" aria-label="홈 바로가기">
-      <button type="button" data-hk="DISC" aria-pressed="true"><b>오늘의 발견</b><small>산업/직무/챌린지/기사</small></button>
+      <button type="button" data-hk="DISC" aria-pressed="true"><b>오늘의 발견</b><small>산업/기관/직무/챌린지/기사</small></button>
       <button type="button" data-hk="DS" aria-pressed="false"><b>오늘의 실행</b><small>오늘 할 일 체크</small></button>
       <button type="button" data-hk="GUIDE" aria-pressed="false"><b>활용 방법</b><small>처음 사용 안내</small></button>
       <button type="button" data-hk="LOOK" aria-pressed="false"><b>내 취향</b><small>요정 · 색상 · 글꼴</small></button>
@@ -5444,7 +5445,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   var KEY = 'visionhr_disc_v1', LOGKEY = 'visionhr_disc_log_v1', BOOKKEY = 'visionhr_disc_book_v1', QUIZKEY = 'visionhr_disc_quiz_v1';
   var TYPES = [
     { k: 'IND', label: '산업', letter: '산', tc: '--t1', salt: 11 },
-    { k: 'PUB', label: '공공기관', letter: '공', tc: '--t2', salt: 22 },
+    { k: 'PUB', label: '공공기관', short: '기관', letter: '공', tc: '--t2', salt: 22 },
     { k: 'JOB', label: '직무', letter: '직', tc: '--t3', salt: 33 }
   ];
   var QTAB = { k: 'QUIZ', label: '퀴즈', letter: '퀴', tc: '--t4' };
@@ -6080,7 +6081,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   function modal() { return document.getElementById('discModal'); }
   function tabHtml() {
     return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat(OFF > 0 ? [] : [CTAB, NTAB]).map(function (x) {
-      return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x.tc + ')" data-disc-tab="' + x.k + '" aria-selected="' + (x.k === ACTIVE || (x.k === 'CHAL' && ACTIVE === 'QUIZ')) + '">' + x.label + '</button>';
+      return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x.tc + ')" data-disc-tab="' + x.k + '" aria-selected="' + (x.k === ACTIVE || (x.k === 'CHAL' && ACTIVE === 'QUIZ')) + '"' + (x.short ? ' aria-label="' + x.label + '"' : '') + '>' + (x.short || x.label) + '</button>';
     }).join('') + '</div>';
   }
   function offHtml(s) { return '<label class="disc-off"><input type="checkbox" id="discOff"' + (s.off ? ' checked' : '') + '><span>앞으로 앱을 열 때 자동으로 띄우지 않기 (홈에서 언제든 볼 수 있어요)</span></label>'; }
@@ -6775,7 +6776,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   ];
   var CH_BY = {}; CHARS.forEach(function (c) { CH_BY[c.k] = c; });
   var TIPS = {
-    'homePage:DISC': ['“오늘의 발견”이에요. 카드·퀴즈·게임을 하나씩 열 때마다 퍼즐 조각이 붙어요 🧩', '게임(밸런스·짝짓기)은 한 판 끝낼 때마다 조각을 받아요. 하루 한 번씩 보상이에요.', '마음에 드는 카드는 열어서 ☆ 찜하면 “진로 결정”에 모여요.'],
+    'homePage:DISC': ['“오늘의 발견”이에요. 산업·기관·직무 카드와 챌린지를 하나씩 열 때마다 퍼즐 조각이 붙어요 🧩', '챌린지(퀴즈·밸런스·짝짓기)는 하나 마칠 때마다 조각을 받아요. 기사 탭에서는 오늘의 산업 기사를 볼 수 있어요.', '마음에 드는 카드는 열어서 ☆ 찜하면 “진로 결정”에 모여요.'],
     'homePage:DS': ['“오늘의 실행”이에요. 진로 결정에서 목표를 정하면 오늘 할 일이 여기에 나와요.', '하루 1개씩 체크하면 돼요. 밀린 일은 자동으로 일정을 조정해 줘요.', '아직 목표가 없다면 아래 버튼으로 “진로 결정”에 가 보세요.'],
     'homePage:GUIDE': ['“활용 방법”이에요. 순서는 정해져 있지 않으니 궁금한 곳부터 시작하세요.', '진단→학과→산업→직무→진로 결정 순으로 둘러보면 가장 자연스러워요.', '찜한 항목은 어디서 시작해도 “진로 결정”에 모여요.'],
     'homePage:LOOK': ['“내 취향”이에요. 요정·색상·글꼴을 내 취향대로 바꿀 수 있어요.', '꾸미기 행을 누르면 바로 바꿀 수 있고, 설정은 이 기기에만 저장돼요.'],
@@ -6796,7 +6797,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   var GUIDE = ['① 진단으로 나를 알아보고 (선택: 학과 탐색)', '② 산업·직무를 둘러보며 ☆ 찜하기', '③ “진로 결정”에서 목표 1개 정하기', '④ “내 로드맵”에서 오늘의 실행 체크하기', '순서는 정해져 있지 않아요. 궁금한 곳부터 시작해도 괜찮아요.'];
   var ACTIONS = { 'homePage:DISC': ['진단 시작하기', 'diagnosisPage'], 'homePage:DS': ['진로 결정 가기', 'preparePage'], 'homePage:GUIDE': ['진단 시작하기', 'diagnosisPage'], diagnosisPage: ['학과 탐색 보기', 'majorPage'], majorPage: ['산업 탐색 가기', 'industryPage'], industryPage: ['직무 탐색 가기', 'jobPage'], publicPage: ['직무 탐색 가기', 'jobPage'], jobPage: ['진로 결정 가기', 'preparePage'], preparePage: ['내 로드맵 보기', 'roadmapPage'] };
   var TOUR = {
-    'homePage:DISC': [['#homeKind', '바로가기 버튼', '오늘의 발견·오늘의 실행·활용 방법·내 취향 중 보고 싶은 것을 눌러 골라요.'], ['#discList', '오늘의 발견', '카드를 열고 ☆ 찜하면 진로 결정에 모여요. 열 때마다 퍼즐 조각이 붙어요.'], ['#discList [data-disc="CHAL"]', '오늘의 챌린지', '퀴즈·밸런스·짝짓기 중 하고 싶은 것을 골라요. 마칠 때마다 퍼즐 조각을 받아요.'], ['#discList [data-disc="BOOK"]', '내 퍼즐', '모은 조각으로 집·자동차 같은 퍼즐을 완성해요.'], ['#discList [data-disc="GAME"]', '게임', '밸런스 게임과 업무 짝짓기를 하고 조각을 받아요.']],
+    'homePage:DISC': [['#homeKind', '바로가기 버튼', '오늘의 발견·오늘의 실행·활용 방법·내 취향 중 보고 싶은 것을 눌러 골라요.'], ['#discList', '오늘의 발견', '산업·기관·직무 카드를 열고 ☆ 찜하면 진로 결정에 모여요. 열 때마다 퍼즐 조각이 붙어요. 위 탭의 “기사”에서 오늘의 산업 기사도 볼 수 있어요.'], ['#discList [data-disc="CHAL"]', '오늘의 챌린지', '퀴즈·밸런스·짝짓기 중 하고 싶은 것을 골라요. 마칠 때마다 퍼즐 조각을 받아요.'], ['#discList [data-disc="BOOK"]', '내 퍼즐', '모은 조각으로 집·자동차 같은 퍼즐을 완성해요.'], ['#discList [data-disc="GAME"]', '게임', '밸런스 게임과 업무 짝짓기를 하고 조각을 받아요.']],
     'homePage:DS': [['#homeKind', '바로가기 버튼', '다른 버튼을 누르면 화면과 요정 안내가 함께 바뀌어요.'], ['#dsHead', '오늘의 실행', '진로 결정 후 오늘 할 일이 여기에 나와요.'], ['#dsList', '매일 한 가지 체크', '하루 1개씩 체크해 보세요. 밀린 일은 자동 조정돼요.']],
     'homePage:GUIDE': [['#homeKind', '바로가기 버튼', '다른 버튼을 누르면 화면과 요정 안내가 함께 바뀌어요.'], ['#guideBox .guide-free', '순서는 자유', '어디서 시작해도 괜찮아요.'], ['#guideBox', '각 탐색 소개', '진단·학과·산업·직무·진로 결정이 어떤 기능인지 확인해요.']],
     'homePage:LOOK': [['#homeKind', '바로가기 버튼', '다른 버튼을 누르면 화면과 요정 안내가 함께 바뀌어요.'], ['#lookRow', '꾸미기', '요정, 색상, 글꼴을 바꿀 수 있어요. 눌러서 열어 보세요.']],
