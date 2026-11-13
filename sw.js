@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-v29';
+const CACHE = 'helpertom-v31';
 const FILES = [
   './',
   './index.html',
@@ -54,7 +54,7 @@ self.addEventListener('fetch', e => {
     return;
   }
   // data/ 조각: 캐시 우선, 없으면 받아서 저장
-  if (/\/data\/(ind|pub)\/[^/]+\.js$/.test(new URL(e.request.url).pathname)) {
+  if (/\/data\/((ind|pub)\/[^/]+\.js|fonts\/[^/]+\.woff2)$/.test(new URL(e.request.url).pathname)) {
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(n => {
       if (n.ok) { const copy = n.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}); }
       return n;

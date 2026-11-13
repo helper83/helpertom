@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.133 (2026-11-13): 요정 안내가 보고 있는 화면(홈 4버튼·학과 A/B·직무 A/B·진단 문항/결과)에 맞춰 바뀜 · 퍼즐 그림 9종 고급화(내 집·자동차·햄버거·우주선·벚꽃 나무·기차·열기구·딸기 케이크·창가 고양이) · 시작 전 완성 모습 미리보기와 그림 선택 · 완성 시 실버/골드 인증 배지 + 수집가·탐험가·퍼즐 마스터 배지 · 글꼴 2종 추가(주아·하이멜로디, SIL OFL, data/fonts 지연 로딩) -->
+<!-- v12.132 (2026-11-13): 진단 상단 '문항 풀기 / 내 결과' 버튼을 앱의 문항·결과 모드와 연동 — 저장된 결과가 있으면 진단 탭을 열 때 '내 결과'로 바로 열림(새로고침 후에도). 진로 결정·로드맵은 기존 2버튼(목표 정하기/내 로드맵) 유지로 전 탭 구성 통일. -->
 <!-- v12.131 (2026-11-13): 첫 방문 시 홈은 '활용 방법'부터 보여 주고(이후 '오늘의 발견'), 학과·직무·진단 화면 상단에도 산업 탐색처럼 2버튼 선택(학과 입력·추천/분류로 둘러보기, 직무대영역/이름으로 찾기, 문항 풀기/내 결과). 인쇄 시에는 모두 출력. -->
 <!-- v12.127 (2026-11-13): 요정 안내 강화 — (1) '▶ 이 화면 안내' 단계별 투어(요소를 강조하고 설명, 이전/다음) 홈·학과·산업·공공기관·직무·진단·진로 결정·로드맵 (2) 기능을 처음 쓸 때 요정의 한마디(☆찜·결과 보기·학과 추천·검색·목록 선택·준비 기간·PDF 저장·진로 결정에 반영·탭 이동) (3) 말풍선 안내 방식 선택(처음 한 번만/화면마다 짧게/안 함). -->
 <!-- v12.126 (2026-11-13): 꾸미기 추가 — (1) 도우미 요정(별이·꽃님·잎새·달이·몽실 중 선택, 화면별 사용법 말풍선, 켜기/끄기·위치) (2) 색상 6종(스카이·민트·라벤더·선셋·로즈·오션) (3) 글꼴 3종(IBM Plex 내장·기기 기본 고딕·명조). 설정은 이 기기에만 저장, 초기화 버튼에 포함. -->
@@ -793,7 +795,7 @@ body{background:var(--bg)!important}
 .acc.open .n{background:var(--pf);color:var(--pf-ink);box-shadow:inset 0 0 0 1.5px var(--pf-line)}
 
 /* v12.66: 진단 결과 — 결과만 표시, 적합 산업/직무 추천 버튼식 펼침 */
-#diagnosisPage.diag-result-mode>.card:first-child{display:none}
+#diagnosisPage.diag-result-mode>.card{display:none}
 #diagnosisPage.diag-edit-mode #diagnosisResult{display:none}
 .diag-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 6px}
 .diag-tabs button{min-height:58px;font:inherit;font-size:16px;font-weight:700;border:1.5px solid var(--pf-line,#B5D3EC);background:#fff;color:var(--ink,#2B3545);border-radius:14px;cursor:pointer}
@@ -992,7 +994,10 @@ body .learn .src a{display:inline-flex;align-items:center;min-height:44px;paddin
 .pz-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .pz-themes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
 .pz-themes button,.pz-weeks button{min-height:44px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:14px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--ink)}
-.pz-themes button span{font-size:22px;line-height:1.2}
+.pz-themes button{flex-direction:column;gap:2px;padding:5px}.pz-th{display:block;width:100%}.pz-th .pz-svg{max-width:none;margin:0 0 2px;border-radius:9px;border:0}.pz-ck{font-style:normal;font-size:12px;color:var(--ok);font-weight:700}
+.pz-prev{display:flex;gap:10px;align-items:center;margin:8px 0}.pz-prev>.pz-svg{flex:1 1 52%;max-width:210px;margin:0;box-shadow:0 6px 16px rgba(24,33,47,.14)}.pz-prev-t{flex:1 1 44%;display:flex;flex-direction:column;gap:4px;min-width:0}.pz-prev-t small{font-size:12px;color:var(--muted)}.pz-prev-b{display:flex;gap:6px;align-items:center;font-size:12px;line-height:1.4}
+.pz-bd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}.pz-bd figure{margin:0;text-align:center;font-size:12px;color:var(--ink2)}.pz-bdsvg{display:block;margin:0 auto 2px;max-width:100%;height:auto;filter:drop-shadow(0 3px 4px rgba(24,33,47,.18))}.pz-bdsvg.lock{filter:none;opacity:.75}
+.pz-goalrow{display:flex;gap:10px;align-items:center;margin:8px 0;font-size:13px;line-height:1.5}.pz-done{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.pz-done-b{display:flex;gap:4px;flex:none}.pz-done-t{flex:1 1 180px;min-width:0}
 .pz-themes button[aria-pressed="true"],.pz-weeks button[aria-pressed="true"]{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 12%,#fff);font-weight:700}
 .pz-weeks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 10px}
 .pz-weeks small{font-size:12px;color:var(--muted)}
@@ -1010,6 +1015,13 @@ html[data-theme="rose"]{--primary:#D14C80;--primary-ink:#A02A58;--tint:#FCE9F1;-
 html[data-theme="ocean"]{--primary:#26868F;--primary-ink:#14626A;--tint:#E3F3F5;--tint2:#EFF9FA;--line-blue:#8EC3C9;--pf:#D5EEF0;--pf-ink:#14626A;--bg:#F1F7F8;--focus:#55B1BA;--t0:#2A8590;--t1:#6F86E0}
 html[data-font="device"]{--font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
 html[data-font="serif"]{--font:"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif}
+@font-face{font-family:"Jua HT";font-style:normal;font-weight:400;font-display:swap;src:url(data/fonts/jua.woff2) format("woff2")}
+@font-face{font-family:"Hi Melody HT";font-style:normal;font-weight:400;font-display:swap;src:url(data/fonts/himelody.woff2) format("woff2")}
+html[data-font="jua"]{--font:"Jua HT","IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+html[data-font="melody"]{--font:"Hi Melody HT","IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+html[data-font="jua"] body,html[data-font="melody"] body{font-synthesis:none}
+html[data-font="melody"] body{font-size:16px;line-height:1.65}
+.lk-grid button[data-v="melody"] span{font-size:17px}
 body{transition:background-color .2s}
 #fxWrap{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:18px;z-index:95;display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:calc(100vw - 24px)}
 #fxWrap[hidden]{display:none}
@@ -5543,55 +5555,83 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 
   /* ---- 퍼즐 (v12.125): 발견 카드 1장·퀴즈 정답 1개 = 조각 1개, 한 판은 7부분 × (1주=2·2주=4)조각 ---- */
   var PZKEY = 'visionhr_disc_puzzle_v1', PICK = { t: 'house', w: 2 }, PICKED = false, NEWDONE = null;
+  var PZK = 0;
+  function G(id, a, b, h) { return '<linearGradient id="§' + id + '" x1="0" y1="0" x2="' + (h ? 1 : 0) + '" y2="' + (h ? 0 : 1) + '"><stop offset="0" stop-color="' + a + '"/><stop offset="1" stop-color="' + b + '"/></linearGradient>'; }
+  function sp(x, y, s, c) { return '<path d="M' + x + ' ' + (y - s) + 'Q' + x + ' ' + y + ' ' + (x + s) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y + s) + 'Q' + x + ' ' + y + ' ' + (x - s) + ' ' + y + 'Q' + x + ' ' + y + ' ' + x + ' ' + (y - s) + 'Z" fill="' + (c || '#fff') + '"/>'; }
+  function ht(x, y, s, c) { return '<path transform="translate(' + x + ' ' + y + ') scale(' + s + ')" d="M0 5 C-7 -1 -6 -6 -2.5 -6 C-1 -6 0 -5 0 -3.6 C0 -5 1 -6 2.5 -6 C6 -6 7 -1 0 5Z" fill="' + (c || '#ff6f91') + '"/>'; }
   var PUZ = [
-    { k: 'house', e: '🏠', n: '내 집', parts: [
-      '<rect x="20" y="98" width="120" height="10" rx="4" fill="#8d6e4a"/><rect x="20" y="94" width="120" height="6" rx="3" fill="#5fae5b"/>',
-      '<rect x="44" y="56" width="72" height="40" fill="#f2c98a"/>',
-      '<polygon points="36,58 80,22 124,58" fill="#d9534f"/>',
-      '<rect x="72" y="70" width="16" height="26" rx="2" fill="#7a4b2a"/><circle cx="84" cy="84" r="1.8" fill="#ffd54a"/>',
-      '<rect x="50" y="66" width="16" height="14" fill="#9fd8ff" stroke="#fff" stroke-width="2"/><rect x="94" y="66" width="16" height="14" fill="#9fd8ff" stroke="#fff" stroke-width="2"/>',
-      '<rect x="98" y="28" width="9" height="18" fill="#9a5b4a"/><circle cx="104" cy="20" r="5" fill="#e5e7eb"/><circle cx="110" cy="12" r="4" fill="#eef0f3"/>',
-      '<circle cx="28" cy="80" r="11" fill="#3f9d4a"/><rect x="26" y="88" width="4" height="10" fill="#6b4a2a"/><circle cx="130" cy="90" r="3" fill="#ff7aa2"/><circle cx="138" cy="92" r="3" fill="#ffd54a"/><circle cx="122" cy="92" r="3" fill="#ff7aa2"/>'] },
-    { k: 'car', e: '🚗', n: '자동차', parts: [
-      '<rect x="10" y="98" width="140" height="10" rx="3" fill="#6b7280"/><rect x="30" y="102" width="14" height="2" fill="#fff"/><rect x="70" y="102" width="14" height="2" fill="#fff"/><rect x="110" y="102" width="14" height="2" fill="#fff"/>',
-      '<rect x="28" y="62" width="104" height="28" rx="8" fill="#e5484d"/>',
-      '<path d="M54 62 L66 42 H100 L114 62 Z" fill="#c93a3f"/>',
-      '<path d="M60 60 L69 46 H80 V60Z M84 60 V46 H98 L108 60Z" fill="#bfe6ff"/>',
-      '<circle cx="52" cy="92" r="11" fill="#2b2f36"/><circle cx="52" cy="92" r="5" fill="#cbd2da"/><circle cx="108" cy="92" r="11" fill="#2b2f36"/><circle cx="108" cy="92" r="5" fill="#cbd2da"/>',
-      '<rect x="124" y="68" width="9" height="8" rx="2" fill="#ffe27a"/><rect x="27" y="68" width="6" height="8" rx="2" fill="#ff9a9a"/>',
-      '<rect x="68" y="78" width="24" height="9" rx="2" fill="#fff" stroke="#9aa3ad"/><path d="M138 30 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffd54a"/>'] },
-    { k: 'burger', e: '🍔', n: '햄버거', parts: [
-      '<ellipse cx="80" cy="102" rx="62" ry="10" fill="#e3e9f0"/>',
-      '<path d="M36 88 H124 V92 Q124 100 112 100 H48 Q36 100 36 92Z" fill="#e3a857"/>',
-      '<rect x="34" y="76" width="92" height="12" rx="6" fill="#6b3f2a"/>',
-      '<polygon points="36,76 124,76 112,87 100,77 88,88 76,77 64,87 52,77 40,86" fill="#ffc83d"/>',
-      '<path d="M32 72 q8 -8 16 0 q8 -8 16 0 q8 -8 16 0 q8 -8 16 0 q8 -8 16 0 q8 -8 16 0 V78 H32Z" fill="#5cc060"/><circle cx="62" cy="72" r="5" fill="#e5484d"/><circle cx="100" cy="72" r="5" fill="#e5484d"/>',
-      '<path d="M36 68 Q36 34 80 34 Q124 34 124 68Z" fill="#e8b062"/>',
-      '<ellipse cx="66" cy="48" rx="3" ry="1.6" fill="#fff6dc"/><ellipse cx="82" cy="42" rx="3" ry="1.6" fill="#fff6dc"/><ellipse cx="98" cy="50" rx="3" ry="1.6" fill="#fff6dc"/><line x1="80" y1="14" x2="80" y2="40" stroke="#8b5a2b" stroke-width="2"/><circle cx="80" cy="14" r="4" fill="#e5484d"/>'] },
-    { k: 'rocket', e: '🚀', n: '우주선', parts: [
-      '<rect x="48" y="106" width="64" height="8" rx="3" fill="#6b7280"/><rect x="74" y="96" width="12" height="12" fill="#9aa3ad"/>',
-      '<rect x="64" y="40" width="32" height="58" rx="6" fill="#f3f6fa" stroke="#cbd2da" stroke-width="2"/>',
-      '<path d="M64 42 Q80 4 96 42Z" fill="#e5484d"/>',
-      '<circle cx="80" cy="60" r="8" fill="#7cc4ff" stroke="#9aa3ad" stroke-width="2"/>',
-      '<path d="M64 80 L46 100 L64 96Z M96 80 L114 100 L96 96Z" fill="#e5484d"/>',
-      '<rect x="72" y="96" width="16" height="6" fill="#4b5563"/>',
-      '<path d="M72 102 Q80 120 88 102Z" fill="#ffb02e"/><path d="M130 24 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z M26 40 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffd54a"/>'] },
-    { k: 'tree', e: '🌳', n: '나무', parts: [
-      '<ellipse cx="80" cy="106" rx="58" ry="9" fill="#8dc26f"/>',
-      '<rect x="75" y="64" width="10" height="42" rx="3" fill="#8b5a2b"/>',
-      '<path d="M80 82 L58 62 M80 74 L102 56" stroke="#8b5a2b" stroke-width="5" stroke-linecap="round" fill="none"/>',
-      '<circle cx="56" cy="54" r="18" fill="#4caf50"/><circle cx="104" cy="48" r="18" fill="#4caf50"/>',
-      '<circle cx="80" cy="38" r="24" fill="#5cc060"/>',
-      '<circle cx="70" cy="40" r="4.5" fill="#e5484d"/><circle cx="90" cy="46" r="4.5" fill="#e5484d"/><circle cx="58" cy="58" r="4.5" fill="#e5484d"/><circle cx="104" cy="52" r="4.5" fill="#e5484d"/>',
-      '<circle cx="134" cy="20" r="9" fill="#ffd54a"/><path d="M26 28 q4 -5 8 0 q4 -5 8 0" stroke="#4b5563" stroke-width="2" fill="none" stroke-linecap="round"/>'] },
-    { k: 'train', e: '🚂', n: '기차', parts: [
-      '<rect x="6" y="102" width="148" height="4" fill="#6b7280"/><rect x="16" y="106" width="6" height="4" fill="#8d6e4a"/><rect x="56" y="106" width="6" height="4" fill="#8d6e4a"/><rect x="96" y="106" width="6" height="4" fill="#8d6e4a"/><rect x="136" y="106" width="6" height="4" fill="#8d6e4a"/>',
-      '<rect x="12" y="58" width="46" height="38" rx="5" fill="#2f6fd0"/><rect x="38" y="44" width="22" height="24" rx="3" fill="#1f56ad"/>',
-      '<rect x="18" y="42" width="10" height="18" fill="#334155"/><circle cx="24" cy="34" r="6" fill="#e5e7eb"/><circle cx="32" cy="26" r="5" fill="#eef0f3"/>',
-      '<circle cx="26" cy="98" r="7" fill="#2b2f36"/><circle cx="26" cy="98" r="3" fill="#cbd2da"/><circle cx="46" cy="98" r="7" fill="#2b2f36"/><circle cx="46" cy="98" r="3" fill="#cbd2da"/>',
-      '<rect x="66" y="62" width="40" height="34" rx="4" fill="#f59e0b"/><rect x="72" y="68" width="10" height="10" fill="#fff6dc"/><rect x="90" y="68" width="10" height="10" fill="#fff6dc"/><circle cx="76" cy="98" r="6" fill="#2b2f36"/><circle cx="96" cy="98" r="6" fill="#2b2f36"/>',
-      '<rect x="110" y="62" width="40" height="34" rx="4" fill="#16a085"/><rect x="116" y="68" width="10" height="10" fill="#e6fffa"/><rect x="134" y="68" width="10" height="10" fill="#e6fffa"/><circle cx="120" cy="98" r="6" fill="#2b2f36"/><circle cx="140" cy="98" r="6" fill="#2b2f36"/>',
-      '<rect x="58" y="86" width="8" height="4" fill="#334155"/><rect x="106" y="86" width="4" height="4" fill="#334155"/><circle cx="140" cy="20" r="9" fill="#ffd54a"/>'] }
+    { k: 'house', e: '🏠', n: '내 집', tag: '아늑한 정원이 있는 우리 집', defs: G('s', '#bfe3ff', '#fff3df') + G('g', '#8fd694', '#59b567') + G('w', '#fff6e4', '#f3d7a8') + G('r', '#f4958a', '#d35a54') + G('t', '#7ad383', '#3f9d4a'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="130" cy="26" r="19" fill="#fff3b8" opacity=".55"/><circle cx="130" cy="26" r="11" fill="#ffe27a"/><g fill="#fff" opacity=".92"><ellipse cx="34" cy="24" rx="16" ry="6"/><ellipse cx="46" cy="20" rx="11" ry="6"/><ellipse cx="96" cy="14" rx="13" ry="5"/></g><path d="M0 84 Q40 66 80 80 T160 74 V120 H0Z" fill="#b9e8b0"/>',
+      '<path d="M0 94 Q80 84 160 94 V120 H0Z" fill="url(#§g)"/><path d="M70 120 Q74 106 80 98 Q86 106 92 120Z" fill="#f4e6cf"/><ellipse cx="80" cy="112" rx="5" ry="2" fill="#e6d4b8"/><ellipse cx="82" cy="104" rx="3.4" ry="1.4" fill="#e6d4b8"/>',
+      '<rect x="44" y="54" width="72" height="42" rx="3" fill="url(#§w)"/><rect x="44" y="90" width="72" height="6" fill="#e3bd83" opacity=".7"/><rect x="108" y="54" width="8" height="42" fill="#000" opacity=".06"/>',
+      '<rect x="96" y="22" width="11" height="22" rx="1.5" fill="#c46a5a"/><rect x="94" y="20" width="15" height="4" rx="1.5" fill="#a7544a"/><path d="M32 60 L80 18 L128 60Z" fill="url(#§r)"/><path d="M32 60 L80 18 L128 60" fill="none" stroke="#b9483f" stroke-width="2" stroke-linejoin="round"/><path d="M42 54 L80 22" stroke="#fff" stroke-width="1.6" opacity=".4" stroke-linecap="round"/><circle cx="80" cy="42" r="7.5" fill="#fff3d0" stroke="#fff" stroke-width="2"/>' + ht(80, 42, .8),
+      '<path d="M72 96 V76 Q72 68 80 68 Q88 68 88 76 V96Z" fill="#8a5a3c"/><circle cx="85" cy="84" r="1.4" fill="#ffd54a"/><rect x="49" y="68" width="16" height="15" rx="2" fill="#ffe9a8" stroke="#fff" stroke-width="2.2"/><path d="M57 68 V83 M49 75.5 H65" stroke="#fff" stroke-width="1.5"/><rect x="95" y="68" width="16" height="15" rx="2" fill="#ffe9a8" stroke="#fff" stroke-width="2.2"/><path d="M103 68 V83 M95 75.5 H111" stroke="#fff" stroke-width="1.5"/><rect x="47" y="84" width="20" height="4" rx="1.5" fill="#a4694a"/><rect x="93" y="84" width="20" height="4" rx="1.5" fill="#a4694a"/><g><circle cx="51" cy="83" r="2.2" fill="#ff7aa2"/><circle cx="57" cy="82.5" r="2.2" fill="#ffd54a"/><circle cx="63" cy="83" r="2.2" fill="#ff7aa2"/><circle cx="97" cy="83" r="2.2" fill="#ffd54a"/><circle cx="103" cy="82.5" r="2.2" fill="#ff7aa2"/><circle cx="109" cy="83" r="2.2" fill="#ffd54a"/></g>',
+      '<rect x="21" y="76" width="5" height="22" rx="2" fill="#7a4f33"/><circle cx="24" cy="68" r="15" fill="url(#§t)"/><circle cx="18" cy="72" r="8" fill="#8be08f" opacity=".6"/><circle cx="131" cy="92" r="10" fill="#4fae5c"/><circle cx="142" cy="96" r="7.5" fill="#6fc47a"/><circle cx="128" cy="89" r="1.8" fill="#ff8fb0"/><circle cx="136" cy="93" r="1.8" fill="#ff8fb0"/>',
+      '<g fill="#fff" opacity=".9"><circle cx="103" cy="15" r="4"/><circle cx="108" cy="8" r="3.4"/><circle cx="114" cy="3" r="2.6"/></g><g><circle cx="38" cy="106" r="2.4" fill="#ff7aa2"/><circle cx="50" cy="110" r="2.4" fill="#ffd54a"/><circle cx="112" cy="108" r="2.4" fill="#fff"/><circle cx="124" cy="112" r="2.4" fill="#ff7aa2"/></g><path d="M26 44 q3 -5 6 0 q3 -5 6 0" stroke="#7a8aa8" stroke-width="1.6" fill="none" stroke-linecap="round"/>' + sp(142, 52, 5, '#fff') + sp(16, 40, 4, '#fff7c9') + sp(60, 30, 3, '#fff')] },
+    { k: 'car', e: '🚗', n: '자동차', tag: '노을 속을 달리는 나의 드림카', defs: G('s', '#ffd0c0', '#bfa9ff') + G('b', '#ff7587', '#cf2f55') + G('r', '#6a6e8c', '#454866') + G('gl', '#e5f6ff', '#8cc8f5'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="118" cy="62" r="26" fill="#fff0b8" opacity=".45"/><circle cx="118" cy="62" r="17" fill="#ffe9a0"/><g fill="#a68fe0" opacity=".85"><rect x="10" y="56" width="14" height="40"/><rect x="26" y="44" width="12" height="52"/><rect x="42" y="62" width="16" height="34"/><rect x="132" y="52" width="14" height="44"/><rect x="146" y="64" width="14" height="32"/></g><g fill="#ffe9a0" opacity=".9"><rect x="13" y="62" width="3" height="3"/><rect x="29" y="52" width="3" height="3"/><rect x="29" y="62" width="3" height="3"/><rect x="135" y="60" width="3" height="3"/></g>',
+      '<rect x="0" y="92" width="160" height="28" fill="url(#§r)"/><rect x="0" y="92" width="160" height="3" fill="#8b8eb3"/><g fill="#fff" opacity=".9"><rect x="12" y="108" width="20" height="2.6" rx="1"/><rect x="58" y="108" width="20" height="2.6" rx="1"/><rect x="104" y="108" width="20" height="2.6" rx="1"/></g>',
+      '<path d="M22 88 Q22 76 36 73 L54 69 Q64 52 84 52 L106 52 Q120 54 128 68 L140 72 Q146 76 146 84 V90 H22Z" fill="url(#§b)"/><path d="M22 86 H146 V90 H22Z" fill="#a82444" opacity=".5"/>',
+      '<path d="M60 68 Q68 56 84 56 H98 Q110 57 118 68Z" fill="url(#§gl)"/><path d="M92 56 V68" stroke="#cf2f55" stroke-width="2.4"/><path d="M68 66 Q74 60 82 60" stroke="#fff" stroke-width="1.6" fill="none" opacity=".8" stroke-linecap="round"/>',
+      '<circle cx="48" cy="90" r="12" fill="#262838"/><circle cx="48" cy="90" r="7" fill="#dfe3ef"/><circle cx="48" cy="90" r="2.4" fill="#8f96ad"/><path d="M48 83 V97 M41 90 H55 M43 85 L53 95 M53 85 L43 95" stroke="#aeb4c8" stroke-width="1"/><circle cx="118" cy="90" r="12" fill="#262838"/><circle cx="118" cy="90" r="7" fill="#dfe3ef"/><circle cx="118" cy="90" r="2.4" fill="#8f96ad"/><path d="M118 83 V97 M111 90 H125 M113 85 L123 95 M123 85 L113 95" stroke="#aeb4c8" stroke-width="1"/>',
+      '<path d="M140 74 L160 68 L160 88 L142 80Z" fill="#fff6c8" opacity=".5"/><ellipse cx="140" cy="76" rx="5" ry="3.4" fill="#fff3a8"/><rect x="21" y="74" width="6" height="7" rx="2" fill="#ff3b50"/><path d="M62 70 V86 M92 70 V86" stroke="#a82444" stroke-width="1" opacity=".6"/><rect x="66" y="75" width="9" height="2.4" rx="1.2" fill="#fff" opacity=".85"/><path d="M30 80 H140" stroke="#fff" stroke-width="1.2" opacity=".5"/>',
+      '<path d="M34 76 Q60 62 100 62" stroke="#fff" stroke-width="2" fill="none" opacity=".5" stroke-linecap="round"/>' + sp(118, 60, 5, '#fff') + sp(28, 30, 5, '#fff7c9') + sp(78, 24, 3.4, '#fff') + sp(146, 36, 4, '#ffe9a0') + ht(18, 56, .9, '#ff9fbe')] },
+    { k: 'burger', e: '🍔', n: '햄버거', tag: '든든하고 맛있는 수제 버거', defs: G('s', '#fff2c9', '#ffd9a0') + G('bn', '#f3b861', '#d9873a') + G('bb', '#e9a652', '#c97a2f'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><g fill="#fff" opacity=".35"><circle cx="20" cy="20" r="14"/><circle cx="140" cy="30" r="18"/><circle cx="130" cy="100" r="12"/><circle cx="26" cy="96" r="10"/></g>',
+      '<ellipse cx="80" cy="104" rx="64" ry="11" fill="#fff"/><ellipse cx="80" cy="104" rx="64" ry="11" fill="none" stroke="#e8d3b0" stroke-width="2"/><ellipse cx="80" cy="103" rx="50" ry="7" fill="#f6ead5"/>',
+      '<path d="M34 90 H126 V94 Q126 102 114 102 H46 Q34 102 34 94Z" fill="url(#§bb)"/>',
+      '<rect x="32" y="76" width="96" height="14" rx="7" fill="#6b3a24"/><path d="M36 80 q6 -3 12 0 M70 82 q6 -3 12 0 M104 80 q6 -3 12 0" stroke="#8a5238" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
+      '<path d="M34 74 H126 L112 86 L100 75 L88 87 L76 75 L64 86 L52 75 L40 85Z" fill="#ffc83a"/><path d="M30 72 q7 -9 14 0 q7 -9 14 0 q7 -9 14 0 q7 -9 14 0 q7 -9 14 0 q7 -9 14 0 q5 -6 10 0 V78 H30Z" fill="#62c56a"/><circle cx="62" cy="68" r="5.5" fill="#ee4b50"/><circle cx="100" cy="68" r="5.5" fill="#ee4b50"/><circle cx="61" cy="66.5" r="1.6" fill="#fff" opacity=".7"/>',
+      '<path d="M34 68 Q34 30 80 30 Q126 30 126 68Z" fill="url(#§bn)"/><path d="M48 46 Q56 36 70 34" stroke="#fff" stroke-width="2.4" fill="none" opacity=".45" stroke-linecap="round"/><g fill="#fff3d2"><ellipse cx="66" cy="46" rx="3.4" ry="1.8" transform="rotate(-20 66 46)"/><ellipse cx="82" cy="40" rx="3.4" ry="1.8"/><ellipse cx="98" cy="48" rx="3.4" ry="1.8" transform="rotate(25 98 48)"/><ellipse cx="76" cy="56" rx="3.4" ry="1.8" transform="rotate(10 76 56)"/><ellipse cx="106" cy="58" rx="3.4" ry="1.8"/></g>',
+      '<line x1="80" y1="10" x2="80" y2="36" stroke="#9a6a3a" stroke-width="2"/><path d="M80 10 L98 15 L80 20Z" fill="#ee4b50"/>' + sp(22, 40, 5, '#fff') + sp(140, 60, 4, '#fff') + sp(132, 20, 3.4, '#fff') + ht(26, 74, .9, '#ff7f8f') + '<g stroke="#fff" stroke-width="2" fill="none" opacity=".8" stroke-linecap="round"><path d="M70 22 q-4 -5 0 -9"/><path d="M90 24 q4 -5 0 -9"/></g>'] },
+    { k: 'rocket', e: '🚀', n: '우주선', tag: '별 사이를 날아가는 나의 로켓', defs: G('s', '#15174a', '#5b3fa6') + G('rk', '#ffffff', '#d6def0', true) + G('rd', '#ff7a8c', '#e23f5e') + G('pl', '#ffcb7a', '#ff7e5f'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="30" cy="30" r="28" fill="#8b5cf6" opacity=".22"/><circle cx="120" cy="96" r="30" fill="#ec4899" opacity=".14"/><g fill="#fff"><circle cx="14" cy="14" r="1.1"/><circle cx="52" cy="10" r="1.3"/><circle cx="76" cy="26" r="1"/><circle cx="104" cy="12" r="1.2"/><circle cx="146" cy="52" r="1"/><circle cx="18" cy="70" r="1.2"/><circle cx="46" cy="100" r="1"/><circle cx="148" cy="108" r="1.2"/><circle cx="96" cy="108" r="1"/><circle cx="126" cy="74" r="1"/></g>',
+      '<circle cx="128" cy="32" r="17" fill="url(#§pl)"/><ellipse cx="128" cy="34" rx="28" ry="6" fill="none" stroke="#ffe9a8" stroke-width="2.4" transform="rotate(-18 128 34)"/><path d="M114 28 Q128 22 142 28" stroke="#fff" stroke-width="1.6" fill="none" opacity=".4"/><circle cx="26" cy="94" r="14" fill="#ebe8f6"/><circle cx="21" cy="90" r="3" fill="#cfcbe3"/><circle cx="31" cy="98" r="2.4" fill="#cfcbe3"/><circle cx="29" cy="88" r="1.6" fill="#cfcbe3"/>',
+      '<path d="M68 92 Q80 128 92 92Z" fill="#ffae2b"/><path d="M73 92 Q80 116 87 92Z" fill="#fff0a0"/><g fill="#ffd54a" opacity=".8"><circle cx="76" cy="116" r="1.6"/><circle cx="86" cy="112" r="1.3"/></g>',
+      '<path d="M62 62 L42 94 L62 88Z M98 62 L118 94 L98 88Z" fill="url(#§rd)"/><rect x="72" y="86" width="16" height="8" rx="2" fill="#4a5168"/>',
+      '<path d="M80 12 Q100 34 100 62 V90 H60 V62 Q60 34 80 12Z" fill="url(#§rk)"/><path d="M80 12 Q93 27 96 42 H64 Q67 27 80 12Z" fill="url(#§rd)"/><rect x="60" y="76" width="40" height="5" fill="url(#§rd)"/>',
+      '<circle cx="80" cy="58" r="10" fill="#cdd6ec"/><circle cx="80" cy="58" r="7.4" fill="#7fd0ff"/><path d="M75 55 Q78 51 83 52" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="70" cy="86" r="1.4" fill="#aab4cf"/><circle cx="90" cy="86" r="1.4" fill="#aab4cf"/>',
+      '<path d="M18 36 L52 22" stroke="#fff" stroke-width="2" opacity=".6" stroke-linecap="round"/>' + sp(52, 22, 5, '#fff') + sp(142, 78, 5, '#ffd54a') + sp(24, 62, 4, '#fff7c9') + sp(104, 18, 3, '#fff') + ht(40, 106, .9, '#ff9fbe')] },
+    { k: 'tree', e: '🌳', n: '벚꽃 나무', tag: '봄바람에 흩날리는 벚꽃', defs: G('s', '#ffeaf3', '#e3f3ff') + G('g', '#b8e6a3', '#86cf86') + G('tr', '#94624a', '#6b4332', true), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="26" cy="26" r="16" fill="#fff6c9" opacity=".7"/><g fill="#fff" opacity=".9"><ellipse cx="110" cy="20" rx="16" ry="5.5"/><ellipse cx="122" cy="17" rx="10" ry="5"/><ellipse cx="60" cy="30" rx="12" ry="4.5"/></g><path d="M0 84 Q40 70 80 84 T160 78 V120 H0Z" fill="#d1efcb"/>',
+      '<path d="M0 96 Q80 86 160 96 V120 H0Z" fill="url(#§g)"/><g fill="#ffc2d9"><ellipse cx="30" cy="108" rx="3" ry="1.6"/><ellipse cx="52" cy="112" rx="3" ry="1.6"/><ellipse cx="108" cy="110" rx="3" ry="1.6"/><ellipse cx="136" cy="106" rx="3" ry="1.6"/><ellipse cx="80" cy="114" rx="3" ry="1.6"/></g>',
+      '<path d="M74 104 Q76 84 76 66 H86 Q86 84 90 104Z" fill="url(#§tr)"/><path d="M80 80 Q64 70 54 56 M82 74 Q98 66 108 52 M80 70 Q80 58 80 48" stroke="#7d5240" stroke-width="4.4" fill="none" stroke-linecap="round"/>',
+      '<circle cx="50" cy="52" r="20" fill="#ffc2d9"/><circle cx="112" cy="48" r="20" fill="#ffc2d9"/><circle cx="80" cy="34" r="24" fill="#ffb3cf"/><circle cx="34" cy="62" r="12" fill="#ffc2d9"/><circle cx="128" cy="60" r="12" fill="#ffc2d9"/>',
+      '<circle cx="62" cy="46" r="16" fill="#ffd3e4"/><circle cx="98" cy="44" r="16" fill="#ffd3e4"/><circle cx="80" cy="30" r="17" fill="#ffe0ec"/><circle cx="46" cy="60" r="10" fill="#ffc2d9"/><circle cx="116" cy="58" r="10" fill="#ffc2d9"/><g fill="#fff" opacity=".7"><circle cx="70" cy="26" r="3"/><circle cx="56" cy="42" r="2.4"/><circle cx="102" cy="40" r="2.8"/><circle cx="88" cy="50" r="2.2"/></g>',
+      '<rect x="98" y="96" width="26" height="4" rx="1.5" fill="#b8825a"/><rect x="100" y="100" width="3" height="8" fill="#8a5a3c"/><rect x="119" y="100" width="3" height="8" fill="#8a5a3c"/><rect x="98" y="90" width="26" height="3" rx="1.5" fill="#c99668"/>',
+      '<g fill="#ffb3cf"><ellipse cx="30" cy="40" rx="3.2" ry="1.8" transform="rotate(30 30 40)"/><ellipse cx="22" cy="70" rx="3.2" ry="1.8" transform="rotate(-20 22 70)"/><ellipse cx="140" cy="44" rx="3.2" ry="1.8" transform="rotate(40 140 44)"/><ellipse cx="146" cy="80" rx="3.2" ry="1.8"/><ellipse cx="64" cy="82" rx="3.2" ry="1.8" transform="rotate(-30 64 82)"/></g><path d="M124 22 q3 -5 6 0 q3 -5 6 0" stroke="#7a8aa8" stroke-width="1.6" fill="none" stroke-linecap="round"/>' + sp(20, 52, 4, '#fff') + sp(142, 28, 5, '#fff') + ht(40, 20, .9, '#ff9fbe')] },
+    { k: 'train', e: '🚂', n: '기차', tag: '꿈의 여행을 떠나는 꼬마 기차', defs: G('s', '#bfe6ff', '#fff4dc') + G('bl', '#4d8ef0', '#2457b8') + G('og', '#ffb84d', '#ef8a22') + G('gr', '#2fbf9f', '#14907a'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><g fill="#fff" opacity=".95"><ellipse cx="34" cy="22" rx="15" ry="5.5"/><ellipse cx="46" cy="18" rx="10" ry="5"/><ellipse cx="116" cy="28" rx="14" ry="5"/></g><path d="M0 84 Q30 56 70 80 Q100 50 160 80 V120 H0Z" fill="#cdeec6"/><path d="M0 92 Q60 70 160 94 V120 H0Z" fill="#a9e0a4"/>',
+      '<rect x="0" y="100" width="160" height="4" fill="#7b8299"/><g fill="#9b7b55"><rect x="8" y="104" width="8" height="5"/><rect x="38" y="104" width="8" height="5"/><rect x="68" y="104" width="8" height="5"/><rect x="98" y="104" width="8" height="5"/><rect x="128" y="104" width="8" height="5"/></g>',
+      '<rect x="12" y="58" width="48" height="40" rx="6" fill="url(#§bl)"/><rect x="38" y="44" width="24" height="26" rx="4" fill="#2a5fc4"/><rect x="42" y="48" width="16" height="12" rx="2" fill="#dff1ff"/><rect x="12" y="84" width="48" height="4" fill="#ffd54a"/>',
+      '<rect x="18" y="38" width="11" height="22" rx="2" fill="#38425a"/><rect x="16" y="34" width="15" height="6" rx="2" fill="#2a3246"/><g fill="#fff" opacity=".92"><circle cx="24" cy="26" r="6"/><circle cx="33" cy="17" r="5"/><circle cx="43" cy="10" r="4"/></g><path d="M12 92 L2 100 H18Z" fill="#ef6a6a"/>',
+      '<circle cx="26" cy="98" r="8" fill="#262838"/><circle cx="26" cy="98" r="3.4" fill="#d7dbe8"/><circle cx="48" cy="98" r="8" fill="#262838"/><circle cx="48" cy="98" r="3.4" fill="#d7dbe8"/><path d="M26 98 H48" stroke="#c9cfdf" stroke-width="2"/>',
+      '<rect x="66" y="62" width="42" height="36" rx="5" fill="url(#§og)"/><rect x="72" y="68" width="12" height="12" rx="2" fill="#fff6dc"/><rect x="90" y="68" width="12" height="12" rx="2" fill="#fff6dc"/><rect x="60" y="86" width="8" height="4" fill="#38425a"/><circle cx="78" cy="98" r="7" fill="#262838"/><circle cx="78" cy="98" r="3" fill="#d7dbe8"/><circle cx="98" cy="98" r="7" fill="#262838"/><circle cx="98" cy="98" r="3" fill="#d7dbe8"/>',
+      '<rect x="112" y="62" width="42" height="36" rx="5" fill="url(#§gr)"/><rect x="118" y="68" width="12" height="12" rx="2" fill="#e6fffa"/><rect x="136" y="68" width="12" height="12" rx="2" fill="#e6fffa"/><rect x="108" y="86" width="6" height="4" fill="#38425a"/><circle cx="124" cy="98" r="7" fill="#262838"/><circle cx="124" cy="98" r="3" fill="#d7dbe8"/><circle cx="144" cy="98" r="7" fill="#262838"/><circle cx="144" cy="98" r="3" fill="#d7dbe8"/>' + sp(150, 40, 5, '#fff') + sp(70, 34, 4, '#fff') + ht(100, 46, 1, '#ff9fbe')] },
+    { k: 'balloon', e: '🎈', n: '열기구', tag: '구름 위를 떠가는 하늘 여행', defs: G('s', '#8fd2ff', '#eaf7ff') + G('m', '#c3dcf7', '#9fc3ee') + '<clipPath id="§c"><path d="M80 8 C112 8 122 34 114 54 C108 66 94 72 90 78 H70 C66 72 52 66 46 54 C38 34 48 8 80 8Z"/></clipPath>', parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><circle cx="26" cy="26" r="16" fill="#fff6c9" opacity=".7"/><circle cx="26" cy="26" r="10" fill="#ffe680"/><g fill="#fff"><ellipse cx="116" cy="22" rx="16" ry="5.5"/><ellipse cx="128" cy="18" rx="10" ry="5"/><ellipse cx="40" cy="64" rx="18" ry="6"/><ellipse cx="54" cy="60" rx="11" ry="5.5"/></g>',
+      '<path d="M0 100 L26 80 L48 98 L76 74 L108 100 L134 82 L160 100 V120 H0Z" fill="url(#§m)"/><path d="M0 108 Q80 96 160 108 V120 H0Z" fill="#a9e0a4"/><path d="M76 74 L68 82 L76 80 L84 84Z" fill="#fff" opacity=".8"/>',
+      '<path d="M80 8 C112 8 122 34 114 54 C108 66 94 72 90 78 H70 C66 72 52 66 46 54 C38 34 48 8 80 8Z" fill="#ff7a8a"/><g clip-path="url(#§c)"><path d="M80 4 C100 14 102 46 92 80 H68 C58 46 60 14 80 4Z" fill="#ffd36b"/><path d="M80 4 C88 16 88 46 82 80 H78 C72 46 72 16 80 4Z" fill="#fff"/><path d="M40 20 Q50 10 62 8" stroke="#fff" stroke-width="3" opacity=".35" fill="none" stroke-linecap="round"/></g>',
+      '<path d="M71 78 L74 92 M89 78 L86 92" stroke="#7b5a3a" stroke-width="1.6"/><rect x="69" y="91" width="22" height="14" rx="3" fill="#c98a4b"/><path d="M69 97 H91 M69 101 H91 M75 91 V105 M80 91 V105 M85 91 V105" stroke="#a96c36" stroke-width="1"/><rect x="67" y="89" width="26" height="4" rx="2" fill="#a96c36"/>',
+      '<g transform="translate(116 56) scale(.34)"><path d="M80 8 C112 8 122 34 114 54 C108 66 94 72 90 78 H70 C66 72 52 66 46 54 C38 34 48 8 80 8Z" fill="#6fdcc0"/><path d="M80 8 C96 14 98 46 90 78 H70 C62 46 64 14 80 8Z" fill="#fff" opacity=".7"/><rect x="68" y="92" width="24" height="14" rx="3" fill="#c98a4b"/></g>',
+      '<path d="M104 94 q3 -4 6 0 q3 -4 6 0 M126 88 q3 -4 6 0 q3 -4 6 0" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>' + ht(80, 40, 1.5, '#fff'),
+      '<g><circle cx="30" cy="100" r="2" fill="#ffd54a"/><circle cx="144" cy="30" r="2" fill="#ff9fbe"/><circle cx="20" cy="48" r="2" fill="#fff"/></g>' + sp(142, 56, 5, '#fff') + sp(14, 80, 4, '#fff') + sp(104, 14, 4, '#fff7c9') + sp(60, 22, 3, '#fff')] },
+    { k: 'cake', e: '🍰', n: '딸기 케이크', tag: '달콤한 행복을 한 조각', defs: G('s', '#fff2f6', '#ffdfe9') + G('sp', '#fbd9a8', '#eeb677') + G('pk', '#ffbfd2', '#ff8fb3') + G('cr', '#ffffff', '#ffeef3'), parts: [
+      '<rect width="160" height="120" fill="url(#§s)"/><g fill="#ffc7d8" opacity=".55"><circle cx="20" cy="22" r="14"/><circle cx="140" cy="18" r="10"/><circle cx="148" cy="86" r="16"/><circle cx="14" cy="92" r="9"/><circle cx="118" cy="52" r="6"/></g><path d="M0 100 H160 V120 H0Z" fill="#fff"/><g fill="#ffd0de" opacity=".7"><rect x="0" y="100" width="20" height="20"/><rect x="40" y="100" width="20" height="20"/><rect x="80" y="100" width="20" height="20"/><rect x="120" y="100" width="20" height="20"/></g>',
+      '<ellipse cx="80" cy="106" rx="58" ry="9" fill="#e9d5dd" opacity=".7"/><ellipse cx="80" cy="103" rx="58" ry="9" fill="#fff"/><ellipse cx="80" cy="103" rx="58" ry="9" fill="none" stroke="#f1d3de" stroke-width="2"/><ellipse cx="80" cy="102" rx="44" ry="6" fill="#fdf1f5"/>',
+      '<rect x="34" y="78" width="92" height="24" rx="6" fill="url(#§sp)"/><rect x="34" y="88" width="92" height="3.4" fill="#fff" opacity=".9"/><g fill="#d89a5c" opacity=".5"><circle cx="48" cy="96" r="1.2"/><circle cx="70" cy="82" r="1.2"/><circle cx="100" cy="96" r="1.2"/><circle cx="116" cy="84" r="1.2"/></g>',
+      '<rect x="42" y="54" width="76" height="26" rx="6" fill="url(#§pk)"/><path d="M42 66 H118" stroke="#fff" stroke-width="3.4" opacity=".85"/><path d="M50 58 Q56 56 62 57" stroke="#fff" stroke-width="2" opacity=".5" fill="none" stroke-linecap="round"/>',
+      '<ellipse cx="80" cy="54" rx="40" ry="8" fill="url(#§cr)"/><path d="M42 54 q4 12 8 0 q4 14 8 0 q4 10 8 0 q4 14 8 0 q4 10 8 0 q4 14 8 0 q4 10 8 0 q4 14 8 0 q4 10 8 0 V52 H42Z" fill="#fff"/>',
+      '<g><path d="M52 52 Q46 44 54 40 Q62 40 60 48 Q58 54 52 52Z" fill="#ee3f55"/><path d="M52 40 l-2 -4 M56 39 l1 -4 M54 40 l4 -3" stroke="#3fae60" stroke-width="2" stroke-linecap="round"/><path d="M100 52 Q94 44 102 40 Q110 40 108 48 Q106 54 100 52Z" fill="#ee3f55"/><path d="M100 40 l-2 -4 M104 39 l1 -4 M102 40 l4 -3" stroke="#3fae60" stroke-width="2" stroke-linecap="round"/><path d="M76 50 Q70 41 80 37 Q90 40 86 48 Q84 54 76 50Z" fill="#ee3f55"/><path d="M78 38 l-2 -4 M82 37 l2 -4 M80 38 l-1 -5" stroke="#3fae60" stroke-width="2" stroke-linecap="round"/><g fill="#ffe1e6" opacity=".85"><circle cx="54" cy="46" r=".9"/><circle cx="104" cy="46" r=".9"/><circle cx="80" cy="44" r=".9"/></g></g>',
+      '<g><circle cx="48" cy="72" r="1.6" fill="#fff"/><circle cx="90" cy="72" r="1.6" fill="#fff"/><circle cx="112" cy="74" r="1.6" fill="#fff"/></g>' + ht(22, 52, 1.2, '#ff8fb3') + ht(138, 40, 1, '#ff8fb3') + sp(138, 70, 5, '#fff') + sp(24, 80, 4, '#fff') + sp(80, 18, 4, '#fff') + sp(118, 24, 3, '#ffd54a')] },
+    { k: 'cat', e: '🐱', n: '창가 고양이', tag: '포근한 창가의 낮잠 친구', defs: G('w', '#ffeadb', '#ffd9bf') + G('sk', '#9ed7ff', '#dff2ff') + G('ct', '#ffc27a', '#f59d4a'), parts: [
+      '<rect width="160" height="120" fill="url(#§w)"/><g fill="#fff" opacity=".5"><circle cx="24" cy="26" r="2"/><circle cx="34" cy="44" r="2"/><circle cx="16" cy="60" r="2"/><circle cx="40" cy="14" r="2"/><circle cx="50" cy="60" r="2"/></g><rect x="92" y="12" width="52" height="62" rx="6" fill="url(#§sk)"/><path d="M118 12 V74 M92 43 H144" stroke="#fff" stroke-width="3"/><rect x="92" y="12" width="52" height="62" rx="6" fill="none" stroke="#fff" stroke-width="4"/><ellipse cx="106" cy="28" rx="9" ry="3.4" fill="#fff"/><ellipse cx="130" cy="58" rx="8" ry="3" fill="#fff"/>',
+      '<rect x="0" y="100" width="160" height="20" fill="#d8a27a"/><rect x="0" y="100" width="160" height="3" fill="#c48c64"/><rect x="86" y="72" width="64" height="7" rx="2" fill="#fff"/><ellipse cx="68" cy="102" rx="40" ry="8" fill="#b9a6f7"/><ellipse cx="68" cy="99" rx="38" ry="7" fill="#cdbdfb"/>',
+      '<path d="M96 100 Q128 96 120 76 Q116 66 108 72" stroke="url(#§ct)" stroke-width="8" fill="none" stroke-linecap="round"/><ellipse cx="66" cy="90" rx="30" ry="18" fill="url(#§ct)"/><path d="M44 84 Q50 78 58 80 M58 96 Q66 100 76 98" stroke="#e98a35" stroke-width="2" fill="none" opacity=".6" stroke-linecap="round"/><ellipse cx="46" cy="98" rx="7" ry="4" fill="#ffe3bd"/><ellipse cx="84" cy="98" rx="7" ry="4" fill="#ffe3bd"/>',
+      '<path d="M44 52 L48 30 L62 44Z" fill="#f59d4a"/><path d="M88 52 L84 30 L70 44Z" fill="#f59d4a"/><path d="M48 46 L50 36 L57 44Z" fill="#ffb3c4"/><path d="M84 46 L82 36 L75 44Z" fill="#ffb3c4"/><circle cx="66" cy="60" r="22" fill="url(#§ct)"/><path d="M66 38 V46 M58 40 L60 47 M74 40 L72 47" stroke="#e98a35" stroke-width="2" stroke-linecap="round"/>',
+      '<path d="M53 60 Q57 55 61 60 M71 60 Q75 55 79 60" stroke="#5a3a28" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M63 66 H69 L66 70Z" fill="#ff8fa7"/><path d="M66 70 Q62 74 58 72 M66 70 Q70 74 74 72" stroke="#5a3a28" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="52" cy="67" rx="4" ry="2.6" fill="#ff9fae" opacity=".6"/><ellipse cx="80" cy="67" rx="4" ry="2.6" fill="#ff9fae" opacity=".6"/><path d="M44 66 H34 M44 70 L35 73 M88 66 H98 M88 70 L97 73" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>',
+      '<rect x="120" y="64" width="16" height="9" rx="2" fill="#e07b5a"/><path d="M128 64 Q120 52 114 56 M128 64 Q128 48 128 44 M128 64 Q138 52 142 56" stroke="#4fb86f" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="114" cy="56" rx="4" ry="3" fill="#6fce8a"/><ellipse cx="142" cy="56" rx="4" ry="3" fill="#6fce8a"/><ellipse cx="128" cy="44" rx="3.4" ry="4" fill="#6fce8a"/><circle cx="26" cy="104" r="9" fill="#ff7a9a"/><path d="M20 100 Q26 104 32 100 M19 106 Q26 110 33 106 M26 95 Q22 104 26 113" stroke="#ff9fb5" stroke-width="1.2" fill="none"/><path d="M34 106 Q46 110 52 106" stroke="#ff7a9a" stroke-width="1.6" fill="none"/>',
+      '<g font-family="sans-serif" font-weight="700" fill="#b9a6f7"><text x="86" y="34" font-size="9" opacity=".9">z</text><text x="94" y="26" font-size="7" opacity=".7">z</text></g>' + ht(40, 28, 1.1, '#ff8fb3') + ht(22, 52, .8, '#ffb3c4') + sp(150, 92, 4, '#fff') + sp(104, 90, 3, '#fff') + sp(16, 18, 4, '#fff')] }
   ];
   var PUZ_BY = {}; PUZ.forEach(function (p) { PUZ_BY[p.k] = p; });
   function pzGet() {
@@ -5609,35 +5649,79 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var z = pzGet(), x = stats(), e = x.total + x.qok + x.gm, done = null, dirty = false;
     if (e < z.spent) { z.spent = e; dirty = true; }
     if (z.cur && e - z.spent >= pzNeed(z.cur.w)) {
-      z.done.push({ t: z.cur.t, w: z.cur.w, d: TODAY ? TODAY.s : '' }); z.spent += pzNeed(z.cur.w); done = z.cur.t; z.cur = null; dirty = true;
+      z.done.push({ t: z.cur.t, w: z.cur.w, d: TODAY ? TODAY.s : '' }); z.spent += pzNeed(z.cur.w); done = z.cur.t; z.fresh = done; z.cur = null; dirty = true;
     }
     if (dirty) LS.set(PZKEY, z);
     return { z: z, e: e, p: Math.max(0, e - z.spent), done: done };
   }
   function pzAfter() {
     var r = pzSync();
-    if (r.done) { NEWDONE = r.done; try { toast('🎉 ' + PUZ_BY[r.done].n + ' 퍼즐을 완성했어요!'); } catch (e) { } }
+    if (r.done) { NEWDONE = r.done; try { toast('🎉 ' + PUZ_BY[r.done].n + ' 퍼즐 완성! 인증 배지를 받았어요'); } catch (e) { } }
   }
+  var PZ_TIER = { 1: { n: '실버', c: ['#ffffff', '#d3dae8', '#8b95ad'] }, 2: { n: '골드', c: ['#fff3b8', '#f2c44f', '#b98412'] } };
+  var PZ_MS = [[3, '수집가', ['#ffe0c2', '#d98e52', '#8a4f25']], [6, '탐험가', ['#e6dcff', '#9b82e6', '#5a3fae']], [9, '퍼즐 마스터', ['#dff6ff', '#74c2f0', '#2f78c0']]];
+  function tk() { return 'z' + (++PZK) + '_'; }
+  function tz(str, t) { return String(str).split('§').join(t); }
+  var JIG = '<g fill="none" stroke="#fff" stroke-width="1" opacity=".55"><path d="M0 40H160M0 80H160M40 0V120M80 0V120M120 0V120"/><circle cx="20" cy="40" r="3.2"/><circle cx="60" cy="80" r="3.2"/><circle cx="100" cy="40" r="3.2"/><circle cx="140" cy="80" r="3.2"/><circle cx="40" cy="20" r="3.2"/><circle cx="80" cy="100" r="3.2"/><circle cx="120" cy="20" r="3.2"/></g>';
   function pzSvg(pz, p, w, full) {
-    var S = 2 * w, g = '', n = 0;
+    var t = tk(), S = 2 * w, g = '', n = 0;
     pz.parts.forEach(function (sv, i) {
       var f = full ? 1 : Math.max(0, Math.min(1, (p - i * S) / S)); if (f >= 1) n++;
-      g += '<g style="opacity:' + (0.08 + 0.92 * f).toFixed(2) + (f < 1 ? ';filter:grayscale(.85)' : '') + '">' + sv + '</g>';
+      g += '<g style="opacity:' + (0.1 + 0.9 * f).toFixed(2) + (f < 1 ? ';filter:grayscale(.85)' : '') + '">' + sv + '</g>';
     });
-    return '<svg class="pz-svg" viewBox="0 0 160 120" role="img" aria-label="' + esc(pz.n) + ' 퍼즐, 7부분 중 ' + n + '부분 완성" focusable="false"><rect width="160" height="120" rx="12" fill="#f3f6fa"/>' + g + '</svg>';
+    return '<svg class="pz-svg" viewBox="0 0 160 120" role="img" aria-label="' + esc(pz.n) + ' 퍼즐, 7부분 중 ' + n + '부분 완성" focusable="false"><defs>' + tz(pz.defs, t) + G('gold', '#fbe7a0', '#c8962e').split('§').join(t) + '<clipPath id="' + t + 'k"><rect width="160" height="120" rx="12"/></clipPath></defs><g clip-path="url(#' + t + 'k)"><rect width="160" height="120" fill="#eef1f7"/>' + tz(g, t) + (full ? '' : JIG) + '</g><rect x="1.5" y="1.5" width="157" height="117" rx="11" fill="none" stroke="url(#' + t + 'gold)" stroke-width="3"/></svg>';
   }
+  /* 인증 배지: 완성한 퍼즐 그림이 들어가는 금·은 인증 마크 */
+  function bdSvg(pz, tier, size, locked) {
+    var t = tk(), c = (PZ_TIER[tier] || PZ_TIER[2]).c, sc = '', i;
+    for (i = 0; i < 16; i++) { var a = i * Math.PI / 8; sc += '<circle cx="' + (50 + 40 * Math.cos(a)).toFixed(1) + '" cy="' + (46 + 40 * Math.sin(a)).toFixed(1) + '" r="5.6"/>'; }
+    if (locked) return '<svg class="pz-bdsvg lock" viewBox="0 0 100 100" width="' + size + '" height="' + size + '" role="img" aria-label="' + esc(pz.n) + ' 배지, 아직 잠겨 있어요" focusable="false"><circle cx="50" cy="46" r="40" fill="#e9edf4" stroke="#c4ccda" stroke-width="2" stroke-dasharray="4 4"/><rect x="38" y="44" width="24" height="18" rx="4" fill="#aab3c5"/><path d="M42 44 V38 a8 8 0 0 1 16 0 V44" fill="none" stroke="#aab3c5" stroke-width="4"/></svg>';
+    return '<svg class="pz-bdsvg" viewBox="0 0 100 100" width="' + size + '" height="' + size + '" role="img" aria-label="' + esc(pz.n) + ' ' + (PZ_TIER[tier] || PZ_TIER[2]).n + ' 인증 배지" focusable="false"><defs><linearGradient id="' + t + 'm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".5" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><clipPath id="' + t + 'c"><circle cx="50" cy="46" r="29"/></clipPath>' + '</defs>' +
+      '<path d="M34 78 L26 98 L38 93 L44 100 L50 80Z" fill="#d94c63"/><path d="M66 78 L74 98 L62 93 L56 100 L50 80Z" fill="#b8344d"/>' +
+      '<g fill="url(#' + t + 'm)">' + sc + '<circle cx="50" cy="46" r="40"/></g><circle cx="50" cy="46" r="35" fill="none" stroke="#fff" stroke-width="1.6" opacity=".75"/><circle cx="50" cy="46" r="31" fill="' + c[2] + '" opacity=".35"/>' +
+      '<g clip-path="url(#' + t + 'c)"><svg x="15" y="21" width="70" height="50" viewBox="0 0 160 120" preserveAspectRatio="xMidYMid slice"><defs>' + tz(pz.defs, t) + '</defs>' + tz(pz.parts.join(''), t) + '</svg></g><circle cx="50" cy="46" r="29" fill="none" stroke="#fff" stroke-width="2"/>' +
+      '<path d="M26 22 Q50 6 74 22" stroke="#fff" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/>' + sp(82, 12, 5, '#fff') + sp(16, 66, 3.4, '#fff') + '</svg>';
+  }
+  function msSvg(m, size, locked) {
+    var t = tk(), c = m[2], sc = '', i;
+    for (i = 0; i < 16; i++) { var a = i * Math.PI / 8; sc += '<circle cx="' + (50 + 40 * Math.cos(a)).toFixed(1) + '" cy="' + (46 + 40 * Math.sin(a)).toFixed(1) + '" r="5.6"/>'; }
+    if (locked) return '<svg class="pz-bdsvg lock" viewBox="0 0 100 100" width="' + size + '" height="' + size + '" role="img" aria-label="' + esc(m[1]) + ' 배지, 아직 잠겨 있어요" focusable="false"><circle cx="50" cy="46" r="40" fill="#e9edf4" stroke="#c4ccda" stroke-width="2" stroke-dasharray="4 4"/><text x="50" y="58" text-anchor="middle" font-size="32" font-weight="700" fill="#aab3c5">' + m[0] + '</text></svg>';
+    return '<svg class="pz-bdsvg" viewBox="0 0 100 100" width="' + size + '" height="' + size + '" role="img" aria-label="' + esc(m[1]) + ' 인증 배지, 퍼즐 ' + m[0] + '개 완성" focusable="false"><defs><linearGradient id="' + t + 'm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c[0] + '"/><stop offset=".5" stop-color="' + c[1] + '"/><stop offset="1" stop-color="' + c[2] + '"/></linearGradient><radialGradient id="' + t + 'r" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#3a3f7a"/><stop offset="1" stop-color="#171a45"/></radialGradient></defs>' +
+      '<path d="M34 78 L26 98 L38 93 L44 100 L50 80Z" fill="#d94c63"/><path d="M66 78 L74 98 L62 93 L56 100 L50 80Z" fill="#b8344d"/><g fill="url(#' + t + 'm)">' + sc + '<circle cx="50" cy="46" r="40"/></g><circle cx="50" cy="46" r="35" fill="none" stroke="#fff" stroke-width="1.6" opacity=".75"/><circle cx="50" cy="46" r="31" fill="url(#' + t + 'r)"/>' +
+      '<text x="50" y="55" text-anchor="middle" font-size="26" font-weight="800" fill="url(#' + t + 'm)">' + m[0] + '</text>' + sp(50, 28, 6, '#ffe9a0') + sp(33, 38, 3, '#fff') + sp(67, 38, 3, '#fff') + '<circle cx="50" cy="46" r="31" fill="none" stroke="#fff" stroke-width="1.4" opacity=".6"/></svg>';
+  }
+  function pzBest() { var z = pzGet(), m = {}; z.done.forEach(function (d) { if (!m[d.t] || d.w > m[d.t].w) m[d.t] = d; }); return m; }
   function pzChooser(heading, canCancel) {
-    var h = '<div class="pz-pick"><p class="muted small" style="margin:0">' + heading + '</p><div class="pz-themes" role="group" aria-label="퍼즐 종류">' +
-      PUZ.map(function (t) { return '<button type="button" data-pz-t="' + t.k + '" aria-pressed="' + (PICK.t === t.k) + '"><span aria-hidden="true">' + t.e + '</span><b>' + esc(t.n) + '</b></button>'; }).join('') +
+    var best = pzBest(), cur = PUZ_BY[PICK.t], tier = PICK.w === 1 ? 1 : 2;
+    var h = '<div class="pz-pick"><p class="muted small" style="margin:0">' + heading + '</p>' +
+      '<div class="pz-prev">' + pzSvg(cur, 0, 1, true) + '<div class="pz-prev-t"><b>' + cur.e + ' ' + esc(cur.n) + '</b><small>' + esc(cur.tag) + '</small><div class="pz-prev-b">' + bdSvg(cur, tier, 52) + '<span>완성하면<br><b>' + PZ_TIER[tier].n + ' 인증 배지</b>를 받아요</span></div></div></div>' +
+      '<div class="pz-themes" role="group" aria-label="퍼즐 그림 고르기">' +
+      PUZ.map(function (q) { return '<button type="button" data-pz-t="' + q.k + '" aria-pressed="' + (PICK.t === q.k) + '"><span class="pz-th">' + pzSvg(q, 0, 1, true) + '</span><b>' + esc(q.n) + '</b>' + (best[q.k] ? '<i class="pz-ck">✓ ' + PZ_TIER[best[q.k].w === 1 ? 1 : 2].n + ' 배지</i>' : '') + '</button>'; }).join('') +
       '</div><div class="pz-weeks" role="group" aria-label="완성 기간">' +
-      [[1, '1주 코스', '14조각'], [2, '2주 코스', '28조각']].map(function (a) { return '<button type="button" data-pz-w="' + a[0] + '" aria-pressed="' + (PICK.w === a[0]) + '"><b>' + a[1] + '</b><small>' + a[2] + ' · 하루 2조각 기준</small></button>'; }).join('') +
-      '</div><div class="row2"><button type="button" class="btn primary" data-pz-start>이 퍼즐로 시작하기</button>' + (canCancel ? '<button type="button" class="btn ghost" data-pz-cancel>취소</button>' : '') + '</div></div>';
+      [[1, '1주 코스', '14조각 · 실버 배지'], [2, '2주 코스', '28조각 · 골드 배지']].map(function (a) { return '<button type="button" data-pz-w="' + a[0] + '" aria-pressed="' + (PICK.w === a[0]) + '"><b>' + a[1] + '</b><small>' + a[2] + '</small></button>'; }).join('') +
+      '</div><div class="row2"><button type="button" class="btn primary" data-pz-start>이 그림으로 시작하기</button>' + (canCancel ? '<button type="button" class="btn ghost" data-pz-cancel>취소</button>' : '') + '</div></div>';
     return h;
+  }
+  function pzCount() { return Object.keys(pzBest()).length; }
+  function pzShelf() {
+    var best = pzBest(), n = pzCount(), msN = PZ_MS.filter(function (m) { return n >= m[0]; }).length, tot = PUZ.length + PZ_MS.length;
+    var h = '<h3 class="disc-h3">인증 배지 <small class="muted">' + (n + msN) + ' / ' + tot + '개 모음</small></h3><p class="muted small" style="margin:0 0 6px">퍼즐을 완성할 때마다 배지가 생겨요. 2주 코스는 골드, 1주 코스는 실버예요.</p><div class="pz-bd">';
+    PUZ.forEach(function (q) { var d = best[q.k]; h += '<figure>' + (d ? bdSvg(q, d.w === 1 ? 1 : 2, 84) : bdSvg(q, 2, 84, true)) + '<figcaption><b>' + esc(q.n) + '</b>' + (d ? '<br>' + PZ_TIER[d.w === 1 ? 1 : 2].n + (d.d ? ' · ' + esc(String(d.d).slice(5)) : '') : '<br>잠김') + '</figcaption></figure>'; });
+    PZ_MS.forEach(function (m) { var ok = n >= m[0]; h += '<figure>' + msSvg(m, 84, !ok) + '<figcaption><b>' + esc(m[1]) + '</b><br>' + (ok ? '달성!' : '퍼즐 ' + m[0] + '개 완성') + '</figcaption></figure>'; });
+    return h + '</div>';
   }
   var PICKING = false;
   function pzSection() {
     var r = pzSync(), z = r.z, h = '<h3 class="disc-h3">내 퍼즐</h3>';
-    if (NEWDONE) { h += '<div class="pz-done" role="status">🎉 <b>' + esc(PUZ_BY[NEWDONE].n) + ' 퍼즐을 완성했어요!</b> 아래 갤러리에 보관했어요. 새 퍼즐을 골라 계속 모아 보세요.</div>'; NEWDONE = null; }
+    if (r.done) NEWDONE = r.done;
+    if (!NEWDONE && z.fresh && PUZ_BY[z.fresh]) NEWDONE = z.fresh;
+    if (z.fresh) { delete z.fresh; LS.set(PZKEY, z); }
+    if (NEWDONE) {
+      var nd = null; z.done.forEach(function (d) { if (d.t === NEWDONE) nd = d; });
+      var dn = pzCount(), isNew = z.done.filter(function (d) { return d.t === NEWDONE; }).length === 1, ms = null;
+      PZ_MS.forEach(function (m) { if (isNew && dn === m[0]) ms = m; });
+      h += '<div class="pz-done" role="status"><div class="pz-done-b">' + bdSvg(PUZ_BY[NEWDONE], nd && nd.w === 1 ? 1 : 2, 76) + (ms ? msSvg(ms, 76) : '') + '</div><div class="pz-done-t">🎉 <b>' + esc(PUZ_BY[NEWDONE].n) + ' 퍼즐을 완성했어요!</b> ' + (nd && nd.w === 1 ? '실버' : '골드') + ' 인증 배지를 받았어요.' + (ms ? ' 그리고 <b>' + esc(ms[1]) + '</b> 배지까지 달성!' : '') + ' 새 그림을 골라 다음 배지에 도전해 보세요.</div></div>'; NEWDONE = null;
+    }
     if (!z.cur || PICKING) {
       if (!PICKED) { var doneT = {}; z.done.forEach(function (d) { doneT[d.t] = 1; }); var nt = PUZ.filter(function (q) { return !doneT[q.k]; })[0]; if (nt) PICK.t = nt.k; }
       if (!z.cur) h += '<p class="muted small" style="margin:0 0 6px">모은 조각 ' + r.p + '개가 새 퍼즐에 바로 들어가요. 퍼즐은 재미로 모으는 놀이예요.</p>';
@@ -5646,12 +5730,12 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var pz = PUZ_BY[z.cur.t], need = pzNeed(z.cur.w), p = Math.min(r.p, need), pct = Math.round(p / need * 100);
     h += '<div class="pz-head"><b>' + pz.e + ' ' + esc(pz.n) + ' · ' + z.cur.w + '주 코스</b><button type="button" class="btn ghost sm" data-pz-change>퍼즐 바꾸기</button></div>' + pzSvg(pz, p, z.cur.w, false);
     h += '<div class="disc-bar"><div class="lab"><span>조각</span><b>' + p + ' / ' + need + '</b></div><div class="bar" role="img" aria-label="퍼즐 조각 ' + p + '개, 전체 ' + need + '개"><i style="width:' + pct + '%"></i></div></div>';
-    h += '<p class="muted small" style="margin:0">오늘의 카드를 열 때, 퀴즈를 맞힐 때, 게임을 끝낼 때마다 조각이 붙어요.</p>';
+    h += '<div class="pz-goalrow">' + bdSvg(pz, z.cur.w === 1 ? 1 : 2, 56) + '<span>완성하면 <b>' + (z.cur.w === 1 ? '실버' : '골드') + ' 인증 배지</b>를 받아요.<br><small class="muted">카드를 열 때, 퀴즈를 맞힐 때, 게임을 끝낼 때마다 조각이 붙어요.</small></span></div>';
     return h;
   }
   function pzGallery() {
-    var z = pzGet(); if (!z.done.length) return '';
-    return '<h3 class="disc-h3">완성한 퍼즐 <small class="muted">' + z.done.length + '개</small></h3><div class="pz-gal">' + z.done.map(function (d) {
+    var z = pzGet(); if (!z.done.length) return pzShelf();
+    return pzShelf() + '<h3 class="disc-h3">완성한 퍼즐 <small class="muted">' + z.done.length + '개</small></h3><div class="pz-gal">' + z.done.map(function (d) {
       var pz = PUZ_BY[d.t]; return '<figure>' + pzSvg(pz, 0, d.w, true) + '<figcaption>' + esc(pz.n) + ' · ' + d.w + '주' + (d.d ? '<br>' + esc(String(d.d).slice(5)) : '') + '</figcaption></figure>';
     }).join('') + '</div>';
   }
@@ -5726,10 +5810,10 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   }
   function bookView() {
     var pzr = pzSync(), x = stats(), b = x.b, done = BADGES.filter(function (g) { return g.ok(x); }), next = BADGES.filter(function (g) { return !g.ok(x); })[0];
-    var h = band('내 퍼즐', '조각 ' + pzr.e + '개 · 완성 ' + pzr.z.done.length + '개 · 배지 ' + done.length + '/' + BADGES.length, BOOKTAB.tc);
+    var h = band('내 퍼즐', '조각 ' + pzr.e + '개 · 완성 ' + pzr.z.done.length + '개 · 활동 배지 ' + done.length + '/' + BADGES.length, BOOKTAB.tc);
     h += '<div class="disc-body"><div class="disc-sum"><div><b>' + x.cur + '일</b><span>연속 방문</span></div><div><b>' + x.best + '일</b><span>최고 기록</span></div><div><b>' + x.qok + '/' + x.qn + '</b><span>퀴즈 정답/참여</span></div><div><b>' + x.full + '일</b><span>완주한 날</span></div></div>';
     h += pzSection() + pzGallery();
-    if (next) h += '<p class="disc-next">🎯 다음 배지: <b>' + esc(next.t) + '</b> — ' + esc(next.d) + '</p>';
+    if (next) h += '<p class="disc-next">🎯 다음 활동 배지: <b>' + esc(next.t) + '</b> — ' + esc(next.d) + '</p>';
     h += '<h3 class="disc-h3">모은 카드</h3>';
     [['IND', '산업'], ['PUB', '공공기관'], ['JOB', '직무']].forEach(function (a) {
       var tot = pools()[a[0]].length, n = x.f[a[0]], pct = tot ? Math.round(n / tot * 100) : 0;
@@ -6146,7 +6230,9 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   var FONTS = [
     { k: 'plex', n: '기본 (IBM Plex)', f: '"IBM Plex Sans KR",sans-serif' },
     { k: 'device', n: '기기 기본 고딕', f: '-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif' },
-    { k: 'serif', n: '명조 (바탕)', f: '"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif' }
+    { k: 'serif', n: '명조 (바탕)', f: '"Noto Serif KR","Nanum Myeongjo","AppleMyungjo","Batang",serif' },
+    { k: 'jua', n: '귀여운 둥근체 (주아)', f: '"Jua HT",sans-serif' },
+    { k: 'melody', n: '사랑스러운 손글씨 (하이멜로디)', f: '"Hi Melody HT",sans-serif' }
   ];
   /* 요정 5명: 머리색·옷색·날개색·머리모양·장식 */
   var CHARS = [
@@ -6170,6 +6256,12 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     preparePage: ['찜한 목록과 진단 결과를 비교해서 목표 산업과 직무를 하나씩 정해요.', '학년·준비 기간·주당 준비시간·시작일을 넣으면 맞춤 로드맵이 만들어져요.', '다 정했다면 “내 로드맵”으로 가 보세요.'],
     roadmapPage: ['정한 목표와 조건으로 만든 로드맵이에요. “오늘의 실행”에서 오늘 할 일을 체크해 보세요.', '밀린 일은 자동으로 일정을 조정해 줘요.', '“PDF로 저장·인쇄”로 내보낼 수도 있어요.']
   };
+  TIPS['majorPage:A'] = ['“학과 입력·추천”이에요. 학과 이름을 넣으면 연결이 높은 산업·직무를 5개씩 추천해요.', '정확한 이름이 아니어도 괜찮아요. 입력 내용은 이 기기에만 저장돼요.', '이름이 가물가물하면 위 “분류로 둘러보기” 버튼을 눌러 보세요.'];
+  TIPS['majorPage:B'] = ['“분류로 둘러보기”예요. 계열을 누르고 비슷한 학과들 중에서 골라 보세요.', '학과를 고르면 바로 추천 결과가 나와요.', '이름을 알고 있다면 위 “학과 입력·추천”이 더 빨라요.'];
+  TIPS['jobPage:A'] = ['“직무대영역으로 고르기”예요. 큰 영역을 고르면 세부 직무로 좁혀져요.', '직무를 고르면 역할·업무·역량·성과·신입 진입경로가 아래에 열려요.', '이름을 알고 있다면 위 “이름으로 찾기”가 빨라요.'];
+  TIPS['jobPage:B'] = ['“이름으로 찾기”예요. 직무 이름 일부만 넣어도 찾아 줘요. 예: 데이터, 인사, 마케팅', '검색 결과를 누르면 상세가 열려요. 회사마다 업무 범위가 다르니 채용공고도 확인하세요.', '막막하면 위 “직무대영역으로 고르기”로 둘러보세요.'];
+  TIPS['diagnosisPage:Q'] = ['“문항 풀기”예요. 64문항, 약 10분이고 정답은 없어요. “지금의 나”로 답해 주세요.', '다 답하면 아래 “결과 보기”를 눌러요. 빈 문항이 있으면 알려 줘요.', '이미 결과가 있다면 위 “내 결과”로 돌아갈 수 있어요.'];
+  TIPS['diagnosisPage:RES'] = ['“내 결과”예요. 점수보다 “왜 맞는지”를 먼저 보세요. 탐색 우선순위일 뿐이에요.', '“적합 산업·직무 추천”을 펼쳐 보고 마음에 들면 ☆ 찜! “PDF로 저장·인쇄”로 보관도 돼요.', '답을 고치고 싶으면 위 “문항 풀기”로 돌아가세요.'];
   var GUIDE = ['① 진단으로 나를 알아보고 (선택: 학과 탐색)', '② 산업·직무를 둘러보며 ☆ 찜하기', '③ “진로 결정”에서 목표 1개 정하기', '④ “내 로드맵”에서 오늘의 실행 체크하기', '순서는 정해져 있지 않아요. 궁금한 곳부터 시작해도 괜찮아요.'];
   var ACTIONS = { 'homePage:DISC': ['진단 시작하기', 'diagnosisPage'], 'homePage:DS': ['진로 결정 가기', 'preparePage'], 'homePage:GUIDE': ['진단 시작하기', 'diagnosisPage'], diagnosisPage: ['학과 탐색 보기', 'majorPage'], majorPage: ['산업 탐색 가기', 'industryPage'], industryPage: ['직무 탐색 가기', 'jobPage'], publicPage: ['직무 탐색 가기', 'jobPage'], jobPage: ['진로 결정 가기', 'preparePage'], preparePage: ['내 로드맵 보기', 'roadmapPage'] };
   var TOUR = {
@@ -6185,6 +6277,12 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     preparePage: [['#interestSummary', '내가 찜한 목록', '산업·직무·기관에서 ☆ 찜한 항목이 모여 있어요.'], ['#prepareDiagnosisSummary', '진단 요약', '진단 결과와 찜한 목록을 비교해서 목표를 골라요.'], ['#planIndustrySelect', '목표 정하기', '산업과 직무(또는 기관)를 하나씩 정해요.'], ['#planMonths', '준비 기간·시간', '기간, 주당 시간, 시작일을 넣으면 맞춤 로드맵이 만들어져요.']],
     roadmapPage: [['#planResult', '내 로드맵', '주차별 과제가 나와요. “오늘의 실행”에서 오늘 할 일을 체크하세요.'], ['button[onclick^="printPlan"]', 'PDF로 저장', '인쇄 창에서 “PDF로 저장”을 고르면 파일로 보관할 수 있어요.']]
   };
+  TOUR['majorPage:A'] = [['#kt-majorPage', '위쪽 선택 버튼', '“학과 입력·추천”과 “분류로 둘러보기”를 오가요.'], ['#majorInput', '학과 입력', '학과 이름을 입력하거나 목록에서 골라요.'], ['#majorResult', '추천 결과', '연결이 높은 산업·직무가 5개씩 나와요. 마음에 들면 ☆ 찜!']];
+  TOUR['majorPage:B'] = [['#kt-majorPage', '위쪽 선택 버튼', '“학과 입력·추천”으로 돌아갈 수 있어요.'], ['#majorBrowse', '학과 둘러보기', '분류를 누르고 학과를 골라요.']];
+  TOUR['jobPage:A'] = [['#kt-jobPage', '위쪽 선택 버튼', '“직무대영역으로 고르기”와 “이름으로 찾기”를 오가요.'], ['#jobGroupGrid', '직무 대영역 고르기', '큰 영역을 고르면 세부 직무로 좁혀져요.'], ['#jobSelectWrap', '직무 선택', '목록에서 직무를 고르면 아래에 상세가 열려요.']];
+  TOUR['jobPage:B'] = [['#kt-jobPage', '위쪽 선택 버튼', '“직무대영역으로 고르기”로 돌아갈 수 있어요.'], ['#jobSearch', '직무 이름으로 찾기', '이름 일부만 입력해도 찾아 줘요.']];
+  TOUR['diagnosisPage:Q'] = [['#kt-diagnosisPage', '위쪽 선택 버튼', '“문항 풀기”와 “내 결과”를 오가요.'], ['#consentGate', '응답 수집 동의(선택)', '동의하지 않아도 진단은 모두 쓸 수 있어요.'], ['#diagnosisQuestions', '64문항', '“지금의 나” 기준으로 솔직하게 골라 주세요.'], ['#diagRunRow', '결과 보기', '다 답하면 눌러요.']];
+  TOUR['diagnosisPage:RES'] = [['#kt-diagnosisPage', '위쪽 선택 버튼', '“문항 풀기”로 돌아가 답을 고칠 수 있어요.'], ['#diagnosisResult', '내 결과', '잘 맞는 산업·직무 TOP5와 PDF 저장이 여기에 있어요.']];
   var HINTS = [
     ['click', '[data-star]', 'star', '☆을 누르면 “찜”에 담겨요. 담은 목록은 “진로 결정” 탭에서 비교해 목표를 정해요.'],
     ['click', 'button[onclick^="runDiagnosis"]', 'run', '응답을 바탕으로 잘 맞는 산업·직무 TOP5를 계산해 줘요. 결과는 PDF로도 저장할 수 있어요.'],
@@ -6195,7 +6293,6 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     ['change', '#industrySelect,#jobSelect,#publicSelect,#publicRegionSelect', 'sel', '고르면 아래에 상세가 열려요. 스크롤을 내려서 하는 일과 채용 직무를 확인해 보세요.'],
     ['change', '#planMonths,#planWeeklyHours,#planStartDate', 'term', '기간·주당 시간·시작일에 맞춰 주차별 로드맵이 만들어져요. 다 정했다면 “내 로드맵”으로!'],
     ['focusin', '#industrySearch,#jobSearch,#publicSearch,#majorInput', 'search', '이름 일부만 입력해도 찾아 줘요. 예: 반도체, 공정, 간호'],
-    ['click', '#homeKind [data-hk]', 'hk', '위 버튼으로 화면을 오가요. 요정 안내도 지금 보고 있는 화면에 맞춰 바뀌어요.'],
     ['click', '.stop[data-page]', 'tab', '아래 탭을 누르면 해당 단계로 이동해요. 순서는 정해져 있지 않아요. 궁금한 곳부터 가 보세요.']
   ];
   var TOUR_S = null, HL = null;
@@ -6256,7 +6353,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     W.hidden = !f.on; W.classList.toggle('fx-left', f.side === 'L');
     BTN.innerHTML = fairySvg(c, 52); BTN.setAttribute('aria-label', '도우미 요정 ' + c.n + ' 열기');
   }
-  function tipsFor() { return TIPS[curPage] || TIPS['homePage:DISC']; }
+  function tipsFor() { return pick(TIPS, curPage) || TIPS['homePage:DISC']; }
   function bubbleHtml(mode) {
     var f = fst(), c = CH_BY[f.ch], h = '<div class="fx-top"><b>' + esc2(c.n) + '</b><button type="button" class="fx-x" data-fx="close" aria-label="말풍선 닫기">✕</button></div>';
     if (mode === 'intro') {
@@ -6267,7 +6364,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       var st = TOUR_S.steps[TOUR_S.i], n = TOUR_S.steps.length, last = TOUR_S.i === n - 1;
       h += '<p><b>' + esc2(st[1]) + '</b> <span class="fx-sub">' + (TOUR_S.i + 1) + '/' + n + '</span></p><p>' + esc2(st[2]) + '</p><div class="fx-act">' + (TOUR_S.i > 0 ? '<button type="button" class="fx-b" data-fx="tprev">← 이전</button>' : '') + (last ? '<button type="button" class="fx-b pri" data-fx="tend">안내 끝내기</button>' : '<button type="button" class="fx-b pri" data-fx="tnext">다음 →</button>') + '</div>';
     } else {
-      var t = tipsFor(), msg = t[tipIdx % t.length], a = ACTIONS[curPage], hasTour = !!(TOUR[curPage] && TOUR[curPage].length);
+      var t = tipsFor(), msg = t[tipIdx % t.length], a = pick(ACTIONS, curPage), hasTour = !!((pick(TOUR, curPage) || []).length);
       h += '<p>' + esc2(msg) + '</p><div class="fx-act">' + (hasTour ? '<button type="button" class="fx-b pri" data-fx="tour">▶ 이 화면 안내</button>' : '') + (t.length > 1 ? '<button type="button" class="fx-b" data-fx="next">다른 팁 ' + ((tipIdx % t.length) + 1) + '/' + t.length + '</button>' : '') +
         (a ? '<button type="button" class="fx-b' + (hasTour ? '' : ' pri') + '" data-fx="go" data-p="' + a[1] + '">' + esc2(a[0]) + '</button>' : '') + '</div>' +
         '<div class="fx-act sm"><button type="button" class="fx-b" data-fx="guide">앱 사용법</button><button type="button" class="fx-b" data-fx="look">🎨 꾸미기</button><button type="button" class="fx-b" data-fx="off">요정 숨기기</button></div>';
@@ -6292,7 +6389,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   }
   function clearHl() { if (HL) { HL.classList.remove('fx-hl'); HL = null; } }
   function tourVisible(sel) { var e = document.querySelector('.page.active ' + sel) || document.querySelector(sel); if (!e) return null; var r = e.getBoundingClientRect(); return (e.getClientRects().length && r.height > 4) ? e : null; }
-  function tourBuild() { return (TOUR[curPage] || []).filter(function (st) { return tourVisible(st[0]); }); }
+  function tourBuild() { return (pick(TOUR, curPage) || []).filter(function (st) { return tourVisible(st[0]); }); }
   function tourShow() {
     clearHl(); var st = TOUR_S.steps[TOUR_S.i], e = st && tourVisible(st[0]);
     if (e) { HL = e; e.classList.add('fx-hl'); var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; var top = e.getBoundingClientRect().top; window.scrollBy({ top: top - hh - 14, behavior: window.matchMedia('(prefers-reduced-motion:reduce)').matches ? 'auto' : 'smooth' }); }
@@ -6315,11 +6412,22 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     });
   }
   function busy() { return document.body.classList.contains('disc-open'); }
-  function pageNow() { var p = document.querySelector('.page.active'), id = p ? p.id : 'homePage'; return id === 'homePage' ? 'homePage:' + (window.__homeKind || 'DISC') : id; }
+  function pageNow() {
+    var p = document.querySelector('.page.active'), id = p ? p.id : 'homePage';
+    if (id === 'homePage') return 'homePage:' + (window.__homeKind || 'DISC');
+    try {
+      if (id === 'majorPage' || id === 'jobPage') return id + ':' + ((window.__ktCur && window.__ktCur[id]) || 'A');
+      if (id === 'diagnosisPage') return id + ':' + ((STATE.diagnosis && !STATE.diagEdit) ? 'RES' : 'Q');
+    } catch (e) { }
+    return id;
+  }
+  function baseKey(k) { return String(k).split(':')[0]; }
+  function pick(map, k) { return map[k] || map[baseKey(k)]; }
   /* 화면이 바뀔 때: 처음 보는 화면이면 말풍선으로 짧게 안내(10초 뒤 자동으로 닫힘) */
   function modalOpen() { return busy() || (MODAL && !MODAL.classList.contains('hidden')); }
   function onPage() {
-    if (!W) return; curPage = pageNow(); tipIdx = 0; clearTimeout(showT);
+    if (!W) return; var nk = pageNow(); if (!B.hidden && auto && nk !== curPage) closeBubble();
+    curPage = nk; tipIdx = 0; clearTimeout(showT);
     if (!B.hidden && !auto) { openBubble('menu'); return; }
     var f = fst(); if (!f.on) { return; }
     var firstSeen = f.mode !== 'off' && !f.seen[curPage], again = f.mode === 'always' && f.seen[curPage];
@@ -6348,8 +6456,8 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     h += '<h3 class="disc-h3" style="font-size:14px;margin:10px 0 4px">말풍선 안내 방식</h3><div class="lk-grid c3" role="group" aria-label="안내 방식">' + [['first', '처음 한 번만'], ['always', '화면마다 짧게'], ['off', '안 함']].map(function (a) { return '<button type="button" data-lk="mode" data-v="' + a[0] + '" aria-pressed="' + (f.mode === a[0]) + '"><b>' + a[1] + '</b></button>'; }).join('') + '</div>';
     h += '<div class="lk-grid c2" role="group" aria-label="요정 위치">' + [['R', '오른쪽 아래'], ['L', '왼쪽 아래']].map(function (a) { return '<button type="button" data-lk="side" data-v="' + a[0] + '" aria-pressed="' + (f.side === a[0]) + '"><b>' + a[1] + '</b></button>'; }).join('') + '</div>';
     h += '<h3 class="disc-h3">🎨 색상</h3><div class="lk-grid c3" role="group" aria-label="색상 고르기">' + THEMES.map(function (t) { return '<button type="button" data-lk="th" data-v="' + t.k + '" aria-pressed="' + (th === t.k) + '"><span class="lk-dot" style="background:' + t.c + '"></span><b>' + t.n + '</b></button>'; }).join('') + '</div>';
-    h += '<h3 class="disc-h3">🔤 글꼴</h3><div class="lk-grid c1" role="group" aria-label="글꼴 고르기">' + FONTS.map(function (x) { return '<button type="button" data-lk="fo" data-v="' + x.k + '" aria-pressed="' + (fo === x.k) + '" style="font-family:' + x.f + '"><b>' + x.n + '</b><span>가나다라마 헬퍼탐 Abc 123</span></button>'; }).join('') + '</div>';
-    h += '<p class="muted small" style="margin:6px 0 0">명조는 기기에 글꼴이 있을 때 적용돼요. 없으면 기본 글꼴로 보여요.</p></div>';
+    h += '<h3 class="disc-h3">🔤 글꼴</h3><div class="lk-grid c1" role="group" aria-label="글꼴 고르기">' + FONTS.map(function (x) { return '<button type="button" data-lk="fo" data-v="' + x.k + '" aria-pressed="' + (fo === x.k) + '" style="font-family:' + x.f.replace(/"/g, '&quot;') + '"><b>' + x.n + '</b><span>가나다라마 헬퍼탐 Abc 123</span></button>'; }).join('') + '</div>';
+    h += '<p class="muted small" style="margin:6px 0 0">귀여운 글꼴(주아·하이멜로디)은 처음 고를 때 한 번 내려받고, 이후엔 오프라인에서도 써요. 명조는 기기에 글꼴이 있을 때 적용돼요.</p></div>';
     h += '<div class="disc-foot"><button type="button" class="btn ghost" data-lk="reset">기본값으로 되돌리기</button><button type="button" class="btn primary" data-lk="close">닫기</button></div></div>';
     return h;
   }
@@ -6408,10 +6516,9 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 (function () {
   var CFG = {
     majorPage: { label: '학과 탐색 구분', tabs: [['A', '학과 입력·추천', ['#majorPage .search', '#majorSuggest']], ['B', '분류로 둘러보기', ['#majorPage .step']]] },
-    jobPage: { label: '직무 탐색 구분', tabs: [['A', '직무대영역으로 고르기', ['#jobPage .step', '#jobCrumb', '#jobSelectWrap']], ['B', '이름으로 찾기', ['#jobPage .search', '#jobSearchResults']]] },
-    diagnosisPage: { label: '진단 구분', tabs: [['A', '문항 풀기', ['#diagnosisPage .warn', '#consentGate', '#diagBar', '#diagnosisQuestions', '#diagRunRow']], ['B', '내 결과', ['#diagnosisResult']]] }
+    jobPage: { label: '직무 탐색 구분', tabs: [['A', '직무대영역으로 고르기', ['#jobPage .step', '#jobCrumb', '#jobSelectWrap']], ['B', '이름으로 찾기', ['#jobPage .search', '#jobSearchResults']]] }
   };
-  var CUR = {}, PRINTING = false;
+  var CUR = {}, PRINTING = false; window.__ktCur = CUR;
   function els(sels) { var o = []; sels.forEach(function (q) { Array.prototype.forEach.call(document.querySelectorAll(q), function (e) { o.push(e); }); }); return o; }
   function apply(pid) {
     var c = CFG[pid], cur = CUR[pid] || c.tabs[0][0];
@@ -6431,21 +6538,31 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     bar.addEventListener('click', function (e) { var b = e.target.closest('[data-kt]'); if (b) set(pid, b.getAttribute('data-kt'), false); });
   }
   function wrap(name, fn) { var o = window[name]; if (typeof o !== 'function') return; window[name] = function () { var self = this, a = arguments; return fn(function () { return o.apply(self, a); }, a); }; }
+  /* 진단: 앱의 문항/결과 모드(diagMode)와 연동. 결과가 저장돼 있으면 '내 결과'로 바로 열린다 */
+  function diagSync() { var bar = document.getElementById('kt-diagnosisPage'); if (!bar) return; var res = !!STATE.diagnosis && !STATE.diagEdit; Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String((b.getAttribute('data-kt') === 'B') === res)); }); }
+  function diagBar() {
+    var sec = document.getElementById('diagnosisPage'); if (!sec || document.getElementById('kt-diagnosisPage')) return;
+    var bar = document.createElement('div'); bar.className = 'kindbar kt no-print'; bar.id = 'kt-diagnosisPage'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', '진단 구분');
+    bar.innerHTML = '<button type="button" data-kt="A" aria-pressed="true"><b>문항 풀기</b></button><button type="button" data-kt="B" aria-pressed="false"><b>내 결과</b></button>';
+    sec.insertBefore(bar, sec.firstChild);
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-kt]'); if (!b) return;
+      if (b.getAttribute('data-kt') === 'A') { STATE.diagEdit = true; diagMode(); window.scrollTo(0, 0); }
+      else if (!STATE.diagnosis) { try { toast('아직 결과가 없어요. 문항에 답하고 “결과 보기”를 눌러 주세요'); } catch (x) { } }
+      else { STATE.diagEdit = false; diagMode(); window.scrollTo(0, 0); }
+      diagSync();
+    });
+    var dm = window.diagMode; window.diagMode = function () { var r = dm.apply(this, arguments); diagSync(); if (typeof window.fxCtx === 'function') window.fxCtx(); return r; };
+    diagSync();
+  }
   function init() {
     Object.keys(CFG).forEach(function (pid) { build(pid); apply(pid); });
     wrap('majorSearch', function (call) { set('majorPage', 'A', false); return call(); });
-    wrap('toggleQuestions', function (call) { set('diagnosisPage', 'A', false); return call(); });
-    wrap('jumpToMissing', function (call) { set('diagnosisPage', 'A', false); return call(); });
-    wrap('runDiagnosis', function (call) {
-      var r = call(); var res = document.getElementById('diagnosisResult');
-      if (res && res.textContent.trim().length > 20) { set('diagnosisPage', 'B', false); var hh = (document.getElementById('siteHeader') || { offsetHeight: 60 }).offsetHeight || 60; window.scrollTo({ top: Math.max(0, res.getBoundingClientRect().top + window.pageYOffset - hh - 70), behavior: 'auto' }); }
-      return r;
-    });
-    wrap('clearDiagnosis', function (call) { var r = call(); set('diagnosisPage', 'A', false); return r; });
+    diagBar();
     var op = window.openPage;
     window.openPage = function (id) {
       var r = op.apply(this, arguments);
-      try { if (id === 'diagnosisPage' && !CUR.diagnosisPage) { var res = document.getElementById('diagnosisResult'); if (res && res.textContent.trim().length > 20) set('diagnosisPage', 'B', false); } } catch (e) { }
+      try { if (id === 'diagnosisPage' && STATE.diagnosis) { STATE.diagEdit = false; diagMode(); } } catch (e) { }
       return r;
     };
   }
