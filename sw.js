@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-v86';
+const CACHE = 'helpertom-v87';
 const FILES = [
   './',
   './index.html',
