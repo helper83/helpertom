@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.169 (2026-11-14): 모바일에서도 전체 분류 탭(홈·진단·학과·산업·직무·진로 결정)을 헬퍼탐 이름 바로 아래에 배치(하단 탭바 제거) -->
 <!-- v12.168 (2026-11-14): 진로 결정 탭에서 오늘의 기사(목표 산업 기사·찜한 항목 기사) 제거 -->
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
@@ -719,6 +720,26 @@ footer .btn{font-size:13px}
 .fx-co>summary:focus-visible{outline:2px solid var(--primary,#1E7BC4);outline-offset:2px;border-radius:6px}
 @media print{.fx-co>summary::after{display:none}}
 @media print{.fx-tools{display:none!important}.fx>summary::after,.learn>details.fx-learn>summary::after{display:none}}
+
+/* v12.169: 모바일도 PC와 같은 상단(앱 이름 아래) 탭 — 연결선·상태 점·상태 문구 포함, 하단 탭바 대체 */
+@media (max-width:640px){
+  header .route{display:block;padding:2px 4px 0;overflow:visible}
+  header .route ol{min-width:0}
+  header .route ol::before{display:block;left:6%;right:6%;top:15px}
+  header .route .stop{padding:2px 0 6px;gap:2px;border-bottom-width:3px}
+  header .route .stop .dot{width:28px;height:28px;font-size:13px}
+  header .route .stop .lbl{font-size:12px}
+  header .route .stop .meta{display:block;font-size:11px;min-height:14px}
+  .head-row{min-height:50px;padding-bottom:2px}
+  .mobile-bottom{display:none!important}
+  body{padding-bottom:0}
+  main{padding-bottom:28px}
+  footer{padding-bottom:16px}
+  .toast{bottom:20px}
+  #fxWrap{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  .diag-bar{top:132px}
+  .context-back-bar{top:136px}
+}
 </style>
 <!-- v9.3 (2026-09-24): 95개 직무 자격증명 재검증(J15·J16·J54·J55·J56·J60·J61 오적용 수정), 신규 5개 기업 심화항목(실제직무·채용근거) 보강, 500개 대표기업 중 25곳(포스코·한국전력·KAI 등) 심화항목(채용근거·실제직무) 보강(잔여 181곳) | <!-- v9.2 (2026-09-24): 설명 보강 백로그 206곳(선정이유·주요사업 공통문구 교체), 산업당 9곳뿐이던 5개 산업군(F04·F06·F15·F23·F40)에 대표기업 1곳씩 추가(TSK코퍼레이션·한화임팩트·TYM·KCTC·토스뱅크)해 500곳→여전히 500곳(신규 5+누락분 조정), 중앙공공기관 342곳 유형별 집계 외부자료 재대조 및 15곳 표본 검증 | <!-- v9.1 (2026-09-24): 대표기업 500곳 웹 교차검증 반영(사명 변경·합병·매각·계열 변경·순위 표현·조직 유형·잘못된 채용 링크), 중복·소멸 기업 5곳 정리 | v9.0 (2026-09-24): 대학생 눈높이 용어 정비(가치사슬→산업 속 위치, 산출물→결과물, 포지션→직무명, 강한 일치→나와 비슷한 점 등), 조사 오류 수정(직무별 ‘산업별로 달라지는 점’ 90건·스케줄러), DB 내부 검수 문구 순화, 화면별 ‘용어 풀이’·앱 정보 ‘용어 사전’ 추가 | v8.9.1 (2026-09-24): 체감 평가 카드를 ‘산업 × 직무 조합 후보 TOP5’ 앞으로 이동 | v8.9 (2026-09-24): 동의 사용자 대상 ‘결과 체감 평가·개선 의견’ 카드(흥미·가치·준비도 판정, TOP3 직무·산업 후보별 체감 일치, 전체 일치·유용성, 빠진 직무, 개선 의견) → 운영기관 구글 시트(helper83) 전송, 개인정보 자동 가림 | v8.8 (2026-09-24): 흥미 기준값 확정(STRONG 직업코드표 562개 직업의 Holland 코드 0.7 + 직무정의 초안 0.3, 육각형 거리 등급화), 가치 기준값 보정(가이드 Part2 유형별 가치 + Part4 13개 가치 적합직업), 산업 기준값은 대표 직무 가중평균(TF-IDF), 준비도·적응력 3단계 구간(Part5) | v8.7 (2026-09-24): 흥미·가치 패턴 비교 채점, 전체 순위·점수차 안내, 근무 조건 주의 문구, 용어 통일(후보·근무 조건·KSA 태도), 군더더기 제거 | v8.6 (2026-09-24): 직무대영역 21개(건설·건축·부동산 / 환경·에너지·산업안전 분리), 이름 9개 쉬운 말, 카드 설명 자동 생성 | v8.5 (2026-09-24): 산업 생태계 10개로 재구성(제약·바이오·헬스케어 분리, 정보보안→IT), 생태계 이름·설명 쉬운 말로 | v8.4 (2026-09-24): '디지털 횡단산업'→'IT·소프트웨어·플랫폼', 생태계 카드에 포함 산업 표시 | v8.3 (2026-09-24): 쉬운 말 적용(준비 필요 배지·직무명 확인 ✔/△/?·준비도 지금→필요) | v8.2 (2026-09-24): 용어 통일·혼동 용어 정리·계획 문장/출발점 논리 보정 | v8.1 (2026-09-24): 스케줄러 분기(13주) 접기·펼치기 | v8.0 (2026-09-24): 준비기간 24개월(104주) 확장 | v7.9 (2026-09-24): ChatGPT 수정본 검토 병합(분류 표기·전송주소 고정·철회 안내) · J74 일괄치환 오류는 미반영 | v7.8 (2026-09-23): 진단 전 수집·이용 동의 게이트 · JOB-ALIO 공고 기반 공공기관 직무 연결(244곳)·사업내용 기반 추론(1,353곳) | v7.7: 정합성 점검판 · 관심목록 버튼 오류 수정 · 익명 응답 전송 사전동의제 · 분류 수(9대 산업영역/20대 직무영역) 정정 · 빈 필드 대체 표시 · 스케줄러 보정 -->
 
@@ -6858,7 +6879,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     ['change', '#industrySelect,#jobSelect,#publicSelect,#publicRegionSelect', 'sel', '고르면 아래에 상세가 열려요. 스크롤을 내려서 하는 일과 채용 직무를 확인해 보세요.'],
     ['change', '#planMonths,#planWeeklyHours,#planStartDate', 'term', '기간·주당 시간·시작일에 맞춰 주차별 로드맵이 만들어져요. 다 정했다면 “내 로드맵”으로!'],
     ['focusin', '#industrySearch,#jobSearch,#publicSearch,#majorInput', 'search', '이름 일부만 입력해도 찾아 줘요. 예: 반도체, 공정, 간호'],
-    ['click', '.stop[data-page]', 'tab', '아래 탭을 누르면 해당 단계로 이동해요. 순서는 정해져 있지 않아요. 궁금한 곳부터 가 보세요.']
+    ['click', '.stop[data-page]', 'tab', '위 탭을 누르면 해당 단계로 이동해요. 순서는 정해져 있지 않아요. 궁금한 곳부터 가 보세요.']
   ];
   var TOUR_S = null, HL = null;
   var W = null, B = null, BTN = null, MODAL = null, tipIdx = 0, hideT = null, showT = null, curPage = 'homePage:DISC', LAST_FOCUS = null, auto = false;
