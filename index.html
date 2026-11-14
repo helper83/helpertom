@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.172 (2026-11-14): 스크롤 시 헤더 축소 기능 제거(원래대로 고정 크기 유지, 이름-탭 간격은 유지) -->
 <!-- v12.171 (2026-11-14): F58 보람상조·교원라이프 공식·채용 URL 추가(잡코리아 채용 페이지) -->
 <!-- v12.170 (2026-11-14): 모바일 헤더 이름·탭 간격 확대, 아래로 스크롤하면 헤더가 탭 줄만 남도록 축소 -->
 <!-- v12.169 (2026-11-14): 모바일에서도 전체 분류 탭(홈·진단·학과·산업·직무·진로 결정)을 헬퍼탐 이름 바로 아래에 배치(하단 탭바 제거) -->
@@ -732,15 +733,8 @@ footer .btn{font-size:13px}
   header .route .stop .dot{width:28px;height:28px;font-size:13px}
   header .route .stop .lbl{font-size:12px}
   header .route .stop .meta{display:block;font-size:11px;min-height:14px}
-  .head-row{min-height:50px;padding-bottom:2px;max-height:80px;overflow:hidden;transition:max-height .2s ease,min-height .2s ease,padding .2s ease}
+  .head-row{min-height:50px;padding-bottom:2px}
   header .route{margin-top:8px}
-  header.hdr-min .head-row{max-height:0;min-height:0;padding-top:0;padding-bottom:0}
-  header.hdr-min .route{margin-top:2px}
-  header.hdr-min .route .stop .meta{display:none}
-  header.hdr-min .route .stop{padding-bottom:4px}
-  header.hdr-min .route ol::before{top:14px}
-  body.hdr-min .diag-bar{top:68px}
-  body.hdr-min .context-back-bar{top:72px}
   .mobile-bottom{display:none!important}
   body{padding-bottom:0}
   main{padding-bottom:28px}
@@ -7229,14 +7223,6 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   window.addEventListener('afterprint', function () { (PRE || []).forEach(function (a) { a[0].open = a[1]; }); PRE = null; });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
-</script>
-<script>
-/* v12.170: 모바일에서 아래로 스크롤하면 헤더를 탭 줄만 남기고 줄임(여유 구간을 둬 깜빡임 방지) */
-(function(){var h=document.getElementById('siteHeader'),mq=window.matchMedia('(max-width:640px)'),t=false;
- function upd(){t=false;if(!h)return;var y=window.pageYOffset||0;if(!mq.matches){h.classList.remove('hdr-min');document.body.classList.remove('hdr-min');return}
-  if(y>160){h.classList.add('hdr-min');document.body.classList.add('hdr-min')}else if(y<40){h.classList.remove('hdr-min');document.body.classList.remove('hdr-min')}}
- window.addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(upd)}},{passive:true});
- window.addEventListener('resize',upd);upd();})();
 </script>
 </body>
 </html>
