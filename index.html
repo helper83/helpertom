@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.175 (2026-11-14): 찜 알림 문구를 산업(이름)·직무(이름)·공공기관(이름) 괄호 형식으로 통일 -->
 <!-- v12.174 (2026-11-14): 오늘의 기사 제목을 산업(철강)·직무(HRD)·공공기관(기관명) 괄호 형식으로 통일 -->
 <!-- v12.173 (2026-11-14): 학과 탭 — 서울대·중앙대 학과명 23종을 앱 분류의 별칭으로 추가(출처 1건, 확인 필요) -->
 <!-- v12.172 (2026-11-14): 스크롤 시 헤더 축소 기능 제거(원래대로 고정 크기 유지, 이름-탭 간격은 유지) -->
@@ -1985,14 +1986,14 @@ function toggleInterest(btn) {
   const idx = list.findIndex(function (x) { return x.id === id; });
   if (idx >= 0) {
     list.splice(idx, 1);
-    toast(TYPE_LABEL[type] + ' 관심목록에서 뺐습니다');
+    toast(TYPE_LABEL[type] + '(' + name + ') 관심목록에서 뺐습니다');
   } else {
     if (list.length >= MAX_INTEREST) {
       toast('관심 ' + josa(TYPE_LABEL[type], '은') + ' 최대 ' + MAX_INTEREST + '개까지 찜할 수 있습니다. 관심목록에서 하나를 빼 주세요');
       return;
     }
     list.push({ id: id, name: name });
-    toast(TYPE_LABEL[type] + ' 관심목록에 담았습니다 (' + list.length + '/' + MAX_INTEREST + ')');
+    toast(TYPE_LABEL[type] + '(' + name + ') 관심목록에 담았습니다 (' + list.length + '/' + MAX_INTEREST + ')');
   }
   saveInterests();
 }
