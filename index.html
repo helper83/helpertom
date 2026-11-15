@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.204 (2026-11-16): 앱 품질 점검 반영 — 초기화 버튼이 새 기사 알림 구독(기기·서버)도 함께 삭제, 알림 저장 키를 visionhr_push_*_v1로 통일, sw.js v99 -->
 <!-- v12.203 (2026-11-16): 푸시 서버 주소 연결(helpertom-push.helper83.workers.dev), 시험 기간에는 주소 끝에 ?push=1 로 연 기기에서만 알림 버튼 표시(PUSH_BETA), sw.js v98 -->
 <!-- v12.202 (2026-11-16): 새 기사 푸시 알림(시험판) — 매일 12:30 KST 하루 최대 1회·무음 알림 1건. 홈 "오늘의 기사" 아래 알림 켜기/끄기 버튼(서버 주소 PUSH_API가 비어 있으면 숨김), sw.js v97 push·notificationclick, tools/push(워커·발송), .github/workflows/news-push.yml -->
 <!-- v12.201 (2026-11-16): 새 기사가 뜨면 앱 아이콘에 빨간 숫자 배지 표시(소리·알림 없음) — 홈에 기사를 보여 주면 배지 해제, 앱을 닫은 동안은 서비스워커 periodicsync로 갱신(안드로이드 설치형), sw.js v96 -->
@@ -4129,10 +4130,10 @@ document.addEventListener('visibilitychange', function () {
 try { if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(function (reg) { if (reg.periodicSync) reg.periodicSync.register('helpertom-news', { minInterval: 6 * 3600 * 1000 }).catch(function () { }); }); } catch (e) { }
 /* v12.202 새 기사 푸시 알림(시험판): 매일 12:30(KST) 하루 최대 1회, 소리 없는 알림 1건. 서버 주소·공개키가 비어 있으면 버튼을 숨김 */
 const PUSH_API = 'https://helpertom-push.helper83.workers.dev', PUSH_BETA = true, PUSH_VAPID = 'BIoV0E_XKxFc8DChXGSPdFuAK-l69t1rtC_LqSUJUySVyPb1bMON3-pnCo8D7w8sSlpkIm3u-G04acG8NEBVFf4';
-const PUSH_SYNC_KEY = 'ht_push_sync';
+const PUSH_SYNC_KEY = 'visionhr_push_sync_v1';
 function pushBetaOn() { /* 시험 기간(PUSH_BETA=true): 주소 끝에 ?push=1 을 붙여 한 번 열면 그 기기에서만 버튼이 보임. 정식 공개 때 PUSH_BETA를 false로 */
   if (!PUSH_BETA) return true;
-  try { if (/[?&]push=1(&|$)/.test(location.search)) localStorage.setItem('ht_push_beta', '1'); return localStorage.getItem('ht_push_beta') === '1'; } catch (e) { return false; }
+  try { if (/[?&]push=1(&|$)/.test(location.search)) localStorage.setItem('visionhr_push_beta_v1', '1'); return localStorage.getItem('visionhr_push_beta_v1') === '1'; } catch (e) { return false; }
 }
 function pushSupported() { return !!(PUSH_API && PUSH_VAPID && pushBetaOn() && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window); }
 function pushMeta() {
@@ -4151,6 +4152,16 @@ function pushSync(sub, force) { /* 찜한 항목이 바뀌었거나 하루가 �
   let old = {}; try { old = JSON.parse(localStorage.getItem(PUSH_SYNC_KEY) || '{}'); } catch (e) { }
   if (!force && old.sig === sig && now - (old.t || 0) < 24 * 3600e3) return Promise.resolve();
   return pushPost('/subscribe', { sub: sub.toJSON(), m: m }).then(function () { try { localStorage.setItem(PUSH_SYNC_KEY, JSON.stringify({ sig: sig, t: now })); } catch (e) { } });
+}
+function pushUnsubscribeSilently() { /* 초기화 때: 서버·기기 구독 삭제(실패·지연해도 1.5초 뒤 계속 진행) */
+  return new Promise(function (res) {
+    if (!pushSupported()) { res(); return; }
+    const t = setTimeout(res, 1500);
+    navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+      if (!sub) return;
+      return pushPost('/unsubscribe', { endpoint: sub.endpoint }).catch(function () { }).then(function () { return sub.unsubscribe(); });
+    }).catch(function () { }).then(function () { clearTimeout(t); res(); });
+  });
 }
 function pushToggle() {
   navigator.serviceWorker.ready.then(function (reg) {
@@ -4709,14 +4720,15 @@ function printPlan() {
   window.print();
 }
 function resetAllAppData() {
-  if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 오늘의 발견 기록(퍼즐·퀴즈·게임), 꾸미기 설정(요정·색상·글꼴)을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
+  if (!window.confirm('이 기기의 관심목록, 진단 응답·결과·검증기록, 진로 결정·로드맵·스케줄러 체크, 오늘의 발견 기록(퍼즐·퀴즈·게임), 꾸미기 설정(요정·색상·글꼴), 새 기사 알림 구독을 모두 지울까요? 되돌릴 수 없습니다.\n※ 동의 후 이미 전송된 익명 기록은 이 버튼으로 삭제되지 않습니다.')) return;
   [KEYS.interests, KEYS.answers, KEYS.result, KEYS.plan, KEYS.guide, KEYS.major, 'visionhr_diagnosis_result_v1','visionhr_diagnosis_result_v2','visionhr_diag_answers_v1', KEYS.schedule,
     PLAN_CHECK_KEY, SCHED_OPEN_KEY, 'visionhr_sched_days_v1', VALIDATION_KEY, CLOUD_CONFIG.queueKey,
     'visionhr_disc_v1', 'visionhr_disc_log_v1', 'visionhr_disc_book_v1', 'visionhr_disc_quiz_v1', 'visionhr_disc_puzzle_v1', 'visionhr_disc_game_v1', 'visionhr_disc_chal_v1', 'visionhr_home_seen_v1', 'visionhr_look_v1', 'visionhr_fairy_v1'].forEach(function (k) { LS.del(k); });
   /* FIX-001(v12.146): 수업 나눔 닉네임·목표 이유·제출 시각, 민간/공공 선택도 함께 삭제 (이 앱 키만) */
   ['visionhr_share_nick_v1', 'visionhr_share_goal_at_v1', 'visionhr_indkind_v1'].forEach(function (k) { LS.del(k); });
   try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('visionhr_share_goal_why_v1_') === 0) LS.del(k); }); } catch (e) { }
-  window.location.reload();
+  try { LS.del(PUSH_SYNC_KEY); } catch (e) { }
+  pushUnsubscribeSilently().then(function () { window.location.reload(); }); /* FIX-AS-09(v12.204): 알림 구독도 이 기기·알림 서버에서 함께 삭제 */
 }
 
 /* ---------- 시작 ---------- */
