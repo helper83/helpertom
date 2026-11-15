@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.202 (2026-11-16): 새 기사 푸시 알림(시험판) — 매일 12:30 KST 하루 최대 1회·무음 알림 1건. 홈 "오늘의 기사" 아래 알림 켜기/끄기 버튼(서버 주소 PUSH_API가 비어 있으면 숨김), sw.js v97 push·notificationclick, tools/push(워커·발송), .github/workflows/news-push.yml -->
 <!-- v12.201 (2026-11-16): 새 기사가 뜨면 앱 아이콘에 빨간 숫자 배지 표시(소리·알림 없음) — 홈에 기사를 보여 주면 배지 해제, 앱을 닫은 동안은 서비스워커 periodicsync로 갱신(안드로이드 설치형), sw.js v96 -->
 <!-- v12.200 (2026-11-15): 산업 출처 정비 — F24 대한항공 공식 실적 추가, F52 KTL 공식 공고 게시판 추가, F51 통계분류포털 주소(http) 정정(코드·로직 변경 없음) -->
 <!-- v12.199 (2026-11-15): 산업 출처 정비 — 서버 오류 언론 링크(세계일보·KED Global) 교체(F14 산업통상부·F27 농식품부), F20 제거, F24·F52 대체 기사, F45 삼일PwC 채용 페이지·F01 아랍뉴스 주소 정리(코드·로직 변경 없음) -->
@@ -476,6 +477,10 @@ details.more>.in{padding:0 14px 14px}
 .news-m{display:block;font-size:12px;color:var(--ink2);margin-top:2px}
 .news-h{margin:10px 14px 0;font-size:14px}
 .news-note{margin:0;padding:10px 14px;font-size:12px;color:var(--ink2);line-height:1.5}
+.push-box{margin-top:10px;border:1.5px solid var(--line);border-radius:var(--r-md);background:#fff;padding:12px 14px}
+.push-box .push-t{font-size:15px;font-weight:600;margin:0 0 4px}
+.push-box .push-btn{width:100%;min-height:44px;margin-top:8px;font-size:15px;font-weight:700}
+.push-box .news-note{padding:0}
 .goal-box{margin-top:10px;padding:12px 14px;border-radius:var(--r-md);background:var(--tint);font-size:14px}
 .edge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700}
 .edge.e3{background:var(--ok-tint);color:var(--ok)}
@@ -1304,6 +1309,7 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
     <div class="hlist no-print" id="discList" role="list"></div>
     <span id="discSec" hidden></span>
     <div id="homeNews" class="no-print"></div>
+    <div id="homePush" class="no-print"></div>
     </div>
     <div class="hp" id="hp-LOOK" data-hp="LOOK" hidden>
     <div class="hsec no-print">내 취향</div>
@@ -4120,6 +4126,56 @@ document.addEventListener('visibilitychange', function () {
   if (document.visibilityState === 'visible') { NEWS_P = null; NEWSX_P = null; try { renderHomeNews(); } catch (e) { } }
 });
 try { if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(function (reg) { if (reg.periodicSync) reg.periodicSync.register('helpertom-news', { minInterval: 6 * 3600 * 1000 }).catch(function () { }); }); } catch (e) { }
+/* v12.202 새 기사 푸시 알림(시험판): 매일 12:30(KST) 하루 최대 1회, 소리 없는 알림 1건. 서버 주소·공개키가 비어 있으면 버튼을 숨김 */
+const PUSH_API = '', PUSH_VAPID = 'BIoV0E_XKxFc8DChXGSPdFuAK-l69t1rtC_LqSUJUySVyPb1bMON3-pnCo8D7w8sSlpkIm3u-G04acG8NEBVFf4';
+const PUSH_SYNC_KEY = 'ht_push_sync';
+function pushSupported() { return !!(PUSH_API && PUSH_VAPID && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window); }
+function pushMeta() {
+  const g = $('planIndustrySelect') ? $('planIndustrySelect').value : '';
+  return { ind: newsLikedCodes('IND', 3), job: newsLikedCodes('JOB', 3), pub: newsLikedCodes('PUB', 3), goal: g && INDUSTRY_BY[g] ? g : '' };
+}
+function pushKey(b64) {
+  const pad = '='.repeat((4 - b64.length % 4) % 4), raw = atob((b64 + pad).replace(/-/g, '+').replace(/_/g, '/'));
+  return Uint8Array.from(raw, function (c) { return c.charCodeAt(0); });
+}
+function pushPost(path, body) {
+  return fetch(PUSH_API.replace(/\/+$/, '') + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(function (r) { if (!r.ok) throw new Error(path + r.status); return r.json(); });
+}
+function pushSync(sub, force) { /* 찜한 항목이 바뀌었거나 하루가 지나면 서버의 구독 정보를 갱신 */
+  const m = pushMeta(), sig = JSON.stringify(m), now = Date.now();
+  let old = {}; try { old = JSON.parse(localStorage.getItem(PUSH_SYNC_KEY) || '{}'); } catch (e) { }
+  if (!force && old.sig === sig && now - (old.t || 0) < 24 * 3600e3) return Promise.resolve();
+  return pushPost('/subscribe', { sub: sub.toJSON(), m: m }).then(function () { try { localStorage.setItem(PUSH_SYNC_KEY, JSON.stringify({ sig: sig, t: now })); } catch (e) { } });
+}
+function pushToggle() {
+  navigator.serviceWorker.ready.then(function (reg) {
+    return reg.pushManager.getSubscription().then(function (sub) {
+      if (sub) { /* 끄기: 서버 삭제 → 기기 구독 해제 */
+        return pushPost('/unsubscribe', { endpoint: sub.endpoint }).catch(function () { }).then(function () { return sub.unsubscribe(); }).then(function () { try { localStorage.removeItem(PUSH_SYNC_KEY); } catch (e) { } toast('알림을 껐어요'); });
+      }
+      return Notification.requestPermission().then(function (perm) {
+        if (perm !== 'granted') { toast('알림이 허용되지 않았어요'); return; }
+        return reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: pushKey(PUSH_VAPID) }).then(function (ns) {
+          return pushSync(ns, true).then(function () { toast('알림을 켰어요 · 매일 12:30'); }, function (e) { return ns.unsubscribe().then(function () { toast('알림 서버에 연결하지 못했어요. 잠시 뒤 다시 시도해 주세요'); }); });
+        });
+      });
+    });
+  }).catch(function () { toast('알림을 설정하지 못했어요'); }).then(renderPushBox);
+}
+function renderPushBox() {
+  const box = $('homePush'); if (!box) return;
+  if (!pushSupported()) { box.innerHTML = ''; return; }
+  navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+    const denied = Notification.permission === 'denied';
+    box.innerHTML = '<div class="push-box"><p class="push-t">🔔 새 기사 알림</p>' +
+      '<p class="news-note">매일 낮 12시 30분(한국시간)에 새 기사가 있을 때만, 하루 최대 1번 소리 없이 알려 드려요. 알림이 소리가 나면 폰의 앱 알림 설정에서 ‘무음’으로 바꿔 주세요.</p>' +
+      '<p class="news-note" style="margin-top:4px">켜면 이 기기의 알림 주소와 찜한 산업·직무 코드가 알림 서버에 저장되고, 끄면 삭제돼요. 이름·연락처는 저장하지 않아요.</p>' +
+      (denied ? '<p class="news-note" style="margin-top:6px"><b>브라우저에서 알림이 차단돼 있어요.</b> 사이트 설정에서 알림을 허용한 뒤 다시 눌러 주세요.</p>' : '') +
+      '<button type="button" class="btn push-btn ' + (sub ? '' : 'primary') + '" id="pushBtn"' + (denied ? ' disabled' : '') + '>' + (sub ? '알림 끄기' : '새 기사 알림 받기') + '</button></div>';
+    const b = $('pushBtn'); if (b) b.onclick = pushToggle;
+    if (sub && !denied) pushSync(sub, false).catch(function () { });
+  }).catch(function () { box.innerHTML = ''; });
+}
 /* v12.164 홈 탭의 오늘의 기사: 찜한 산업·직무·공공기관(각 최대 3개) 기사 2건씩. 찜이 없으면 목표 산업 → 기사 많은 산업 */
 function renderHomeNews() {
   const box = $('homeNews'); if (!box) return;
@@ -4140,6 +4196,7 @@ function renderHomeNews() {
     const foot = has ? newsFootHtml(d).replace('</p>', (basis ? ' · ' + esc(basis) + ' 기준' : '') + '</p>') : '';
     box.innerHTML = '<div class="hsec">오늘의 기사</div><details class="news-fold" open><summary>📰 ' + (basis ? esc(basis) + ' 기사' : '오늘의 기사') + '</summary>' + body + foot + '</details>';
     /* v12.201 홈에 기사를 보여 주는 순간 '본 것'으로 처리하고 아이콘 배지를 지움 */
+    try { renderPushBox(); } catch (e) { }
     try { if (has && document.visibilityState === 'visible') { const g = $('planIndustrySelect') ? $('planIndustrySelect').value : ''; newsBadgeMarkSeen(r, ci, cj, cp, g && INDUSTRY_BY[g] ? g : ''); } } catch (e) { }
   });
 }

@@ -1,0 +1,7 @@
+# (선택) 명령줄로 배포할 때만 사용. 대시보드에서 붙여넣기로 만들었다면 필요 없음.
+name = "helpertom-push"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+[[kv_namespaces]]
+binding = "SUBS"
+id = "여기에_KV_네임스페이스_ID"

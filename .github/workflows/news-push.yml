@@ -1,0 +1,33 @@
+name: 새 기사 푸시 알림
+on:
+  schedule:
+    - cron: '30 3 * * *'   # 매일 12:30 KST (UTC 03:30). GitHub 사정으로 몇 분 늦을 수 있음
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '같은 날 재발송 허용(시험용)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: news-push
+  cancel-in-progress: false
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: 발송 도구 설치
+        working-directory: tools/push
+        run: npm install --no-audit --no-fund
+      - name: 알림 발송(하루 최대 1회, 무음)
+        working-directory: tools/push
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          ADMIN_TOKEN: ${{ secrets.PUSH_ADMIN_TOKEN }}
+          FORCE: ${{ inputs.force && '1' || '0' }}
+        run: node send_push.mjs

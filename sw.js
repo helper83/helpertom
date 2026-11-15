@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-v96';
+const CACHE = 'helpertom-v97';
 const META = 'helpertom-meta', META_URL = './__news-meta'; // v12.201: 새 기사 배지용 기록(앱이 저장, 활성화 때 지우지 않음)
 const FILES = [
   './',
@@ -6,6 +6,7 @@ const FILES = [
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/badge-96.png',
   './icons/icon-maskable-512.png'
 ];
 
@@ -93,3 +94,23 @@ async function checkNewsBadge() {
     else if (self.navigator && navigator.clearAppBadge) await navigator.clearAppBadge();
   } catch (_) {}
 }
+
+// v12.202: 새 기사 푸시 알림(매일 12:30 KST, 하루 최대 1회). 소리·진동 없는 알림 1건 + 아이콘 배지 숫자
+self.addEventListener('push', e => {
+  let p = {};
+  try { p = e.data ? e.data.json() : {}; } catch (_) {}
+  const jobs = [self.registration.showNotification(p.title || '헬퍼탐 · 새 기사', {
+    body: p.body || '', icon: './icons/icon-192.png', badge: './icons/badge-96.png',
+    tag: 'helpertom-news', silent: true, data: { url: p.url || './' }
+  })];
+  if (p.n > 0 && self.navigator && navigator.setAppBadge) jobs.push(navigator.setAppBadge(p.n).catch(() => {}));
+  e.waitUntil(Promise.all(jobs));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || './', self.registration.scope).href;
+  e.waitUntil(clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    for (const c of list) { if (c.url.indexOf(self.registration.scope) === 0 && 'focus' in c) return c.focus(); }
+    return clients.openWindow(url);
+  }));
+});
