@@ -1,4 +1,5 @@
-const CACHE = 'helpertom-v95';
+const CACHE = 'helpertom-v96';
+const META = 'helpertom-meta', META_URL = './__news-meta'; // v12.201: 새 기사 배지용 기록(앱이 저장, 활성화 때 지우지 않음)
 const FILES = [
   './',
   './index.html',
@@ -32,7 +33,7 @@ self.addEventListener('message', e => { if (e.data === 'precache-shards') e.wait
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      Promise.all(keys.filter(k => k !== CACHE && k !== META).map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
@@ -73,3 +74,22 @@ self.addEventListener('fetch', e => {
     caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
+
+// v12.201: 앱이 닫혀 있는 동안 새 기사 수를 세어 앱 아이콘 배지만 갱신(알림·소리 없음). 안드로이드 설치형 앱의 periodicsync 지원 시에만 동작
+self.addEventListener('periodicsync', e => { if (e.tag === 'helpertom-news') e.waitUntil(checkNewsBadge()); });
+async function checkNewsBadge() {
+  try {
+    const mr = await (await caches.open(META)).match(META_URL);
+    if (!mr) return;
+    const meta = await mr.json(), m = meta.m || {}, seen = new Set(meta.seen || []);
+    const [d, x] = await Promise.all(['data/news/latest.json', 'data/news/extra.json'].map(u => fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null)));
+    if (!d && !x) return;
+    const out = new Set();
+    const add = (src, codes) => (codes || []).forEach(c => ((src || {})[c] || []).slice(0, 2).forEach(a => { if (a && a.u) out.add(a.u); }));
+    add(d && d.items, m.ind); add(x && x.jobs, m.job); add(x && x.pub, m.pub);
+    if (!(m.ind || []).length && !(m.job || []).length && !(m.pub || []).length && m.goal) add(d && d.items, [m.goal]);
+    const n = [...out].filter(u => !seen.has(u)).length;
+    if (n > 0) { if (self.navigator && navigator.setAppBadge) await navigator.setAppBadge(n); }
+    else if (self.navigator && navigator.clearAppBadge) await navigator.clearAppBadge();
+  } catch (_) {}
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- v12.128 (2026-11-13): 게임 추가 — 직무 밸런스 게임(5문항·칭호 4종)·업무 짝짓기(직무 4↔신입 첫 업무 4, 실제 직무 데이터 사용), 게임당 하루 1판 퍼즐 조각 +1, 배지 2개 추가. v12.129 홈 바로가기: 오늘의 발견·오늘의 실행·활용 방법·내 취향 버튼(산업 탭의 민간기업/공공기관 방식). -->
+<!-- v12.201 (2026-11-16): 새 기사가 뜨면 앱 아이콘에 빨간 숫자 배지 표시(소리·알림 없음) — 홈에 기사를 보여 주면 배지 해제, 앱을 닫은 동안은 서비스워커 periodicsync로 갱신(안드로이드 설치형), sw.js v96 -->
 <!-- v12.200 (2026-11-15): 산업 출처 정비 — F24 대한항공 공식 실적 추가, F52 KTL 공식 공고 게시판 추가, F51 통계분류포털 주소(http) 정정(코드·로직 변경 없음) -->
 <!-- v12.199 (2026-11-15): 산업 출처 정비 — 서버 오류 언론 링크(세계일보·KED Global) 교체(F14 산업통상부·F27 농식품부), F20 제거, F24·F52 대체 기사, F45 삼일PwC 채용 페이지·F01 아랍뉴스 주소 정리(코드·로직 변경 없음) -->
 <!-- v12.198 (2026-11-15): 산업 F35·F39·F43·F44·F47 — 링크 점검(477건 중 474 정상)에서 발견된 출처 오입력(title/url 문자열) 제거(코드·로직 변경 없음) -->
@@ -4097,6 +4098,28 @@ function renderLikedNews() {
     box.innerHTML = '<details class="news-fold"><summary>📰 찜한 항목 기사 (항목당 2건)</summary>' + (r.d && r.d.generated ? rows + newsFootHtml(r.d) : '<p class="news-note">기사 목록을 아직 불러오지 못했어요.</p>') + '</details>';
   });
 }
+/* v12.201 새 기사 → 앱 아이콘 배지(숫자만, 소리·알림 없음). 앱을 닫은 동안은 서비스워커(periodicsync)가 같은 규칙으로 새 기사 수를 계산해 배지를 올림(안드로이드 설치형 앱 기준) */
+const NEWS_META_CACHE = 'helpertom-meta', NEWS_META_URL = './__news-meta';
+function newsBadgeUrls(d, x, m) {
+  const out = [];
+  const add = function (src, codes) { (codes || []).forEach(function (c) { ((src || {})[c] || []).slice(0, 2).forEach(function (a) { if (a && a.u) out.push(a.u); }); }); };
+  add(d && d.items, m.ind); add(x && x.jobs, m.job); add(x && x.pub, m.pub);
+  if (!(m.ind || []).length && !(m.job || []).length && !(m.pub || []).length && m.goal) add(d && d.items, [m.goal]);
+  return Array.from(new Set(out));
+}
+function setAppBadgeN(n) {
+  try { if (n > 0) { if (navigator.setAppBadge) navigator.setAppBadge(n); } else if (navigator.clearAppBadge) navigator.clearAppBadge(); else if (navigator.setAppBadge) navigator.setAppBadge(0); } catch (e) { }
+}
+function newsBadgeMarkSeen(r, ci, cj, cp, goal) {
+  const m = { ind: ci, job: cj, pub: cp, goal: goal || '' };
+  setAppBadgeN(0);
+  if (!window.caches) return;
+  caches.open(NEWS_META_CACHE).then(function (c) { return c.put(NEWS_META_URL, new Response(JSON.stringify({ m: m, seen: newsBadgeUrls(r.d, r.x, m), t: Date.now() }), { headers: { 'Content-Type': 'application/json' } })); }).catch(function () { });
+}
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'visible') { NEWS_P = null; NEWSX_P = null; try { renderHomeNews(); } catch (e) { } }
+});
+try { if ('serviceWorker' in navigator) navigator.serviceWorker.ready.then(function (reg) { if (reg.periodicSync) reg.periodicSync.register('helpertom-news', { minInterval: 6 * 3600 * 1000 }).catch(function () { }); }); } catch (e) { }
 /* v12.164 홈 탭의 오늘의 기사: 찜한 산업·직무·공공기관(각 최대 3개) 기사 2건씩. 찜이 없으면 목표 산업 → 기사 많은 산업 */
 function renderHomeNews() {
   const box = $('homeNews'); if (!box) return;
@@ -4116,6 +4139,8 @@ function renderHomeNews() {
     const body = !has ? '<p class="news-note">기사 목록을 아직 불러오지 못했어요. 매일 오전 6시(한국시간) 이후 갱신돼요.</p>' : (rows || '<p class="news-note">오늘 수집된 기사가 아직 없어요.</p>');
     const foot = has ? newsFootHtml(d).replace('</p>', (basis ? ' · ' + esc(basis) + ' 기준' : '') + '</p>') : '';
     box.innerHTML = '<div class="hsec">오늘의 기사</div><details class="news-fold" open><summary>📰 ' + (basis ? esc(basis) + ' 기사' : '오늘의 기사') + '</summary>' + body + foot + '</details>';
+    /* v12.201 홈에 기사를 보여 주는 순간 '본 것'으로 처리하고 아이콘 배지를 지움 */
+    try { if (has && document.visibilityState === 'visible') { const g = $('planIndustrySelect') ? $('planIndustrySelect').value : ''; newsBadgeMarkSeen(r, ci, cj, cp, g && INDUSTRY_BY[g] ? g : ''); } } catch (e) { }
   });
 }
 window.__HT_NEWS = { all: newsAll, group: newsGroupHtml, foot: newsFootHtml, liked: newsLikedCodes };
