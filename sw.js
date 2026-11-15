@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-v97';
+const CACHE = 'helpertom-v98';
 const META = 'helpertom-meta', META_URL = './__news-meta'; // v12.201: 새 기사 배지용 기록(앱이 저장, 활성화 때 지우지 않음)
 const FILES = [
   './',
