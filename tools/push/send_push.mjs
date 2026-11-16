@@ -18,7 +18,9 @@ const kstToday = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 const read = f => { try { return JSON.parse(fs.readFileSync(root + f, 'utf8')); } catch (e) { return null; } };
 const d = read('data/news/latest.json'), x = read('data/news/extra.json');
 if (!d || !d.generated) { console.log('기사 파일이 없어 건너뜁니다.'); process.exit(0); }
-if (!FORCE && String(d.generated).slice(0, 10) !== kstToday) { console.log('오늘 갱신된 기사가 없어 건너뜁니다. (생성: ' + d.generated + ')'); process.exit(0); }
+const kstYesterday = new Date(Date.now() + 9 * 3600e3 - 86400e3).toISOString().slice(0, 10);
+/* 수집이 늦어 어제 저녁에야 끝난 기사도 다음 날 12:30에 합쳐서 보낸다(이미 알린 기사는 아래에서 걸러짐). 이틀 이상 묵은 기사는 보내지 않는다. */
+if (!FORCE && String(d.generated).slice(0, 10) < kstYesterday) { console.log('최근 이틀 안에 갱신된 기사가 없어 건너뜁니다. (생성: ' + d.generated + ')'); process.exit(0); }
 
 const h8 = u => crypto.createHash('sha1').update(u).digest('hex').slice(0, 8);
 // 앱의 새 기사 배지와 같은 규칙: 찜한 산업·직무·기관별 기사 2건(최대 3개씩), 찜이 없으면 목표 산업
@@ -56,4 +58,5 @@ do {
   if (!DRY && (puts.length || dels.length)) await api('/admin/apply', { method: 'POST', body: JSON.stringify({ puts, dels }) });
   cursor = page.done ? '' : page.cursor;
 } while (cursor);
+if (!DRY) await api('/admin/apply', { method: 'POST', body: JSON.stringify({ puts: [], dels: [], count: total - removed }) }); // 구독 수 카운터를 실제 값으로 보정
 console.log('구독 ' + total + '건 · 발송 ' + sent + ' · 건너뜀 ' + skipped + ' · 만료 삭제 ' + removed + ' · 실패 ' + failed + (DRY ? ' (DRY_RUN)' : ''));
