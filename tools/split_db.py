@@ -3,7 +3,7 @@
 
 index.html 안의 EMBEDDED_DB(한 줄 JSON)를 '가벼운 인라인 DB + 지연 로딩 shard'로 나눈다.
 
-  python3 tools/split_db.py split --db full_db.json --html index.html --out . --ver v12.124
+  python3 tools/split_db.py split --db full_db.json --html index.html --out . --ver v12.229
   python3 tools/split_db.py merge --html index.html --out full_db.json   # 인라인 + shard → 원본 DB 복원
 
 분리 규칙
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     ap.add_argument('--db')
     ap.add_argument('--html', default='index.html')
     ap.add_argument('--out', default='.')
-    ap.add_argument('--ver', default='v12.124')
+    ap.add_argument('--ver', default='v12.229')
     a = ap.parse_args()
     if a.cmd == 'split':
         db = json.load(open(a.db, encoding='utf-8'))
