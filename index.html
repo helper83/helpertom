@@ -41,6 +41,7 @@
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
+<!-- v12.222 (2026-11-18): 직무 상세에 'AI 시대 업무 지도'(시범 10개 직무: 회계·세무, 소프트웨어개발, 마케팅·브랜드, 인사, 고객서비스, 간호, 법무, 데이터분석, 통번역, 상담·진로) — 주요·신입 업무를 AI 맡김/함께/지시·책임으로 구분, data/ai/roles.js 지연 로딩, sw.js v117 -->
 <!-- v12.221 (2026-11-17): 앱 품질 점검 수정 — 주차 완료 체크·완료 기준 체크·진로 자료 링크 터치 영역 44px 보정, sw.js v116 -->
 <!-- v12.220 (2026-11-17): 진로 결정 로드맵에 '중·고등학생 진로 자료' 섹션 추가 — 커리어넷 메뉴 11개(직업 이해·진로 체험·학과·학교 선택·진학 준비 단계별) + 자료 4종(한국직업능력개발원 2020·2001, 서울시교육청 2026·2025) 요약·쪽수·최신성 경고, 중/고 단계별 필터, sw.js v115 -->
 <!-- v12.219 (2026-11-17): 진로 결정 학년·단계 5단계(중학생·고등학생·대학생(저학년/고학년)·졸업생) 세분화 — 단계 체크포인트 복원, 중·고생 로드맵(진로 체험·학과 선택·진학 준비)·스케줄러·완료 기준 분기, 졸업생 경력 전환·재취업 트랙, 진단 '참고용' 표시, 안내·설문 문구, sw.js v114 -->
@@ -800,6 +801,12 @@ footer .btn{font-size:13px}
 /* v12.221 QA: 터치 영역 44px 보정 (주차 완료 체크·완료 기준·진로 자료 링크) */
 .week-check{min-height:44px;padding:0 6px}.check label{min-height:44px;align-items:center;padding:8px 0}.check input{margin-top:0}
 .school-res a{display:inline-block;padding:11px 0;margin:-11px 0}.school-res li{min-height:44px;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px}
+/* v12.222 AI 시대 업무 지도 */
+.ai-role .ai-rows{display:grid;gap:6px;margin-top:6px;font-size:13px}.ai-rows>div{display:flex;gap:8px;align-items:flex-start}
+.zc{flex:none;width:62px;text-align:center;padding:2px 0;border-radius:6px;font-size:12px;line-height:1.5}
+.zA{background:#E3F0FB;color:#145A92}.zB{background:#FFF1D6;color:#7A4F00}.zC{background:#DFF3E6;color:#1E6B3F}
+.ai-bar{display:flex;height:24px;border-radius:6px;overflow:hidden;font-size:12px;line-height:24px;text-align:center}
+@media print{.ai-role>summary{display:none}}
 </style>
 <!-- v9.3 (2026-09-24): 95개 직무 자격증명 재검증(J15·J16·J54·J55·J56·J60·J61 오적용 수정), 신규 5개 기업 심화항목(실제직무·채용근거) 보강, 500개 대표기업 중 25곳(포스코·한국전력·KAI 등) 심화항목(채용근거·실제직무) 보강(잔여 181곳) | <!-- v9.2 (2026-09-24): 설명 보강 백로그 206곳(선정이유·주요사업 공통문구 교체), 산업당 9곳뿐이던 5개 산업군(F04·F06·F15·F23·F40)에 대표기업 1곳씩 추가(TSK코퍼레이션·한화임팩트·TYM·KCTC·토스뱅크)해 500곳→여전히 500곳(신규 5+누락분 조정), 중앙공공기관 342곳 유형별 집계 외부자료 재대조 및 15곳 표본 검증 | <!-- v9.1 (2026-09-24): 대표기업 500곳 웹 교차검증 반영(사명 변경·합병·매각·계열 변경·순위 표현·조직 유형·잘못된 채용 링크), 중복·소멸 기업 5곳 정리 | v9.0 (2026-09-24): 대학생 눈높이 용어 정비(가치사슬→산업 속 위치, 산출물→결과물, 포지션→직무명, 강한 일치→나와 비슷한 점 등), 조사 오류 수정(직무별 ‘산업별로 달라지는 점’ 90건·스케줄러), DB 내부 검수 문구 순화, 화면별 ‘용어 풀이’·앱 정보 ‘용어 사전’ 추가 | v8.9.1 (2026-09-24): 체감 평가 카드를 ‘산업 × 직무 조합 후보 TOP5’ 앞으로 이동 | v8.9 (2026-09-24): 동의 사용자 대상 ‘결과 체감 평가·개선 의견’ 카드(흥미·가치·준비도 판정, TOP3 직무·산업 후보별 체감 일치, 전체 일치·유용성, 빠진 직무, 개선 의견) → 운영기관 구글 시트(helper83) 전송, 개인정보 자동 가림 | v8.8 (2026-09-24): 흥미 기준값 확정(STRONG 직업코드표 562개 직업의 Holland 코드 0.7 + 직무정의 초안 0.3, 육각형 거리 등급화), 가치 기준값 보정(가이드 Part2 유형별 가치 + Part4 13개 가치 적합직업), 산업 기준값은 대표 직무 가중평균(TF-IDF), 준비도·적응력 3단계 구간(Part5) | v8.7 (2026-09-24): 흥미·가치 패턴 비교 채점, 전체 순위·점수차 안내, 근무 조건 주의 문구, 용어 통일(후보·근무 조건·KSA 태도), 군더더기 제거 | v8.6 (2026-09-24): 직무대영역 21개(건설·건축·부동산 / 환경·에너지·산업안전 분리), 이름 9개 쉬운 말, 카드 설명 자동 생성 | v8.5 (2026-09-24): 산업 생태계 10개로 재구성(제약·바이오·헬스케어 분리, 정보보안→IT), 생태계 이름·설명 쉬운 말로 | v8.4 (2026-09-24): '디지털 횡단산업'→'IT·소프트웨어·플랫폼', 생태계 카드에 포함 산업 표시 | v8.3 (2026-09-24): 쉬운 말 적용(준비 필요 배지·직무명 확인 ✔/△/?·준비도 지금→필요) | v8.2 (2026-09-24): 용어 통일·혼동 용어 정리·계획 문장/출발점 논리 보정 | v8.1 (2026-09-24): 스케줄러 분기(13주) 접기·펼치기 | v8.0 (2026-09-24): 준비기간 24개월(104주) 확장 | v7.9 (2026-09-24): ChatGPT 수정본 검토 병합(분류 표기·전송주소 고정·철회 안내) · J74 일괄치환 오류는 미반영 | v7.8 (2026-09-23): 진단 전 수집·이용 동의 게이트 · JOB-ALIO 공고 기반 공공기관 직무 연결(244곳)·사업내용 기반 추론(1,353곳) | v7.7: 정합성 점검판 · 관심목록 버튼 오류 수정 · 익명 응답 전송 사전동의제 · 분류 수(9대 산업영역/20대 직무영역) 정정 · 빈 필드 대체 표시 · 스케줄러 보정 -->
 
@@ -1890,6 +1897,35 @@ function ensureIndustry(code) {
     Object.defineProperty(pkg, '__full', { value: true, enumerable: false });
     return pkg;
   });
+}
+/* v12.222: AI 시대 업무 지도 — 직무의 주요·신입 업무를 AI 맡김(A)·사람과 함께(B)·지시·검증·책임(C)으로 나눠 보여준다(data/ai/roles.js, 시범 10개 직무) */
+const AI_ZONE = { A: ['AI 맡김', 'zA'], B: ['함께', 'zB'], C: ['지시·책임', 'zC'] };
+const AI_LICENSED = { J09: '회계·세무 판단과 신고의 책임은 사람에게 있습니다.', J14: '법적 판단과 최종 책임은 변호사 등 자격자에게 있습니다.', J66: '면허가 필요한 간호 행위와 환자 안전 책임은 사람에게 있습니다.' };
+function aiRoleHtml(job, d) {
+  const mj = job.majorTasks || [], en = job.entryTasks || [];
+  if (!d || mj.length !== d.m.length || en.length !== d.e.length) return '';
+  const cnt = function (z) { const o = { A: 0, B: 0, C: 0 }; z.split('').forEach(function (k) { o[k]++; }); return o; };
+  const ce = cnt(d.e), cm = cnt(d.m);
+  const rows = function (ts, z) { return '<div class="ai-rows">' + ts.map(function (t, i) { const m = AI_ZONE[z.charAt(i)]; return '<div><span class="zc ' + m[1] + '">' + m[0] + '</span><span>' + esc(t) + '</span></div>'; }).join('') + '</div>'; };
+  let h = '<details class="more ai-role"><summary><span>AI 시대 업무 지도</span><span class="muted small">신입 업무 ' + en.length + '개 중 AI 맡김 ' + ce.A + '</span></summary><div class="in">';
+  h += '<p class="small muted" style="margin:0 0 6px">신입이 맡는 업무 ' + en.length + '개 중</p><div class="ai-bar" role="img" aria-label="신입 업무 구간: AI 맡김 ' + ce.A + ', 함께 ' + ce.B + ', 지시·책임 ' + ce.C + '">';
+  ['A', 'B', 'C'].forEach(function (k) { if (ce[k]) h += '<div class="' + AI_ZONE[k][1] + '" style="flex:' + ce[k] + '">' + AI_ZONE[k][0] + ' ' + ce[k] + '</div>'; });
+  h += '</div><p class="small muted" style="margin:4px 0 10px">주요 업무 ' + mj.length + '개 중 AI 맡김 ' + cm.A + ' · 함께 ' + cm.B + ' · 지시·책임 ' + cm.C + '</p>';
+  h += '<b class="small">신입 업무</b>' + rows(en, d.e) + '<b class="small" style="display:block;margin-top:10px">주요 업무</b>' + rows(mj, d.m);
+  h += '<div class="ask" style="margin:12px 0 0"><b>신입 업무는 이렇게 바뀝니다</b><p class="small" style="margin:4px 0 0">' + esc(d.chg) + '</p></div>';
+  h += '<b class="small" style="display:block;margin-top:10px">AI를 지휘하려면</b>' + listHtml(d.sk);
+  if (AI_LICENSED[job.code]) h += '<p class="small" style="margin:8px 0 0"><b>자격·책임</b> ' + esc(AI_LICENSED[job.code]) + '</p>';
+  h += '<p class="small muted" style="margin:10px 0 0">비전HR컨설팅 검수 ' + esc((window.__AI_ROLES_VER || '2026-11-18')) + ' · 앱의 직무 업무 목록을 기준으로 한 일반적 분류이며 추정입니다. 기관·직급·AI 도입 수준에 따라 달라집니다.</p></div></details>';
+  return h;
+}
+function fillAiRole(code) {
+  loadShard('ai', 'roles').then(function (all) {
+    const box = document.getElementById('aiRoleBox'); const d = all && all[code];
+    if (!box || box.getAttribute('data-job') !== code || !d) return;
+    const pk = DB.jobPackages[code]; const job = pk && pk.job; if (!job) return;
+    window.__AI_ROLES_VER = all._meta && all._meta.ver;
+    box.innerHTML = aiRoleHtml(job, d);
+  }).catch(function () {});
 }
 function publicLoaded(pCode) { return !!DB.publicPackages[pCode] || (LAZY.publicChunk || {})[pCode] == null; }
 function ensurePublic(pCode) {
@@ -3387,6 +3423,7 @@ function showJob(code) {
     '<div><b>' + (job.workProcess ? '업무 흐름' : '주요 결과물') + '</b><span>' + esc(job.workProcess || joinOr(job.outputs, '채용공고 확인', 4)) + '</span></div>' +
     '<div><b>핵심 역량</b><span>' + esc(first(job.skills, 2).concat(first(job.abilities, 2)).join(' · ') || '자료 없음') + '</span></div>' +
     '<div><b>주요 도구</b><span>' + esc(joinOr(job.tools, '공고별 확인', 4)) + '</span></div></div>';
+  h += '<div id="aiRoleBox" data-job="' + esc(code) + '"></div>'; setTimeout(function () { fillAiRole(code); }, 0);
   h += jobTaskBlock(job, 0);
   h += level3Html(job);
   h += '<h3>필요한 지식·기술·태도 <span class="muted small">(NCS KSA)</span></h3>' +
