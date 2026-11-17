@@ -41,6 +41,7 @@
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
+<!-- v12.219 (2026-11-17): 진로 결정 학년·단계 5단계(중학생·고등학생·대학생(저학년/고학년)·졸업생) 세분화 — 단계 체크포인트 복원, 중·고생 로드맵(진로 체험·학과 선택·진학 준비)·스케줄러·완료 기준 분기, 졸업생 경력 전환·재취업 트랙, 진단 '참고용' 표시, 안내·설문 문구, sw.js v114 -->
 <!-- v12.217 (2026-11-17): 진단 — 문항 S043·S047 문구 중립화, 면허 필수(C) 직무·세부직무 C 포함 직무에 '시험 준비 필요' 안내, 추정 점수(J96~J112·F51~F60) 개성 보정·'기준값 추정' 표시, sw.js v112 -->
 <!-- v12.216 (2026-11-17): 공인 민간자격 98종·공인 만료·취소 46종(2026.5.1, 동일 자격명 병합) 내장(DB.privateCerts), 직무별 privCerts·공식 정보 표(privCertHtml), 자격표 근거 보강(민간자격정보서비스), sw.js v111 -->
 <!-- v12.215 (2026-11-17): 국가전문자격 212종(공공데이터 2025.6.1) 내장(DB.nationalCerts), 직무별 natCerts 연결·공식 정보 표(natCertHtml), 자격표 행에 시행기관 URL 보강·검증 등급 재산정, sw.js v110 -->
@@ -1519,7 +1520,7 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
           <button class="btn sm" type="button" onclick="clearDiagnosis()">응답 지우고 다시 하기</button>
         </div>
       </div>
-      <div class="warn">이 결과는 진로 탐색을 돕는 참고자료이며, 합격 가능성이나 적성을 확정하지 않습니다. 결과가 뜻밖이라면 그 이유를 짝이나 상담자와 이야기해 보세요.</div>
+      <div class="warn">이 결과는 진로 탐색을 돕는 참고자료이며, 합격 가능성이나 적성을 확정하지 않습니다. 결과가 뜻밖이라면 그 이유를 짝이나 상담자와 이야기해 보세요.<br><b>참고용 · 문항과 기준값은 대학생·졸업생 기준으로 만들었습니다.</b> 중·고등학생은 직업·학과를 알아보는 참고 자료로만 활용하고, 진학·진로 결정은 선생님·상담자와 함께 해 주세요.</div>
       <div id="consentGate"></div>
       <div class="diag-bar" id="diagBar">
         <span class="cnt" id="diagCount">0 / 64</span>
@@ -1570,14 +1571,14 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
       <div class="prep-step no-print">
         <div class="step-title"><span class="num">4</span>나의 준비 조건</div>
         <div class="grid g4">
-          <div><label class="label" for="planStatus">학년</label>
+          <div><label class="label" for="planStatus">학년·단계</label>
             <select id="planStatus" onchange="onPlanInput()">
               <option value="">선택하세요</option>
-              <option value="1">1학년</option>
-              <option value="2">2학년</option>
-              <option value="3">3학년</option>
-              <option value="4">4학년</option>
-              <option value="grad">졸업</option>
+              <option value="mid">중학생</option>
+              <option value="high">고등학생</option>
+              <option value="univ-low">대학생(저학년)</option>
+              <option value="univ-high">대학생(고학년)</option>
+              <option value="grad">졸업생</option>
             </select>
           </div>
           <div><label class="label" for="planMonths">준비 기간</label>
@@ -1633,7 +1634,7 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
   <div class="hsec">앱 정보 및 데이터 안내</div>
   <div class="hlist">
   <div class="ai-intro">
-  <p class="muted">헬퍼탐은 대학생의 산업·직무 탐색과 취업준비를 돕는 참고용 서비스입니다. 진단·추천 결과는 참고자료이며 적성·합격 가능성을 보장하지 않습니다.</p>
+  <p class="muted">헬퍼탐은 중·고등학생부터 대학생·졸업생까지 진로 탐색과 취업 준비를 돕는 참고용 서비스입니다. 진단 문항은 대학생·졸업생 기준으로 만들어, 중·고등학생은 ‘참고용’으로만 활용해 주세요. 진단·추천 결과는 참고자료이며 적성·합격 가능성을 보장하지 않습니다.</p>
   </div>
 
   <details class="more">
@@ -1650,7 +1651,7 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
     <div class="in">
       <p><b>현재 분류 기준</b> · 60개 산업(F01~F60)·112개 직무(J01~J112)와 산업×직무 6,720개 연결을 사용하며, 산업은 <span class="js-ind-groups">10</span>개 생태계, 직무는 <span class="js-job-groups">21</span>개 대영역으로 묶어 탐색합니다.</p>
       <p><b>채용근거 등급(A+~C)</b>은 기업 평가가 아니라 채용정보의 확인 수준입니다. <b>직무명 확인 표시</b>는 회사의 직무명을 실제 채용공고에서 확인했는지 보여 줍니다. ✔ 채용공고 확인완료, △·? 채용공고 확인필요(△ 회사 채용 분야까지 확인, ? 자료 기반 대표 직무명).</p>
-      <p><b>용어</b> · 산업 생태계(<span class="js-ind-groups">10</span>) › 산업(60) › 세부시장 / 직무대영역(<span class="js-job-groups">21</span>) › 직무(107) › 세부직무. 직무의 <b>신입 진입 유형</b>은 바로 지원형(A)·사전 준비형(B), 산업·기업의 <b>신입 진입 용이성</b>은 높음·보통·낮음으로 표시합니다.</p>
+      <p><b>용어</b> · 산업 생태계(<span class="js-ind-groups">10</span>) › 산업(60) › 세부시장 / 직무대영역(<span class="js-job-groups">21</span>) › 직무(112) › 세부직무. 직무의 <b>신입 진입 유형</b>은 바로 지원형(A)·사전 준비형(B), 산업·기업의 <b>신입 진입 용이성</b>은 높음·보통·낮음으로 표시합니다.</p>
       <p>대표기업·기관은 최근 공개 가능한 매출·영업수익·사업수익·예산 등 규모지표를 우선 참고해 산업별 10개를 제시합니다. 비공개·비영리·공공기관은 유사 규모지표와 산업 대표성을 함께 반영합니다. 채용근거가 아직 수록되지 않은 기업은 등급 대신 <b>‘채용근거 미수록’</b>으로 표시합니다.</p>
       <p><b>공공기관 직무 근거</b>는 근거 수준을 구분해 표시합니다. <b>검색 검증</b>은 기관 공식 채용공고·직무기술서·JOB-ALIO·클린아이 잡플러스 등 공개 채용자료에서 모집분야를 확인한 경우이며, <b>기능 검증</b>은 기관의 설립목적·주요사업·조직기능을 바탕으로 연결한 탐색용 직무입니다.</p>
       <p>지원 전에는 최신 채용공고와 공시 원문을 다시 확인하세요.</p>
@@ -3827,7 +3828,7 @@ function fbCardUI(d){
   if(!cloudConsent())return '';
   const f=fbInitDraft(d);
       const jobOpts='<option value="">없음 · 선택 안 함</option>'+DB.jobs.map(function(j){return '<option value="'+esc(j.code)+'"'+(f.missingJob===j.code?' selected':'')+'>'+esc(j.name)+'</option>';}).join('');
-  const yrs=['1학년','2학년','3학년','4학년','졸업생/청년'];
+  const yrs=['중학생','고등학생','대학생(저학년)','대학생(고학년)','졸업생'];
   let h='<div class="fb-card" id="fbCard"><h3>결과가 나와 얼마나 맞나요? · 체감 평가와 개선 의견</h3><p class="muted small" style="margin:0 0 6px">약 2분 · 응답 수집에 동의하셨기 때문에 보이는 설문입니다. 보내 주신 평가는 진단 기준값을 검증·보정하는 데에만 쓰입니다. <b>이름·학번·연락처는 적지 마세요.</b></p>';
   h+=fbRows(1,'추천 산업 TOP3가 각각 나와 맞는다고 느끼나요?','industryRatings');
   h+=fbRows(2,'추천 직무 TOP3가 각각 나와 맞는다고 느끼나요?','jobRatings');
@@ -3903,7 +3904,7 @@ function v73MarkChoice(iCode,jCode){const rec=v73CurrentRecord();if(!rec)return;
 function diagMode(){var pg=$('diagnosisPage');if(!pg)return;var has=!!STATE.diagnosis;pg.classList.toggle('diag-result-mode',has&&!STATE.diagEdit);pg.classList.toggle('diag-edit-mode',has&&!!STATE.diagEdit);}
 function diagTab(k){var nx=(window.__diagTab===k)?'':k;window.__diagTab=nx;['ind','job'].forEach(function(x){var p=$('diagPanel_'+x),b=$('diagTabBtn_'+x);if(p)p.classList.toggle('open',x===nx);if(b){b.classList.toggle('on',x===nx);b.setAttribute('aria-expanded',x===nx?'true':'false');}});var c=$('diagCommon');if(c){c.classList.toggle('open',!!nx);c.setAttribute('data-tab',nx);}}
 function diagEditAnswers(){STATE.diagEdit=true;diagMode();window.scrollTo(0,0);}
-function renderDiagnosis(){const d=STATE.diagnosis;if(!d){$('diagnosisResult').innerHTML='';diagMode();return;}logDiagnosisRun(d);const p=d.profile;const _pl=(document.querySelector('.brand-mark')||{}).src||'';const _pd=new Date(d.at);const _ps=isNaN(_pd.getTime())?'':(_pd.getFullYear()+'.'+String(_pd.getMonth()+1).padStart(2,'0')+'.'+String(_pd.getDate()).padStart(2,'0'));let h='<div class="card" id="diagResultTop"><div class="print-only diag-print-head">'+(_pl?'<img src="'+_pl+'" alt="">':'')+'<div><div class="t">헬퍼탐 산업·직무 탐색 진단 결과</div><div class="s">비전HR컨설팅'+(_ps?' · 진단일 '+_ps:'')+'</div></div></div><div class="page-head"><div><div class="step-tag">64문항 · 7개 영역 · 34개 세부특성 진단 결과</div><h2>점수보다 “왜 맞는지·무엇을 확인할지”를 보세요</h2><p class="muted">후보 순위는 탐색 우선순위입니다. 적합도·준비도·근무 조건·산업-직무 연결 정도를 함께 보세요. <b>적합도는 100점 만점 평가가 아니라</b> 나와 각 직무·산업 기준값이 얼마나 비슷한지를 나타내며, ‘전체 순위’와 함께 해석합니다.</p></div><div class="btn-row no-print"><button class="btn sm primary" type="button" onclick="printDiagnosis()">PDF로 저장 · 인쇄</button><button class="btn sm" type="button" onclick="diagEditAnswers()">문항 다시 보기·수정</button><button class="btn sm" type="button" onclick="clearDiagnosis()">응답 지우고 다시 하기</button></div></div>';
+function renderDiagnosis(){const d=STATE.diagnosis;if(!d){$('diagnosisResult').innerHTML='';diagMode();return;}logDiagnosisRun(d);const p=d.profile;const _pl=(document.querySelector('.brand-mark')||{}).src||'';const _pd=new Date(d.at);const _ps=isNaN(_pd.getTime())?'':(_pd.getFullYear()+'.'+String(_pd.getMonth()+1).padStart(2,'0')+'.'+String(_pd.getDate()).padStart(2,'0'));let h='<div class="card" id="diagResultTop"><div class="print-only diag-print-head">'+(_pl?'<img src="'+_pl+'" alt="">':'')+'<div><div class="t">헬퍼탐 산업·직무 탐색 진단 결과</div><div class="s">비전HR컨설팅'+(_ps?' · 진단일 '+_ps:'')+'</div></div></div><div class="page-head"><div><div class="step-tag">64문항 · 7개 영역 · 34개 세부특성 진단 결과</div><h2>점수보다 “왜 맞는지·무엇을 확인할지”를 보세요</h2><p class="muted">'+((function(){try{var st=(LS.get(KEYS.plan,{})||{}).status;return st==='mid'||st==='high'?'<span class="tag">참고용 · 중·고등학생</span> ':'';}catch(e){return '';}})())+'후보 순위는 탐색 우선순위입니다. 적합도·준비도·근무 조건·산업-직무 연결 정도를 함께 보세요. <b>적합도는 100점 만점 평가가 아니라</b> 나와 각 직무·산업 기준값이 얼마나 비슷한지를 나타내며, ‘전체 순위’와 함께 해석합니다. <b>문항은 대학생·졸업생 기준이므로 중·고등학생은 참고용으로만 보세요.</b></p></div><div class="btn-row no-print"><button class="btn sm primary" type="button" onclick="printDiagnosis()">PDF로 저장 · 인쇄</button><button class="btn sm" type="button" onclick="diagEditAnswers()">문항 다시 보기·수정</button><button class="btn sm" type="button" onclick="clearDiagnosis()">응답 지우고 다시 하기</button></div></div>';
 
 if(d.sd<0.55)h+='<p class="warn">응답이 비슷한 점수에 몰려 후보 간 차이가 작습니다. 상위권을 서열로 보기보다 3~5개를 함께 탐색하세요.</p>';
 else if(d.jobs.length>=5&&(d.jobs[0].fit-d.jobs[4].fit)<3)h+='<p class="warn">상위 5개 직무 후보의 적합도 차이가 3점 미만입니다. 1위만 보지 말고 5개를 함께 비교하세요.</p>';
@@ -4098,7 +4099,7 @@ function renderPrepare() {
     return '<option value="' + esc(x.id) + '"' + (x.id === saved.p ? ' selected' : '') + '>' + esc(x.name) + '</option>';
   }).join('') + (pubs.length ? '' : '<option value="" disabled>산업 탐색의 공공기관에서 관심 기관을 찜하면 여기에 나옵니다</option>');
   if (saved.status !== undefined) {
-    var _mig = { '3-1': '3', '3-2': '3', '4-1': '4', '4-2': '4' };
+    var _mig = { '1': 'univ-low', '2': 'univ-low', '3': 'univ-high', '4': 'univ-high', '3-1': 'univ-high', '3-2': 'univ-high', '4-1': 'univ-high', '4-2': 'univ-high' };
     $('planStatus').value = _mig[saved.status] || saved.status;
   }
   if (saved.months) $('planMonths').value = String(saved.months);
@@ -4333,14 +4334,58 @@ function updateGoalSummary() {
     '<div class="small" style="margin-top:4px">' + esc(t[2]) + (e.entry ? ' 이 조합의 신입 진입 용이성: ' + esc(easeLabel(e.entry)) + '.' : '') + (e.major ? ' 전공 연계: ' + esc(e.major) + '.' : '') + '</div>' + alt;
 }
 const STATUS_GUIDE = {
-  '1': { label: '1학년', items: ['관심 산업·직무를 넓게 탐색하고, 흥미 있는 분야를 3개 이내로 기록해 두기', '전공 기초 과목과 학점 관리를 우선순위로 두고 기본기를 쌓기', '교내 프로그램(진로특강·학과 행사·동아리)에 참여해 일의 세계를 직접 보기'] },
-  '2': { label: '2학년', items: ['관심 직무를 2~3개로 좁히고, 해당 직무의 채용공고를 실제로 읽어 보기', '직무와 연결되는 전공·교양 과목, 자격증, 어학 계획을 학기 단위로 세우기', '방학 중 단기 직무체험·봉사·아르바이트로 일 경험의 기초 자료 만들기'] },
-  '3': { label: '3학년', items: ['목표 직무 1개를 잠정 확정하고, 관련 과목·팀프로젝트를 직무 증거로 설계하기', '방학 현장실습·인턴·직무교육 모집 공고를 학기 중에 미리 확인하고 지원하기', '학점·어학 등 기본 요건을 목표 공고 기준으로 점검하고, 직무 프로젝트 1개를 결과물로 완성하기'] },
-  '4': { label: '4학년', items: ['상·하반기 공개채용과 채용연계형 인턴을 중심으로 실제 지원 시작하기', '필기(인적성·NCS 직업기초능력) 준비를 주 단위 루틴으로 만들고 면접 준비에 시간을 가장 많이 배분하기', '지원 결과를 기록해 불합격 사유를 다음 지원서에 반영하고, 졸업요건과 졸업 후 계획을 미리 정해 두기'] },
-  'grad': { label: '졸업', items: ['공백 기간을 설명할 수 있는 활동(직무교육·프로젝트·일경험)을 꾸준히 유지하기', '고용24 등 청년 고용지원 프로그램과 대학 일자리센터 상담을 함께 활용하기', '수시·상시채용공고를 주 2회 이상 확인하는 루틴 만들기'] }
+  'mid': { label: '중학생', track: 'school', items: ['커리어넷·워크넷 직업정보에서 관심 직업 3개의 하는 일을 1쪽으로 정리하기', '자유학기·진로체험 프로그램과 직업인 인터뷰로 일의 세계를 직접 경험하기', '고등학교 유형(일반·특성화·마이스터·특목·자율)별 교육과정을 비교해 진학 후보 2~3곳 정하기'] },
+  'high': { label: '고등학생', track: 'school', items: ['관심 직무와 연결되는 학과 3개를 골라 교육과정·진출분야·입학 전형을 비교표로 만들기', '진로 체험·직업인 멘토링·학과 체험에 참여해 학과 선택의 근거 만들기', '학생부 진로 활동(동아리·탐구·봉사·독서)을 관심 직무와 연결해 기록하고, 진학 외 경로(전문대·계약학과·직업훈련·취업)도 함께 비교하기'] },
+  'univ-low': { label: '대학생(저학년)', track: 'univ', items: ['관심 산업·직무를 넓게 탐색하고, 흥미 있는 분야를 3개 이내로 기록해 두기', '전공 기초 과목과 학점 관리를 우선순위로 두고, 관심 직무의 채용공고를 실제로 읽어 보기', '교내 프로그램(진로특강·학과 행사·동아리)과 방학 단기 직무체험으로 일 경험의 기초 자료 만들기'] },
+  'univ-high': { label: '대학생(고학년)', track: 'univ', items: ['목표 직무 1개를 잠정 확정하고, 관련 과목·팀프로젝트·인턴을 직무 증거로 설계하기', '상·하반기 공개채용과 채용연계형 인턴 일정을 역산해 필기(인적성·NCS)·면접 준비를 주 단위 루틴으로 만들기', '지원 결과를 기록해 불합격 사유를 다음 지원서에 반영하고, 졸업요건과 졸업 후 계획을 미리 점검하기'] },
+  'grad': { label: '졸업생', track: 'grad', items: ['공백 기간을 설명할 수 있는 활동(직무교육·프로젝트·일경험)을 꾸준히 유지하기', '수시·상시채용공고를 주 2회 이상 확인하는 루틴 만들기', '고용24 등 공공 고용서비스와 대학 일자리센터 상담을 함께 활용하기(이용 자격은 공식 사이트에서 확인)'] }
 };
-function weeklyAllocation(hours) {
-  const rows = [['직무·산업 학습', 0.25, '산업 이슈·직무 지식·채용공고 분석'], ['실습·프로젝트', 0.35, '핵심 업무 재현, 도구 활용, 프로젝트 수행'],
+const GRAD_TRACKS = [
+  { name: '경력 전환 트랙 (다른 직무·산업으로 이동)', items: ['지금까지의 경력·경험에서 목표 직무로 옮겨 쓸 수 있는 역량 3가지를 공고 요구역량과 1:1로 연결하기', '부족한 역량은 직업훈련·자격·프로젝트로 3~6개월 안에 보완하기', '이전 경력을 새 직무의 성과 언어(문제-행동-결과)로 바꿔 이력서·경력기술서 다시 쓰기', '현직자 인터뷰 2~3회로 전환 직무의 실제 업무와 진입 경로 확인하기'] },
+  { name: '재취업 트랙 (공백 후 복귀)', items: ['공백 기간은 교육·프로젝트·단기 일경험 등 활동으로 설명할 수 있게 정리하기', '고용24·국민취업지원제도 등 공공 고용서비스 상담으로 이용 가능한 프로그램 확인하기(요건은 공식 사이트에서 확인)', '경력·신입 구분 없이 지원 가능한 상시·수시채용 공고를 찾아 주 2회 이상 지원 현황 기록하기', '이력서 첫 화면에 최근 활동과 직무 키워드가 보이도록 수정하기'] }
+];
+function isSchoolStage(st) { return st === 'mid' || st === 'high'; }
+function checkpointHtml(v) {
+  const g = STATUS_GUIDE[v.status]; if (!g) return '';
+  let h = '<div class="plan-sec"><h3>내 단계 체크포인트 · ' + esc(g.label) + '</h3>' + listHtml(g.items);
+  if (g.track === 'grad') {
+    h += '<div class="grid g2" style="margin-top:8px">' + GRAD_TRACKS.map(function (t) { return '<div class="ask" style="margin:0"><b>' + esc(t.name) + '</b>' + listHtml(t.items) + '</div>'; }).join('') + '</div>';
+  }
+  if (g.track === 'school') h += '<p class="muted small" style="margin:6px 0 0">이 로드맵은 취업 준비보다 진로 체험·학과(학교) 선택·진학 준비를 중심으로 구성했습니다. 직무는 지금 정하는 목표가 아니라 방향을 확인하는 후보로 보세요.</p>';
+  return h + '</div>';
+}
+function allocNote(st) {
+  return isSchoolStage(st) ? '시험기간·방학·학교 행사에 맞춰 비중을 조정해도 됩니다. 주 4시간 미만이면 한 번에 한 영역만 집중하는 편이 효과적입니다.' : '시험기간·인턴·채용시즌에는 비중을 조정해도 됩니다. 주 4시간 미만이면 한 번에 한 영역만 집중하는 편이 효과적입니다.';
+}
+function stageKpiLabels(st) { return isSchoolStage(st) ? ['직업·학과 정보 조사', '진로 체험·인터뷰', '학과(학교) 비교표', '진학 계획 상담'] : ['채용공고 분석', '직무 프로젝트', '포트폴리오 핵심 사례', '모의면접·피드백']; }
+function stageChecks(st) {
+  return isSchoolStage(st) ? ['관심 직업·직무 3개를 정해 하는 일을 설명할 수 있다', '진로 체험이나 직업인 인터뷰를 1회 이상 했다', '관심 학과(학교) 후보 2~3곳을 비교표로 정리했다', '진학 외 대안 경로도 한 가지 이상 확인했다', '진로 활동 기록이 관심 방향과 이어진다']
+    : ['지원할 기업·기관을 5~15곳으로 좁혔다', '공고의 자격·우대요건과 내 경험을 표로 맞춰 봤다', '핵심 업무를 직접 해 본 증거가 최소 1개 있다', '핵심 경험을 STAR 구조로 2분 안에 설명할 수 있다', '이력서·자기소개서·면접 답변이 같은 직무 방향을 말한다'];
+}
+function schoolPhases(months, job, prep, st) {
+  const high = st === 'high';
+  const major = first(job.majorTasks, 2);
+  const edu = first(prep.primaryEducation, 3), eduText = edu.length ? edu.join('·') : '관련 학과';
+  const A = ['“' + (major[0] || '핵심 업무') + '” 등 이 직무의 핵심 업무를 커리어넷·워크넷 직업정보와 비교해 1쪽으로 정리하기', '이 직무의 하루·역할·함께 일하는 사람을 인터뷰 질문 5개로 만들어 보기', '내가 좋아하는 활동·잘하는 활동과 이 직무의 공통점·차이점을 3가지씩 적기'];
+  const B = ['학교 진로교사·지자체·꿈길 등에서 관심 직무와 가까운 진로체험 프로그램을 1개 이상 신청하기', '직업인·선배·지인 중 1명을 인터뷰하고 배운 점을 기록하기', '체험 뒤 흥미·가치·어려웠던 점을 3줄로 남겨 다음 선택에 반영하기'];
+  const C = high ? ['관련 학과(' + eduText + ')의 교육과정·진출분야·입학 전형을 비교표로 만들기', '학과 후보 3개와 대안 경로(전문대·계약학과·직업훈련·바로 취업)를 함께 비교하기', '학과 체험·입학설명회·전공 탐색 프로그램에 참여해 학과 선택 근거 만들기']
+    : ['고등학교 유형(일반·특성화·마이스터·특목·자율)별 교육과정과 졸업 후 진로를 비교표로 만들기', '관심 직무와 연결되는 고교·학과 후보 2~3곳 정하기', '입학설명회·학교 방문 일정을 확인하고 궁금한 점을 질문 목록으로 만들기'];
+  const D = high ? ['학생부 진로 활동(동아리·탐구·봉사·독서)을 관심 직무와 연결해 기록하기', '학과별 지원 자격·전형 일정·준비 서류를 확인해 지원 계획표 만들기', '선택이 바뀔 때를 대비해 2순위 학과·경로를 정해 두고 선생님·보호자와 상담하기']
+    : ['후보 학교의 입학 전형과 준비 일정을 달력에 정리하기', '관심 직무에 도움이 되는 교과·활동(동아리·독서·탐구)을 학기 계획에 넣기', '보호자·선생님·진로상담 교사와 후보 학교·학과를 놓고 상담하기'];
+  const defs = months <= 3
+    ? [['직업 이해·탐색', A], ['진로 체험', B], [high ? '학과 선택·진학 준비' : '학교 선택·진학 준비', C.slice(0, 2).concat(D.slice(0, 1))]]
+    : [['직업 이해·탐색', A], ['진로 체험', B], [high ? '학과 선택' : '고교·학과 선택', C], ['진학 준비·기록', D]];
+  const n = defs.length;
+  return defs.map(function (d, k) {
+    let when;
+    if (months <= 3) when = (k * 4 + 1) + '~' + (k + 1) * 4 + '주';
+    else { const a = Math.round(months * k / n), b = Math.round(months * (k + 1) / n); when = (a + 1 >= b) ? b + '개월' : (a + 1) + '~' + b + '개월'; }
+    return { when: when, sub: '', focus: d[0], acts: d[1] };
+  });
+}
+function weeklyAllocation(hours, st) {
+  const rows = isSchoolStage(st) ? [['직업·학과 정보 탐색', 0.30, '커리어넷·워크넷 등으로 직업·학과 알아보기'], ['진로 체험·활동', 0.30, '체험 프로그램, 인터뷰, 동아리·탐구 활동'], ['기록·정리', 0.20, '체험 소감, 진로 활동 기록, 비교표 정리'], ['진학 준비', 0.20, '학교·학과·전형 정보 확인과 상담']]
+    : [['직무·산업 학습', 0.25, '산업 이슈·직무 지식·채용공고 분석'], ['실습·프로젝트', 0.35, '핵심 업무 재현, 도구 활용, 프로젝트 수행'],
     ['경험·포트폴리오 정리', 0.20, '결과물 정리, 경험을 문제-행동-결과로 기록'], ['지원·면접 준비', 0.20, '기업·기관 분석, 지원서, 면접 연습']];
   const alloc = rows.map(function (r) { return { name: r[0], h: Math.round(hours * r[1] * 2) / 2, what: r[2] }; });
   const diff = Math.round((hours - alloc.reduce(function (s, r) { return s + r.h; }, 0)) * 2) / 2;
@@ -4352,7 +4397,21 @@ function fmtH(h) {
   if (h < 1) return Math.round(h * 60) + '분';
   return (Number.isInteger(h) ? h : h.toFixed(1)) + '시간';
 }
-function planPhases(months, job, prep) {
+function planPhases(months, job, prep, st) {
+  if (isSchoolStage(st)) return schoolPhases(months, job, prep, st);
+  const ph = planPhasesBase(months, job, prep);
+  if (st === 'grad') ph.forEach(function (p) {
+    p.focus = String(p.focus).replace('(인턴·현장실습)', '(일경험·직무교육)');
+    p.acts = p.acts.map(function (a) {
+      if (a.indexOf('방학 1회 이상 인턴') === 0) return '일경험·직무교육·단기 프로젝트에 1회 이상 참여하고 성과를 수치로 기록하기';
+      if (a.indexOf('채용연계형 인턴·상하반기 공채') === 0) return '상시·수시채용 공고 일정과 지원 가능한 경력·신입 공고를 구분해 지원 달력 만들기';
+      return a;
+    });
+    if (/현장성|현장경험/.test(p.focus)) p.acts = p.acts.concat(['이전 경력·경험 중 목표 직무에 옮겨 쓸 수 있는 역량을 이력서 문장으로 바꿔 쓰기']);
+  });
+  return ph;
+}
+function planPhasesBase(months, job, prep) {
   const major = first(job.majorTasks, 3);
   const entry = first(job.entryTasks, 3);
   const project = first(prep.recommendedProject, 2);
@@ -4386,7 +4445,11 @@ function planPhases(months, job, prep) {
     P('12~15개월', '', '기업·기관 맞춤화', ['관심 기업·기관 15곳 분석과 우선순위 정하기', '프로젝트 2차로 포트폴리오를 2~3개 사례로 확장하기', '경험 은행·면접 답변 은행 만들기']),
     P('16~18개월', prep.month12 || '', '지원·면접 집중', base.apply)];
 }
-function planKpi(months, hours) {
+function planKpi(months, hours, st) {
+  const k0 = planKpiBase(months, hours);
+  return isSchoolStage(st) ? { postings: Math.max(3, Math.round(k0.postings * 0.5)), projects: Math.max(1, k0.projects), portfolio: Math.max(1, k0.portfolio), mocks: Math.max(1, k0.mocks) } : k0;
+}
+function planKpiBase(months, hours) {
   const f = months <= 3 ? 1 : months <= 6 ? 1.6 : months <= 12 ? 2.4 : months <= 18 ? 3 : 3.6;
   const e = hours >= 12 ? 1.2 : hours < 6 ? 0.8 : 1;
   return { postings: Math.max(5, Math.round(6 * f * e)), projects: Math.max(1, Math.round(1.2 * f * e)), portfolio: Math.max(1, Math.round(f)), mocks: Math.max(1, Math.round(1.5 * f)) };
@@ -4424,15 +4487,16 @@ function makePlanNow() {
   if (!ip || !jp) { box.innerHTML = '<p class="warn">선택한 산업·직무 정보를 찾지 못했습니다.</p>'; return; }
   const ind = ip.industry, job = jp.job, prep = jp.preparation || {};
   const pub = v.p ? publicPkg(v.p) : null;
-  const phases = planPhases(v.months, job, prep);
-  const alloc = weeklyAllocation(v.hours);
-  const kpi = planKpi(v.months, v.hours);
+  const phases = planPhases(v.months, job, prep, v.status);
+  const alloc = weeklyAllocation(v.hours, v.status);
+  const kpi = planKpi(v.months, v.hours, v.status);
+  const isSchool = isSchoolStage(v.status), KL = stageKpiLabels(v.status), ckp = isSchool ? 's' : '';
   let h = '<div id="dsRoad" class="ds-road no-print"></div><div class="plan-title"><div><div class="muted small">나의 ' + v.months + '개월 로드맵 · ' + new Date().toLocaleDateString('ko-KR') + '</div>' +
     '<h2>' + esc(ind.name) + ' × ' + esc(job.name) + '</h2></div></div>';
   h += '<div class="btn-row no-print"><button type="button" class="btn sm" onclick="goFromPlan(\'I\',\'' + v.i + '\')">산업 자세히 보기</button><button type="button" class="btn sm" onclick="goFromPlan(\'J\',\'' + v.j + '\')">직무 자세히 보기</button>' + (pub ? '<button type="button" class="btn sm" onclick="goFromPlan(\'P\',\'' + esc(v.p) + '\')">기관 자세히 보기</button>' : '') + '</div>';
   h += '<div class="plan-sec"><h3>1. 목표 직무 한눈에</h3><div class="grid g3">' +
     '<div class="ask" style="margin:0"><b>하는 일</b><p class="small" style="margin:0">' + esc(job.description || '') + '</p></div>' +
-    '<div class="ask" style="margin:0"><b>신입 진입 유형</b><p class="small" style="margin:0">' + esc(entryTypeText(job, prep)) + '</p></div>' +
+    '<div class="ask" style="margin:0"><b>' + (isSchool ? '졸업 후 진입 경로' : '신입 진입 유형') + '</b><p class="small" style="margin:0">' + esc(entryTypeText(job, prep)) + '</p></div>' +
     '<div class="ask" style="margin:0"><b>' + (job.workProcess ? '업무 흐름' : '성과지표(KPI)') + '</b><p class="small" style="margin:0">' + esc(job.workProcess || joinOr(job.kpi, '공고 확인', 4)) + '</p></div></div>' +
     jobTaskBlock(job, 6) + '%%QF_recruit%%</div>';
 
@@ -4444,7 +4508,8 @@ function makePlanNow() {
 
   h += '<div class="plan-sec"><h3>3. 주 ' + v.hours + '시간 쓰는 법</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>영역</th><th>주당</th><th>하는 일</th></tr></thead><tbody>' +
     alloc.map(function (r) { return '<tr><td><b>' + esc(r.name) + '</b></td><td class="n">' + fmtH(r.h) + '</td><td>' + esc(r.what) + '</td></tr>'; }).join('') +
-    '</tbody></table></div><p class="muted small">시험기간·인턴·채용시즌에는 비중을 조정해도 됩니다. 주 4시간 미만이면 한 번에 한 영역만 집중하는 편이 효과적입니다.</p></div>';
+    '</tbody></table></div><p class="muted small">' + allocNote(v.status) + '</p></div>';
+  h += checkpointHtml(v);
 
   let roadH = '<div style="margin-top:6px">' + phases.map(function (p) {
     return '<div class="phase"><div class="when"><b>' + esc(p.when) + '</b><span>' + esc(p.focus) + '</span></div><div>' +
@@ -4466,15 +4531,9 @@ function makePlanNow() {
   }
 
   roadH += '<div class="plan-sec"><h3>완료 기준</h3><div class="kpi">' +
-    '<div><strong>' + kpi.postings + '+</strong><span>채용공고 분석</span></div><div><strong>' + kpi.projects + '+</strong><span>직무 프로젝트</span></div>' +
-    '<div><strong>' + kpi.portfolio + '+</strong><span>포트폴리오 핵심 사례</span></div><div><strong>' + kpi.mocks + '+</strong><span>모의면접·피드백</span></div></div>' +
-    '<div class="check" style="margin-top:10px">' + [
-      '지원할 기업·기관을 5~15곳으로 좁혔다',
-      '공고의 자격·우대요건과 내 경험을 표로 맞춰 봤다',
-      '핵심 업무를 직접 해 본 증거가 최소 1개 있다',
-      '핵심 경험을 STAR 구조로 2분 안에 설명할 수 있다',
-      '이력서·자기소개서·면접 답변이 같은 직무 방향을 말한다'
-    ].map(function (t, ci) { const ck = planChecks(); return '<label><input type="checkbox"' + (ck[v.i + '|' + v.j + '|' + ci] ? ' checked' : '') + ' onchange="togglePlanCheck(\'' + v.i + '|' + v.j + '|' + ci + '\', this.checked)"> ' + esc(t) + '</label>'; }).join('') + '</div></div>';
+    '<div><strong>' + kpi.postings + '+</strong><span>' + KL[0] + '</span></div><div><strong>' + kpi.projects + '+</strong><span>' + KL[1] + '</span></div>' +
+    '<div><strong>' + kpi.portfolio + '+</strong><span>' + KL[2] + '</span></div><div><strong>' + kpi.mocks + '+</strong><span>' + KL[3] + '</span></div></div>' +
+    '<div class="check" style="margin-top:10px">' + stageChecks(v.status).map(function (t, ci) { const ck = planChecks(); return '<label><input type="checkbox"' + (ck[v.i + '|' + v.j + '|' + ckp + ci] ? ' checked' : '') + ' onchange="togglePlanCheck(\'' + v.i + '|' + v.j + '|' + ckp + ci + '\', this.checked)"> ' + esc(t) + '</label>'; }).join('') + '</div></div>';
 
   roadH += '<div class="plan-sec"><h3>주차별 실행 스케줄러 · 최대 24개월</h3>' + scheduleHtml(v, job, prep) + '</div>';
   setTimeout(renderScheduleProgress,0);
@@ -4512,14 +4571,54 @@ function makePlanNow() {
         : jobSiteLinks(recruit, jobKw).filter(function (l) { return l.label !== '링크드인'; }))) +
     '';
   h = h.replace('%%ROAD%%', function () { return roadAccHtml(phases, roadH); });
-  ['recruit', 'exp', 'cert', 'edu'].forEach(function (k) { h = h.replace('%%QF_' + k + '%%', function () { return window.__qf[k] || ''; }); });
+  ['recruit', 'exp', 'cert', 'edu'].forEach(function (k) { h = h.replace('%%QF_' + k + '%%', function () { return (isSchool && (k === 'recruit' || k === 'exp')) ? '' : (window.__qf[k] || ''); }); });
   box.innerHTML = h;
 }
 const PLAN_CHECK_KEY = 'visionhr_plan_checks_v1';
 function planChecks() { return LS.get(PLAN_CHECK_KEY, {}) || {}; }
 function togglePlanCheck(k, on) { const c = planChecks(); if (on) c[k] = true; else delete c[k]; LS.set(PLAN_CHECK_KEY, c); }
 function addDaysISO(iso,days,withYear){const d=new Date((iso||new Date().toISOString().slice(0,10))+'T00:00:00');d.setDate(d.getDate()+days);return d.toLocaleDateString('ko-KR',withYear?{year:'2-digit',month:'numeric',day:'numeric'}:{month:'numeric',day:'numeric'});}
-function baseSchedulerTasks(job,prep){
+function schoolSchedulerBase(job,prep,st){
+  const high=st==='high', n=job.name||'목표 직무', major=first(job.majorTasks,3);
+  const edu=first(prep.primaryEducation,3), eduText=edu.length?edu.join('·'):'관련 학과';
+  const T=function(phase,title,task,output){return {phase:phase,title:title,task:task,output:output};};
+  return [
+    T('1. 직업 이해',n+' 알아보기','커리어넷·워크넷 직업정보에서 '+n+' 관련 직업의 하는 일·필요 역량을 읽고 핵심 5가지를 정리합니다.','직업 정보 1페이지'),
+    T('1. 직업 이해','하는 일의 흐름 이해',(major[0]||'핵심 업무')+'부터 주요 업무가 어떤 순서로 이어지는지 그림이나 글로 정리합니다.','업무 흐름 메모'),
+    T('1. 직업 이해','나와 직업 비교','내가 좋아하는 활동·잘하는 활동과 이 직업의 공통점·차이점을 3가지씩 적습니다.','나와 직업 비교표'),
+    T('1. 직업 이해','관련 직업 더 알아보기','비슷한 일을 하는 다른 직업 2개를 찾아 하는 일과 필요한 역량을 '+n+'과 비교합니다.','직업 비교 메모'),
+    T('1. 직업 이해','직업의 변화·전망 확인','커리어넷·워크넷 등 공식 직업정보에서 이 직업의 변화·전망 정보를 확인하고 출처를 함께 적습니다.','전망 정리 메모(출처 포함)'),
+    T('2. 진로 체험','체험 프로그램 찾기','학교 진로교사·지자체·꿈길 등에서 '+n+' 관련 진로체험 후보 3개를 찾아 일정과 신청 방법을 정리합니다.','체험 후보 목록'),
+    T('2. 진로 체험','체험 신청·준비','후보 중 1개를 신청하고 준비물·궁금한 점을 정리합니다.','신청 확인·질문 목록'),
+    T('2. 진로 체험','직업인 인터뷰 질문 만들기','하는 일·보람·어려움·준비 방법을 묻는 질문 5개를 만듭니다.','인터뷰 질문 5개'),
+    T('2. 진로 체험','체험·인터뷰 실행','체험에 참여하거나 직업인을 1명 인터뷰하고 새로 알게 된 점을 기록합니다.','체험·인터뷰 기록'),
+    T('2. 진로 체험','체험 소감 정리','흥미·가치·어려웠던 점을 3줄로 남기고 다음 선택에 어떻게 반영할지 적습니다.','체험 소감 3줄'),
+    T('2. 진로 체험','두 번째 체험·활동 계획','다른 방식의 체험(학교 행사·동아리·봉사·온라인 직업 체험)을 하나 더 정해 일정을 잡습니다.','체험 계획서'),
+    T('2. 진로 체험','배운 점 나누기','체험·인터뷰에서 배운 점을 친구나 선생님께 3분 동안 설명하고 질문을 받아 봅니다.','발표·질문 기록'),
+    T('3. '+(high?'학과 선택':'학교 선택'),high?'관련 학과 찾기':'고교 유형 알아보기',high?'관련 학과('+eduText+') 후보를 3개 이상 찾고 학과 소개 자료를 모읍니다.':'일반·특성화·마이스터·특목·자율 고교의 교육과정과 졸업 후 진로를 정리합니다.',high?'학과 후보 목록':'고교 유형 비교표'),
+    T('3. '+(high?'학과 선택':'학교 선택'),high?'교육과정 비교':'후보 학교 좁히기',high?'학과별 교육과정과 배우는 과목을 비교합니다.':'관심 직무와 연결되는 후보 학교 2~3곳을 정합니다.',high?'교육과정 비교표':'후보 학교 목록'),
+    T('3. '+(high?'학과 선택':'학교 선택'),high?'진출 분야 확인':'학교 설명회 확인',high?'학과 졸업 후 진출 분야와 관련 자격·직무를 확인합니다.':'입학설명회·학교 방문 일정을 확인하고 궁금한 점을 질문 목록으로 만듭니다.',high?'진출 분야 정리':'질문 목록'),
+    T('3. '+(high?'학과 선택':'학교 선택'),high?'대안 경로 비교':'진학 외 경로 알아보기',high?'전문대·계약학과·직업훈련·바로 취업 등 대안 경로를 함께 비교합니다.':'직업계고·직업훈련 등 다른 경로도 한 가지 이상 확인합니다.','대안 경로 비교표'),
+    T('3. '+(high?'학과 선택':'학교 선택'),high?'후보 좁히기':'후보 선택 이유 적기',high?'학과 후보를 2~3개로 좁히고 선택 이유를 한 줄씩 적습니다.':'후보 학교별로 끌리는 점과 걱정되는 점을 적습니다.','선택 이유 메모'),
+    T('3. '+(high?'학과 선택':'학교 선택'),'비교표 보완','지금까지의 비교표에서 빠진 기준(학비·거리·교육과정·졸업 후 진로)을 채워 넣습니다.','보완한 비교표'),
+    T('3. '+(high?'학과 선택':'학교 선택'),high?'선배 이야기 듣기':'재학생 이야기 듣기',high?'관심 학과 재학생·졸업생 1명에게 수업·진로에 대해 질문하고 답을 기록합니다.':'관심 학교 재학생 1명에게 수업·학교생활에 대해 질문하고 답을 기록합니다.','질문·답변 기록'),
+    T('4. 진학 준비','준비 일정 달력 만들기','후보 학교·학과의 전형 일정과 준비 서류를 달력에 정리합니다.','진학 준비 달력'),
+    T('4. 진학 준비','진로 활동 계획',high?'학생부 진로 활동(동아리·탐구·봉사·독서)을 관심 직무와 연결하는 계획을 세웁니다.':'관심 직무에 도움이 되는 교과·활동(동아리·독서·탐구)을 학기 계획에 넣습니다.','진로 활동 계획표'),
+    T('4. 진학 준비','상담하기','보호자·선생님·진로상담 교사와 후보와 선택 이유를 놓고 상담하고 조언을 기록합니다.','상담 기록'),
+    T('4. 진학 준비','진로 기록 정리','지금까지의 조사·체험·비교 결과를 하나의 진로 기록으로 묶습니다.','진로 기록 1부'),
+    T('4. 진학 준비','이번 학기 목표 정하기','관심 직무와 후보 진학 경로를 기준으로 이번 학기에 할 활동 3가지를 정합니다.','학기 목표 3가지'),
+    T('4. 진학 준비','진로 기록 보완','새로 알게 된 점과 달라진 생각을 진로 기록에 덧붙입니다.','보완한 진로 기록'),
+    T('4. 진학 준비','최종 점검·다음 90일','선택이 바뀌었는지 확인하고 다음 90일 동안 할 일을 정합니다.','다음 90일 계획')
+  ];
+}
+function extendSchoolTask(b,cycle,n){
+  const phase=cycle===2?'5. 심화 탐색':(cycle===3?'6. 실행 보완':'7. 최종 정리');
+  const v=['처음보다 깊이 있게 한 번 더 조사하고 달라진 점을 기록합니다.','다른 직업·학과 1곳과 비교해 선택 이유를 적습니다.','선생님·보호자·직업인에게 피드백을 받아 보완합니다.','선택이 바뀌었다면 이유를, 같다면 근거를 한 줄로 남깁니다.'];
+  const pre=cycle===2?'심화 ':(cycle===3?'보완 ':'정리 ');
+  return {phase:phase,title:pre+b.title,task:b.task+' '+v[(n-1)%v.length],output:pre+b.output};
+}
+function baseSchedulerTasks(job,prep,st){
+  if(isSchoolStage(st)) return schoolSchedulerBase(job,prep,st);
   const major=first(job.majorTasks,6), entry=first(job.entryTasks,6), proj=first(prep.recommendedProject,3), port=first(prep.portfolioOutput,3);
   const tools=first(job.tools||job.tool||job.digitalTools||[],4);
   const ksa=first([].concat(job.knowledge||[],job.skills||[],job.attitudes||[]),5);
@@ -4575,7 +4674,7 @@ function scheduleWeeks(months){
   return SCHEDULE_WEEKS[months] || Math.min(104,Math.max(13,Math.round(months*52/12)));
 }
 function scheduleContext(v,job){
-  return [job&&job.code||'job',Number(v.months)||6,v.startDate||'today'].join('|');
+  return [job&&job.code||'job',Number(v.months)||6,v.startDate||'today'].join('|')+(isSchoolStage(v.status)?'|'+v.status:'');
 }
 function scheduleStore(ctx){
   const all=LS.get(KEYS.schedule,{})||{};
@@ -4626,8 +4725,9 @@ function extendSchedulerTask(baseItem,week,cycle,n){
     output:pre+baseItem.output
   };
 }
-function schedulerTasks(job,prep,months){
-  const base=baseSchedulerTasks(job,prep);
+function schedulerTasks(job,prep,months,st){
+  const school=isSchoolStage(st);
+  const base=baseSchedulerTasks(job,prep,st);
   const total=scheduleWeeks(months);
   if(total<=13){
     /* 26주 핵심과정에서 전반·중반·후반을 균형 있게 압축 */
@@ -4641,24 +4741,24 @@ function schedulerTasks(job,prep,months){
   const out=base.slice();
   for(let w=27;w<=Math.min(total,52);w++){
     const b=base[(w-27)%base.length];
-    out.push(extendSchedulerTask(b,w,2,w-26));
+    out.push(school?extendSchoolTask(b,2,w-26):extendSchedulerTask(b,w,2,w-26));
   }
   for(let w=53;w<=Math.min(total,78);w++){
     const b=base[(w-53)%base.length];
-    out.push(extendSchedulerTask(b,w,3,w-52));
+    out.push(school?extendSchoolTask(b,3,w-52):extendSchedulerTask(b,w,3,w-52));
   }
   /* v8.0: 24개월(104주) — 79~104주 경력확장·최종지원 주기 */
   for(let w=79;w<=total;w++){
     const b=base[(w-79)%base.length];
-    out.push(extendSchedulerTask(b,w,4,w-78));
+    out.push(school?extendSchoolTask(b,4,w-78):extendSchedulerTask(b,w,4,w-78));
   }
   /* 마지막 주는 기간 전체를 닫는 회고·다음계획으로 교체 */
   if(out.length){
     out[out.length-1]={
       phase:(total>78?'11':(total>52?'10':'9'))+'. 종합점검·다음단계',
       title:(Number(months)||6)+'개월 성과점검·다음 90일',
-      task:'전체 주차의 완료도, 직무역량 증거, 프로젝트·지원 실적을 점검하고 부족한 항목을 기준으로 다음 90일 후속계획을 세웁니다.',
-      output:'기간 전체 성과 정리표 + 90일 후속계획'
+      task:school?'전체 주차의 완료도, 체험·조사 기록, 학과(학교) 비교 결과를 점검하고 다음 90일 계획을 세웁니다.':'전체 주차의 완료도, 직무역량 증거, 프로젝트·지원 실적을 점검하고 부족한 항목을 기준으로 다음 90일 후속계획을 세웁니다.',
+      output:school?'기간 전체 정리표 + 90일 계획':'기간 전체 성과 정리표 + 90일 후속계획'
     };
   }
   return out;
@@ -4734,7 +4834,7 @@ function renderQuarterProgress(){
 }
 function scheduleHtml(v,job,prep){
   const total=scheduleWeeks(v.months);
-  const tasks=schedulerTasks(job,prep,v.months);
+  const tasks=schedulerTasks(job,prep,v.months,v.status);
   ACTIVE_SCHEDULE_CTX=scheduleContext(v,job);
   const done=scheduleStore(ACTIVE_SCHEDULE_CTX);
   const withYear=total>52;
@@ -5452,7 +5552,7 @@ else initializeApp();
       a.h.disabled = state === 'lock';
       a.h.setAttribute('aria-expanded', state === 'open' ? 'true' : 'false');
       a.n.textContent = (state === 'done') ? '✓' : String(i + 1);
-      a.sub.textContent = state === 'lock' ? lockText(i) : state === 'open' && i < 3 ? (i === 0 ? '관심목록과 진단 결과를 훑어보세요' : i === 1 ? '산업과 직무를 하나씩 고르세요' : '학년·기간·주당 시간을 입력하세요') : sm[i];
+      a.sub.textContent = state === 'lock' ? lockText(i) : state === 'open' && i < 3 ? (i === 0 ? '관심목록과 진단 결과를 훑어보세요' : i === 1 ? '산업과 직무를 하나씩 고르세요' : '학년·단계·기간·주당 시간을 입력하세요') : sm[i];
       a.tr.textContent = state === 'done' ? '수정' : state === 'ready' ? '열기' : state === 'lock' ? '🔒' : '';
     });
     var now = g('accNow');
@@ -5580,8 +5680,8 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var p = LS.get(KEYS.plan, null); if (!p || !p.i || !p.j) return null;
     var jp; try { jp = jobPkg(p.j); } catch (e) { return null; }
     if (!jp || !jp.job) return null;
-    var months = Number(p.months) || 6, v = { months: months, startDate: p.startDate || '' };
-    return { job: jp.job, tasks: schedulerTasks(jp.job, jp.preparation || {}, months), total: scheduleWeeks(months), ctx: scheduleContext(v, jp.job), start: p.startDate || iso() };
+    var months = Number(p.months) || 6, v = { months: months, startDate: p.startDate || '', status: p.status || '' };
+    return { job: jp.job, tasks: schedulerTasks(jp.job, jp.preparation || {}, months, p.status), total: scheduleWeeks(months), ctx: scheduleContext(v, jp.job), start: p.startDate || iso() };
   }
   /* 한 주차 과제를 가벼운 5단계로 */
   function steps(t) {
