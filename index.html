@@ -41,6 +41,7 @@
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
+<!-- v12.220 (2026-11-17): 진로 결정 로드맵에 '중·고등학생 진로 자료' 섹션 추가 — 커리어넷 메뉴 11개(직업 이해·진로 체험·학과·학교 선택·진학 준비 단계별) + 자료 4종(한국직업능력개발원 2020·2001, 서울시교육청 2026·2025) 요약·쪽수·최신성 경고, 중/고 단계별 필터, sw.js v115 -->
 <!-- v12.219 (2026-11-17): 진로 결정 학년·단계 5단계(중학생·고등학생·대학생(저학년/고학년)·졸업생) 세분화 — 단계 체크포인트 복원, 중·고생 로드맵(진로 체험·학과 선택·진학 준비)·스케줄러·완료 기준 분기, 졸업생 경력 전환·재취업 트랙, 진단 '참고용' 표시, 안내·설문 문구, sw.js v114 -->
 <!-- v12.217 (2026-11-17): 진단 — 문항 S043·S047 문구 중립화, 면허 필수(C) 직무·세부직무 C 포함 직무에 '시험 준비 필요' 안내, 추정 점수(J96~J112·F51~F60) 개성 보정·'기준값 추정' 표시, sw.js v112 -->
 <!-- v12.216 (2026-11-17): 공인 민간자격 98종·공인 만료·취소 46종(2026.5.1, 동일 자격명 병합) 내장(DB.privateCerts), 직무별 privCerts·공식 정보 표(privCertHtml), 자격표 근거 보강(민간자격정보서비스), sw.js v111 -->
@@ -4345,6 +4346,65 @@ const GRAD_TRACKS = [
   { name: '재취업 트랙 (공백 후 복귀)', items: ['공백 기간은 교육·프로젝트·단기 일경험 등 활동으로 설명할 수 있게 정리하기', '고용24·국민취업지원제도 등 공공 고용서비스 상담으로 이용 가능한 프로그램 확인하기(요건은 공식 사이트에서 확인)', '경력·신입 구분 없이 지원 가능한 상시·수시채용 공고를 찾아 주 2회 이상 지원 현황 기록하기', '이력서 첫 화면에 최근 활동과 직무 키워드가 보이도록 수정하기'] }
 ];
 function isSchoolStage(st) { return st === 'mid' || st === 'high'; }
+const CN = 'https://www.career.go.kr/cloud/w/';
+const SCHOOL_RESOURCES = {
+  note: '커리어넷 메뉴는 2026-11-17 공개 화면 기준이며, 일부 기능은 로그인이 필요합니다. 문서 쪽수는 첨부 PDF 인쇄 쪽 번호 기준입니다.',
+  links: [
+    { ph: '직업 이해', name: '직업백과', url: CN + 'job/list', who: '중·고', tip: '관심 직업의 하는 일·준비 방법 확인' },
+    { ph: '직업 이해', name: '직업인 인터뷰', url: CN + 'interview/job', who: '중·고', tip: '실제 직업인 이야기로 직업 이미지 점검' },
+    { ph: '직업 이해', name: '직업적성검사 · 직업흥미검사(H)', url: CN + 'inspect/vocation/intro', who: '중', tip: '중학생 추천 검사 · 흥미(H)는 inspect/holland/intro', url2: CN + 'inspect/holland/intro', name2: '흥미검사(H)' },
+    { ph: '직업 이해', name: '진로성숙도검사', url: CN + 'inspect/grow3/intro', who: '고', tip: '고등학생 추천 · 진로 준비 정도 점검' },
+    { ph: '진로 체험', name: '진로실행력검사', url: CN + 'inspect/exc/intro', who: '중', tip: '계획을 실천하는 힘 점검' },
+    { ph: '진로 체험', name: '신산업 진로체험 프로그램', url: CN + 'industry/intro', who: '중·고', tip: '신산업 분야 체험 안내' },
+    { ph: '진로 체험', name: '진로동영상 · 직업탐구 별일입니다', url: CN + 'jinroMovie/list?searchProgram=MCAT0249', who: '고', tip: '직업 영상으로 간접 체험' },
+    { ph: '학과·학교 선택', name: '고등학교 학과정보', url: CN + 'major/hList', who: '중', tip: '고교 학과·계열 비교' },
+    { ph: '학과·학교 선택', name: '대학교 학과정보', url: CN + 'major/uList', who: '고', tip: '관심 학과의 배우는 내용·진출 분야' },
+    { ph: '학과·학교 선택', name: '학교 정보', url: CN + 'school/list', who: '중·고', tip: '학교 후보 기본 정보 확인' },
+    { ph: '진학 준비', name: '진로상담', url: CN + 'counsel/insert', who: '중·고', tip: '온라인 진로상담 신청' }
+  ],
+  docs: [
+    { id: 'A', title: '고등학교 선택 및 진학지도 교사용 도움서', org: '한국직업능력개발원', year: '2020.12', who: '중', ph: ['학과·학교 선택', '진학 준비'],
+      sum: '중1 자유학년제부터 고교 정보 탐색·체험을 시작하고, 자기이해→경로설계→학교생활→학습설계 순으로 진학을 설계하도록 안내. 고교 유형 비교와 입학전형 연간 일정, 상담 절차(약 20~25분) 포함.',
+      pages: '진학지도 주요 내용 p.10–11 · 학년별 중점 p.15–18 · 상담 절차 p.26– · 고교 유형·특징 p.82 · 전형 일정 p.130–131 · 참고 사이트 p.134–137',
+      warn: '2020년 기준 — 고교 유형 개편·학교 수·사이트 주소 등은 현행 확인 필요' },
+    { id: 'B', title: '중학생 진로탐색 현장체험학습 프로그램 개발', org: '한국직업능력개발원(KRIVET) 기본연구', year: '2001', who: '중', ph: ['진로 체험'],
+      sum: '체험은 탐색 목적을 분명히 하고 흥미와 교육 요소를 균형 있게, 학교 공부와 연계하도록 설계해야 한다는 원리 제시. 현장 소개→견학→직업인 만남→실습→정리 순 운영 가이드와 직업인 강연·안내 지침 수록.',
+      pages: '프로그램 개발 절차·모형 Ⅳ장 · 직업인 안내 지침·학교용 운영 가이드라인 pdf 129–133쪽',
+      warn: '2001년 자료 — 정책·기관 정보는 낡음. 체험 설계 원리와 체크 항목만 참고(스캔본이라 일부 글자 인식 불확실)' },
+    { id: 'C', title: 'AI로 연결하는 미래 진로 연계교육(중학교)', org: '서울특별시교육청', year: '2026', who: '중', ph: ['직업 이해', '진로 체험'],
+      sum: 'AI 기초 후 지능형 로봇·디지털 헬스케어·첨단 신소재 3개 신산업 분야별로 직업 이해·체험 활동 구성. AI에 진로·진학 정보를 묻고 학교 홈페이지 등으로 검증하는 활동 포함.',
+      pages: 'AI 기초 p.10–43(프롬프트 p.22, 진로 여행 p.32) · 지능형 로봇 p.44 · 디지털 헬스케어 p.94 · 첨단 신소재 p.142',
+      warn: '서울시교육청 자료 — 타 지역은 시·도교육청 안내 확인' },
+    { id: 'D', title: '더 나은 미래를 여는 고등학교 진로 연계교육 프로그램 2.0', org: '서울특별시교육청', year: '2025', who: '고', ph: ['직업 이해', '학과·학교 선택', '진학 준비'],
+      sum: '자기이해·미래 사회 변화→직무 탐색(진학 vs 취업 2트랙)→고교학점제·선택과목·입시 개요→면접 대비 순의 30차시. 1학년 1·2학기 중심 권장 시기표 제공.',
+      pages: '진학 vs 취업 p.146 · 2022 개정 교육과정·고교학점제 p.158 · 선택과목 탐색 p.200–219 · 입학 전형 개요 p.188 · 면접 p.278–299 · 권장 시기표 p.3',
+      warn: '입시 전형은 대학별·연도별로 바뀜 — 지원 연도 모집요강 확인 필수' }
+  ]
+};
+function schoolResourcesHtml(st) {
+  const isSch = isSchoolStage(st);
+  const phs = ['직업 이해', '진로 체험', '학과·학교 선택', '진학 준비'];
+  const who = st === 'mid' ? '중' : st === 'high' ? '고' : '';
+  const fit = function (w) { return !who || w.indexOf(who) >= 0; };
+  let h = '<details class="more school-res"' + (isSch ? ' open' : '') + '><summary><span>중·고등학생 진로 자료 (커리어넷·교육청·연구원)</span><span class="muted small">' + (isSch ? '내 단계에 맞게 정렬' : '후배·자녀 지도용') + '</span></summary><div style="padding:0 14px 14px">';
+  h += '<p class="muted small" style="margin:0 0 8px">' + esc(SCHOOL_RESOURCES.note) + '</p>';
+  phs.forEach(function (p) {
+    const ls = SCHOOL_RESOURCES.links.filter(function (l) { return l.ph === p && fit(l.who); });
+    const ds = SCHOOL_RESOURCES.docs.filter(function (d) { return d.ph.indexOf(p) >= 0 && fit(d.who); });
+    if (!ls.length && !ds.length) return;
+    h += '<h4 style="margin:12px 0 4px">' + (phs.indexOf(p) + 1) + '. ' + esc(p) + '</h4><ul class="plain" style="margin:0;padding-left:18px">';
+    ls.forEach(function (l) {
+      h += '<li><a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.name) + '</a> <span class="muted small">(' + esc(l.who) + ') ' + esc(l.tip.replace(/ · 흥미\(H\)는 .*$/, '')) + '</span>' + (l.url2 ? ' · <a href="' + esc(l.url2) + '" target="_blank" rel="noopener">' + esc(l.name2) + '</a>' : '') + '</li>';
+    });
+    ds.forEach(function (d) { h += '<li><b>자료 ' + esc(d.id) + '</b> ' + esc(d.title) + ' <span class="muted small">(' + esc(d.org) + ', ' + esc(d.year) + ')</span></li>'; });
+    h += '</ul>';
+  });
+  h += '<h4 style="margin:14px 0 4px">자료 4종 요약·쪽수</h4>';
+  SCHOOL_RESOURCES.docs.filter(function (d) { return fit(d.who); }).forEach(function (d) {
+    h += '<div class="ask" style="margin:0 0 8px"><b>자료 ' + esc(d.id) + ' · ' + esc(d.title) + '</b><div class="muted small">' + esc(d.org) + ' · ' + esc(d.year) + ' · 대상 ' + esc(d.who) + '학생</div><div style="margin-top:4px">' + esc(d.sum) + '</div><div class="muted small" style="margin-top:4px">쪽수: ' + esc(d.pages) + '</div><div class="small" style="margin-top:4px;color:var(--danger)">⚠ ' + esc(d.warn) + '</div></div>';
+  });
+  return h + '</div></details>';
+}
 function checkpointHtml(v) {
   const g = STATUS_GUIDE[v.status]; if (!g) return '';
   let h = '<div class="plan-sec"><h3>내 단계 체크포인트 · ' + esc(g.label) + '</h3>' + listHtml(g.items);
@@ -4480,7 +4540,7 @@ function makePlanNow() {
   const v = readPlanInput();
   const box = $('planResult');
   if (!v.i || !v.j) {
-    box.innerHTML = '<p class="muted" style="margin-top:12px">진로 결정에서 목표 산업과 직무를 고르면 여기에 로드맵이 만들어집니다.</p><div class="btn-row no-print"><button class="btn primary" type="button" onclick="openPage(\'preparePage\')">← 진로 결정으로 가기</button></div>';
+    box.innerHTML = '<p class="muted" style="margin-top:12px">진로 결정에서 목표 산업과 직무를 고르면 여기에 로드맵이 만들어집니다.</p><div class="btn-row no-print"><button class="btn primary" type="button" onclick="openPage(\'preparePage\')">← 진로 결정으로 가기</button></div>' + schoolResourcesHtml(v.status);
     return;
   }
   const ip = industryPkg(v.i), jp = jobPkg(v.j);
@@ -4510,6 +4570,7 @@ function makePlanNow() {
     alloc.map(function (r) { return '<tr><td><b>' + esc(r.name) + '</b></td><td class="n">' + fmtH(r.h) + '</td><td>' + esc(r.what) + '</td></tr>'; }).join('') +
     '</tbody></table></div><p class="muted small">' + allocNote(v.status) + '</p></div>';
   h += checkpointHtml(v);
+  h += schoolResourcesHtml(v.status);
 
   let roadH = '<div style="margin-top:6px">' + phases.map(function (p) {
     return '<div class="phase"><div class="when"><b>' + esc(p.when) + '</b><span>' + esc(p.focus) + '</span></div><div>' +
