@@ -237,5 +237,93 @@ def main():
     except Exception as e:
         print('! 직무·공공기관 기사 수집 실패: %s' % e, file=sys.stderr)
 
+# ---------- 구글뉴스 중계 링크 → 언론사 원문 링크 변환 ----------
+# 구글뉴스 링크(news.google.com/rss/articles/...)는 일부 폰·통신망에서 "비정상 트래픽(We're sorry...)" 안내 페이지로 막힌다.
+# 선정된 기사만 원문 주소로 바꿔 저장하고(실패하면 기존 구글 링크 그대로 둠), 원래 구글 링크는 g 에 남겨 알림·배지의 '이미 본 기사' 판정이 유지되게 한다.
+import base64
+RES_PATH = os.path.join(ROOT, 'data', 'news', 'resolved.json')
+GN = re.compile(r'^https://news\.google\.com/(?:rss/)?(?:read|articles)/([A-Za-z0-9_-]+)')
+
+def gn_id(u):
+    m = GN.match(u or '')
+    return m.group(1) if m else ''
+
+def gn_direct(gid):
+    """예전 형식 ID는 base64 안에 원문 주소가 그대로 들어 있다(네트워크 불필요). 새 형식(AU_yqL...)은 ''."""
+    try:
+        raw = base64.urlsafe_b64decode(gid + '=' * (-len(gid) % 4))
+    except Exception:
+        return ''
+    if b'AU_yqL' in raw[:12]:
+        return ''
+    m = re.search(rb'https?://[\x21-\x7e]+', raw)
+    if not m:
+        return ''
+    u = m.group(0).decode('ascii', 'ignore')
+    return '' if 'google.' in urllib.parse.urlparse(u).netloc else u
+
+def gn_fetch(gid):
+    """구글뉴스 기사 ID → 원문 주소 (페이지의 서명·시간값을 받아 batchexecute 로 조회). 실패하면 ''."""
+    page = http_get('https://news.google.com/rss/articles/%s?hl=ko&gl=KR&ceid=KR:ko' % gid)
+    if not page:
+        return ''
+    txt = page.decode('utf-8', 'ignore')
+    sg, ts = re.search(r'data-n-a-sg="([^"]+)"', txt), re.search(r'data-n-a-ts="([^"]+)"', txt)
+    if not (sg and ts):
+        return ''
+    inner = '["garturlreq",[["X","X",["X","X"],null,null,1,1,"US:en",null,1,null,null,null,null,null,0,1],"X","X",1,[1,1,1],1,1,null,0,0,null,0],"%s",%s,"%s"]' % (gid, ts.group(1), sg.group(1))
+    body = 'f.req=' + urllib.parse.quote(json.dumps([[['Fbv4je', inner, None, 'generic']]]))
+    try:
+        req = urllib.request.Request('https://news.google.com/_/DotsSplashUi/data/batchexecute', data=body.encode('utf-8'),
+                                     headers={'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'User-Agent': UA})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            raw = r.read().decode('utf-8', 'ignore')
+        part = json.loads(raw.split('\n\n')[1])
+        u = json.loads(part[0][2])[1]
+        return u if isinstance(u, str) and u.startswith('http') and 'news.google.' not in urllib.parse.urlparse(u).netloc else ''
+    except Exception:
+        return ''
+
+def resolve_links(fetch=gn_fetch, budget_sec=900, pause=0.5, root=None):
+    base = root or ROOT
+    paths = [os.path.join(base, 'data', 'news', f) for f in ('latest.json', 'extra.json')]
+    res_path = os.path.join(base, 'data', 'news', 'resolved.json')
+    docs = {}
+    for pth in paths:
+        try:
+            docs[pth] = json.load(open(pth, encoding='utf-8'))
+        except Exception:
+            pass
+    def arts(doc):
+        groups = [doc.get('items') or {}] + [doc.get(k) or {} for k in ('jobs', 'pub')]
+        return [a for g in groups for lst in g.values() for a in lst]
+    try:
+        cache = json.load(open(res_path, encoding='utf-8'))
+    except Exception:
+        cache = {}
+    t0, fails, done, hit, new = time.time(), 0, 0, 0, {}
+    for doc in docs.values():
+        for a in arts(doc):
+            gid = gn_id(a.get('u', ''))
+            if not gid:
+                continue
+            u = cache.get(gid) or gn_direct(gid)
+            if not u and fails < 8 and time.time() - t0 < budget_sec:
+                u = fetch(gid); time.sleep(pause); done += 1
+                fails = 0 if u else fails + 1
+            if u:
+                new[gid] = u; hit += 1
+                a['g'] = a['u']; a['u'] = u
+    for pth, doc in docs.items():
+        with open(pth, 'w', encoding='utf-8') as f:
+            json.dump(doc, f, ensure_ascii=False, separators=(',', ':'))
+    with open(res_path, 'w', encoding='utf-8') as f:   # 오늘 쓰인 ID만 남겨 파일이 커지지 않게 함
+        json.dump(new, f, ensure_ascii=False, separators=(',', ':'))
+    print('원문 링크 변환: %d건 성공 (새로 조회 %d건)%s' % (hit, done, ' · 연속 실패로 조회 중단(구글 링크 유지)' if fails >= 8 else ''))
+
 if __name__ == '__main__':
     main()
+    try:
+        resolve_links()
+    except Exception as e:
+        print('! 원문 링크 변환 실패(구글 링크 유지): %s' % e, file=sys.stderr)

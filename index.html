@@ -40,6 +40,7 @@
 <!-- v12.168 (2026-11-14): 진로 결정 탭에서 오늘의 기사(목표 산업 기사·찜한 항목 기사) 제거 -->
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
+<!-- v12.207 (2026-11-17): 오늘의 기사 링크 오류(구글 We're sorry 차단 페이지) 대응 - 수집기가 구글뉴스 중계 링크를 언론사 원문 주소로 변환(실패 시 기존 링크 유지), 배지·알림 본 기사 판정은 원래 링크(g) 기준, sw.js v102 -->
 <!-- v12.206 (2026-11-17): 홈 오늘의 발견 탭·설명의 "기관" 표기를 "공공"으로 변경, sw.js v101 -->
 <!-- v12.165 (2026-11-14): 챌린지·게임 화면 위에도 산업·기관·직무·챌린지·기사 탭 줄 표시(눌러서 오늘의 발견으로 바로 이동) -->
 <!-- v12.164 (2026-11-14): "오늘의 산업 기사" → "오늘의 기사", 직무·중앙 공공기관 기사 추가(data/news/extra.json, 홈·기사 탭·진로 결정 찜한 항목) -->
@@ -4112,7 +4113,7 @@ function renderLikedNews() {
 const NEWS_META_CACHE = 'helpertom-meta', NEWS_META_URL = './__news-meta';
 function newsBadgeUrls(d, x, m) {
   const out = [];
-  const add = function (src, codes) { (codes || []).forEach(function (c) { ((src || {})[c] || []).slice(0, 2).forEach(function (a) { if (a && a.u) out.push(a.u); }); }); };
+  const add = function (src, codes) { (codes || []).forEach(function (c) { ((src || {})[c] || []).slice(0, 2).forEach(function (a) { if (a && a.u) out.push(a.g || a.u); }); }); }; /* v12.207: 원문 링크로 바뀐 기사는 원래 구글 링크(g)로 '본 기사' 판정 */
   add(d && d.items, m.ind); add(x && x.jobs, m.job); add(x && x.pub, m.pub);
   if (!(m.ind || []).length && !(m.job || []).length && !(m.pub || []).length && m.goal) add(d && d.items, [m.goal]);
   return Array.from(new Set(out));

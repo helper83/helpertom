@@ -26,7 +26,7 @@ const h8 = u => crypto.createHash('sha1').update(u).digest('hex').slice(0, 8);
 // 앱의 새 기사 배지와 같은 규칙: 찜한 산업·직무·기관별 기사 2건(최대 3개씩), 찜이 없으면 목표 산업
 function articlesFor(m) {
   const out = [], seen = new Set();
-  const add = (src, codes) => (codes || []).forEach(c => ((src || {})[c] || []).slice(0, 2).forEach(a => { if (a && a.u && !seen.has(a.u)) { seen.add(a.u); out.push(a); } }));
+  const add = (src, codes) => (codes || []).forEach(c => ((src || {})[c] || []).slice(0, 2).forEach(a => { if (a && a.u && !seen.has(a.g || a.u)) { seen.add(a.g || a.u); out.push(a); } }));
   add(d.items, m.ind); add(x && x.jobs, m.job); add(x && x.pub, m.pub);
   if (!out.length && !(m.ind || []).length && !(m.job || []).length && !(m.pub || []).length && m.goal) add(d.items, [m.goal]);
   return out;
@@ -42,14 +42,14 @@ do {
     const rec = it.rec, last = rec.last || { d: '', u: [] };
     if (!FORCE && last.d === kstToday) { skipped++; continue; }              // 하루 최대 1회
     const arts = articlesFor(rec.m || {});
-    const fresh = arts.filter(a => !(last.u || []).includes(h8(a.u)));        // 아직 알리지 않은 기사
+    const fresh = arts.filter(a => !(last.u || []).includes(h8(a.g || a.u)));        // 아직 알리지 않은 기사
     if (!fresh.length) { skipped++; continue; }
     const n = fresh.length;
     const payload = JSON.stringify({ title: '헬퍼탐 · 새 기사 ' + n + '건', body: fresh[0].t + (n > 1 ? ' 외 ' + (n - 1) + '건' : ''), n, url: APP_URL });
     if (DRY) { console.log('[DRY] ' + it.id.slice(0, 6) + ' → ' + payload); sent++; continue; }
     try {
       await webpush.sendNotification(rec.sub, payload, { TTL: 4 * 3600, urgency: 'normal' });
-      rec.last = { d: kstToday, u: arts.map(a => h8(a.u)).slice(0, 12) };
+      rec.last = { d: kstToday, u: arts.map(a => h8(a.g || a.u)).slice(0, 12) };
       puts.push({ id: it.id, rec }); sent++;
     } catch (e) {
       if (e.statusCode === 404 || e.statusCode === 410) { dels.push(it.id); removed++; } else { failed++; console.log('전송 실패 ' + it.id.slice(0, 6) + ' ' + (e.statusCode || e.message)); }
