@@ -41,6 +41,7 @@
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
+<!-- v12.227 (2026-11-18): AI 업무 지도 카드 상단에 구역 설명(AI 활용·함께·지시·책임) 한 줄 추가. -->
 <!-- v12.226 (2026-11-18): 직무 탐색에서 직무를 보면 '1. 직무대영역 고르기'를 자동으로 접고, 접기·펴기 버튼 추가. -->
 <!-- v12.225 (2026-11-18): 업무 구간 이름 'AI 맡김'을 'AI 활용'으로 변경(가능성으로 읽히도록). -->
 <!-- v12.224 (2026-11-18): AI 시대 업무 지도를 BOK·Anthropic·WEF 자료와 대조해 검증, 21개 업무 구간 수정, 근거 등급 표기. -->
@@ -1915,6 +1916,7 @@ function aiRoleHtml(job, d) {
   const ce = cnt(d.e), cm = cnt(d.m);
   const rows = function (ts, z) { return '<div class="ai-rows">' + ts.map(function (t, i) { const m = AI_ZONE[z.charAt(i)]; return '<div><span class="zc ' + m[1] + '">' + m[0] + '</span><span>' + esc(t) + '</span></div>'; }).join('') + '</div>'; };
   let h = '<details class="more ai-role"><summary><span>AI 시대 업무 지도</span><span class="muted small">신입 업무 ' + en.length + '개 중 AI 활용 ' + ce.A + '</span></summary><div class="in">';
+  h += '<p class="small ai-legend" style="margin:0 0 10px"><span class="zc zA">AI 활용</span> AI가 초안·처리 · <span class="zc zB">함께</span> AI 결과를 사람이 보정 · <span class="zc zC">지시·책임</span> 사람이 판단·책임</p>';
   h += '<p class="small muted" style="margin:0 0 6px">신입이 맡는 업무 ' + en.length + '개 중</p><div class="ai-bar" role="img" aria-label="신입 업무 구간: AI 활용 ' + ce.A + ', 함께 ' + ce.B + ', 지시·책임 ' + ce.C + '">';
   ['A', 'B', 'C'].forEach(function (k) { if (ce[k]) h += '<div class="' + AI_ZONE[k][1] + '" style="flex:' + ce[k] + '">' + AI_ZONE[k][0] + ' ' + ce[k] + '</div>'; });
   h += '</div><p class="small muted" style="margin:4px 0 10px">주요 업무 ' + mj.length + '개 중 AI 활용 ' + cm.A + ' · 함께 ' + cm.B + ' · 지시·책임 ' + cm.C + '</p>';
