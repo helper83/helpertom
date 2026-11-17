@@ -41,6 +41,7 @@
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
+<!-- v12.226 (2026-11-18): 직무 탐색에서 직무를 보면 '1. 직무대영역 고르기'를 자동으로 접고, 접기·펴기 버튼 추가. -->
 <!-- v12.225 (2026-11-18): 업무 구간 이름 'AI 맡김'을 'AI 활용'으로 변경(가능성으로 읽히도록). -->
 <!-- v12.224 (2026-11-18): AI 시대 업무 지도를 BOK·Anthropic·WEF 자료와 대조해 검증, 21개 업무 구간 수정, 근거 등급 표기. -->
 <!-- v12.223 (2026-11-18): AI 시대 업무 지도를 110개 직무로 확대(J81·J111 제외), 자격직무 책임 문구 5개 추가. -->
@@ -366,6 +367,8 @@ select:focus,input:focus{outline:none;border-color:var(--focus,#7db6e2);box-shad
 
 /* ---------- step blocks & cards ---------- */
 .step{margin-top:18px}
+.step.folded>.grid{display:none}
+@media print{#jobGroupStep{display:none}}
 .step-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;margin-bottom:10px;flex-wrap:wrap}
 .num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:700;flex:0 0 auto}
 .grid{display:grid;gap:10px}
@@ -1508,8 +1511,8 @@ button.ch-step{cursor:pointer}.ch-step.done{border-color:var(--line,#E1E5EC);bac
         <input id="jobSearch" type="search" placeholder="예: 경영기획, HR, MD, QA/QC, 백엔드, 데이터·AI" autocomplete="off" oninput="searchJobs(this.value)">
       </div>
       <div id="jobSearchResults" class="search-results" aria-live="polite"></div>
-      <div class="step">
-        <div class="step-title"><span class="num">1</span><span class="js-job-groups">21</span>개 직무대영역 고르기</div>
+      <div class="step" id="jobGroupStep">
+        <div class="step-title"><span class="num">1</span><span class="js-job-groups">21</span>개 직무대영역 고르기 <button class="btn ghost" type="button" id="jobGroupToggle" aria-expanded="true" aria-controls="jobGroupGrid" onclick="toggleJobGroupFold()">접기</button></div>
         <div id="jobGroupGrid" class="grid g3"></div>
       </div>
       <div id="jobCrumb" class="crumb hidden"></div>
@@ -3301,8 +3304,18 @@ function renderJobGroups() {
       '<span class="c">직무 ' + g.codes.length + '개 보기</span></button>';
   }).join('');
 }
+/* v12.226: 직무를 보고 있으면 1단계(직무대영역 고르기)를 자동으로 접는다. 버튼으로 다시 펼 수 있다 */
+function setJobGroupFold(fold) {
+  const st = $('jobGroupStep'), bt = $('jobGroupToggle');
+  if (!st || !bt) return;
+  st.classList.toggle('folded', !!fold);
+  bt.setAttribute('aria-expanded', fold ? 'false' : 'true');
+  bt.textContent = fold ? '펴기' : '접기';
+}
+function toggleJobGroupFold() { setJobGroupFold(!$('jobGroupStep').classList.contains('folded')); }
 function selectJobGroup(no, keepDetail) {
   STATE.jobGroup = no;
+  if (!keepDetail) setJobGroupFold(false);
   if (!keepDetail) STATE.jobCode = '';
   document.querySelectorAll('[data-jgroup]').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-jgroup') === no); });
   const g = JOB_GROUP_META.find(function (x) { return x.no === no; });
@@ -3320,6 +3333,7 @@ function updateJobCrumb() {
 }
 function resetJobGroup() {
   STATE.jobGroup = ''; STATE.jobCode = '';
+  setJobGroupFold(false);
   document.querySelectorAll('[data-jgroup]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
   $('jobSelectWrap').classList.add('hidden');
   $('jobCrumb').classList.add('hidden');
@@ -3400,6 +3414,7 @@ function showJob(code) {
   updateJobCrumb();
   const box = $('jobDetail');
   if (!code) { box.innerHTML = ''; return; }
+  setJobGroupFold(true);
   const pkg = jobPkg(code);
   if (!pkg) { box.innerHTML = '<p class="warn">직무 정보를 찾지 못했습니다.</p>'; return; }
   const job = pkg.job || {};
