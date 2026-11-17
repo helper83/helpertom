@@ -40,6 +40,7 @@
 <!-- v12.168 (2026-11-14): 진로 결정 탭에서 오늘의 기사(목표 산업 기사·찜한 항목 기사) 제거 -->
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
+<!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
 <!-- v12.217 (2026-11-17): 진단 — 문항 S043·S047 문구 중립화, 면허 필수(C) 직무·세부직무 C 포함 직무에 '시험 준비 필요' 안내, 추정 점수(J96~J112·F51~F60) 개성 보정·'기준값 추정' 표시, sw.js v112 -->
 <!-- v12.216 (2026-11-17): 공인 민간자격 98종·공인 만료·취소 46종(2026.5.1, 동일 자격명 병합) 내장(DB.privateCerts), 직무별 privCerts·공식 정보 표(privCertHtml), 자격표 근거 보강(민간자격정보서비스), sw.js v111 -->
 <!-- v12.215 (2026-11-17): 국가전문자격 212종(공공데이터 2025.6.1) 내장(DB.nationalCerts), 직무별 natCerts 연결·공식 정보 표(natCertHtml), 자격표 행에 시행기관 URL 보강·검증 등급 재산정, sw.js v110 -->
@@ -5048,13 +5049,24 @@ function majorRecommend(DBx, refMap, r, n) {
     return out;
   };
   const icN = norm(ic, icnt, refMap, IN, 40), jcN = norm(jc, jcnt, JOB_MAJOR_REFERENCE, JB, 8);
-  const top = function (map, names) {
+  /* v12.218: 한 산업그룹·직무군에 쏠리지 않도록 그룹당 최대 2개로 상위 목록을 구성하고, 다른 그룹의 연결 항목은 '넓혀 보기' 목록으로 따로 제공 */
+  const IG = {}; DBx.industries.forEach(function (x) { IG[x.code] = x.group || x.code; });
+  const gKey = function (kind, c) { if (kind === 'I') return 'I' + (IG[c] || c); const g = (typeof jobGroupOf === 'function') ? jobGroupOf(c) : null; return 'J' + (g ? g.no : c); };
+  const top = function (map, names, kind) {
     const arr = Object.keys(map).filter(function (c) { return names[c]; }).map(function (c) { return { code: c, name: names[c], score: map[c] }; });
     arr.sort(function (a, b) { return b.score - a.score || (a.code < b.code ? -1 : 1); });
     const max = arr.length && arr[0].score > 0 ? arr[0].score : 1;
-    return arr.slice(0, n).map(function (x) { x.pct = Math.max(8, Math.round(x.score / max * 100)); return x; });
+    const cnt = {}, main = [], rest = [];
+    arr.forEach(function (x) { const g = gKey(kind, x.code); if (main.length < n && (cnt[g] || 0) < 2) { cnt[g] = (cnt[g] || 0) + 1; main.push(x); } else rest.push(x); });
+    while (main.length < n && rest.length) main.push(rest.shift());
+    const used = {}; main.forEach(function (x) { used[gKey(kind, x.code)] = 1; });
+    const more = [];
+    rest.forEach(function (x) { const g = gKey(kind, x.code); if (more.length < 6 && x.score > 0 && !used[g]) { used[g] = 1; more.push(x); } });
+    const fin = function (x) { x.pct = Math.max(8, Math.round(x.score / max * 100)); return x; };
+    return { list: main.map(fin), more: more.map(fin) };
   };
-  return { industries: top(icN, IN), jobs: top(jcN, JB), evidence: evidence };
+  const ti = top(icN, IN, 'I'), tj = top(jcN, JB, 'J');
+  return { industries: ti.list, jobs: tj.list, moreI: ti.more, moreJ: tj.more, evidence: evidence };
 }
 
 /* ===== v1.3 학과 탐색 화면 ===== */
@@ -5250,7 +5262,9 @@ function majorApplyGuide(out, g, IN, JB) {
     (cur || []).forEach(function (x) { if (res.length < 5 && !seen[x.code]) { seen[x.code] = 1; res.push(x); } });
     return res.slice(0, 5);
   };
-  return { industries: pick(g.ind, out.industries, IN), jobs: pick(g.job, out.jobs, JB), evidence: out.evidence, guide: g };
+  const ri = pick(g.ind, out.industries, IN), rj = pick(g.job, out.jobs, JB);
+  const dropIn = function (more, res) { const have = {}; res.forEach(function (x) { have[x.code] = 1; }); return (more || []).filter(function (x) { return !have[x.code]; }); };
+  return { industries: ri, jobs: rj, moreI: dropIn((out.industries || []).slice(5).concat(out.moreI || []), ri), moreJ: dropIn((out.jobs || []).slice(5).concat(out.moreJ || []), rj), evidence: out.evidence, guide: g };
 }
 function majorGuideHtml(g) {
   const certs = g.certs.map(function (c) {
@@ -5277,7 +5291,8 @@ function majorShow(r, q, scroll) {
   DB.jobs.forEach(function (x) { JB0[x.code] = x.name; });
   const gd = majorGuideFor(r, q);
   const out = majorApplyGuide(majorRecommend(DB, INDUSTRY_MAJOR_REFERENCE, r, 8), gd, IN0, JB0);
-  if (!gd) { out.industries = out.industries.slice(0, 5); out.jobs = out.jobs.slice(0, 5); }
+  if (!gd) { out.moreI = out.industries.slice(5).concat(out.moreI || []); out.moreJ = out.jobs.slice(5).concat(out.moreJ || []); out.industries = out.industries.slice(0, 5); out.jobs = out.jobs.slice(0, 5); }
+  out.moreI = (out.moreI || []).slice(0, 6); out.moreJ = (out.moreJ || []).slice(0, 6);
   STATE.major = out;
   const thin = out.evidence < 30;
   const short = out.industries.length < 5 || out.jobs.length < 5;
@@ -5295,6 +5310,7 @@ function majorShow(r, q, scroll) {
     (short ? '<p class="small muted" style="margin:6px 0 0">연결 데이터가 있는 항목이 적어 산업 ' + out.industries.length + '개·직무 ' + out.jobs.length + '개만 표시합니다. 무관한 항목으로 채우지 않았으니 산업·직무 탐색에서 직접 둘러보세요.</p>' : '') + '</div>';
   h += '<div class="mj-cols"><div class="mj-col"><h3>추천 산업 TOP ' + out.industries.length + '</h3><p class="small muted" style="margin:0">전공 연결이 높은 산업 순 · 이름을 누르면 상세로 이동</p>' + majorRows('INDUSTRY', out.industries) + '</div>' +
     '<div class="mj-col"><h3>추천 직무 TOP ' + out.jobs.length + '</h3><p class="small muted" style="margin:0">전공 연결이 높은 직무 순 · 이름을 누르면 상세로 이동</p>' + majorRows('JOB', out.jobs) + '</div></div>' +
+    ((out.moreI.length || out.moreJ.length) ? '<details class="more"><summary>다른 산업·직무로 넓혀 보기 (산업 ' + out.moreI.length + ' · 직무 ' + out.moreJ.length + ')</summary><div class="in"><p class="small muted" style="margin:0 0 6px">위 추천과 다른 산업군·직무군에서 전공 연결이 확인된 항목입니다. 연결은 상대적으로 약할 수 있으니 채용공고로 요구 전공·역량을 확인하세요.</p><div class="mj-cols"><div class="mj-col"><h3>산업</h3>' + majorRows('INDUSTRY', out.moreI) + '</div><div class="mj-col"><h3>직무</h3>' + majorRows('JOB', out.moreJ) + '</div></div></div></details>' : '') +
     (gd ? majorGuideHtml(gd) : '') +
     '<div class="btn-row no-print"><button class="btn primary" type="button" onclick="majorAddAll()">추천 항목 관심목록에 담기</button>' +
     '<button class="btn" type="button" onclick="openPage(\'industryPage\')">산업 탐색으로 이동</button>' +
