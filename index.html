@@ -42,6 +42,7 @@
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
 <!-- v12.227 (2026-11-18): AI 업무 지도 카드 상단에 구역 설명(AI 활용·함께·지시·책임) 한 줄 추가. -->
+<!-- v12.230 (2026-11-18): 화면 요소가 없어 동작하지 않던 뉴스 함수(renderNews·renderLikedNews) 정리. -->
 <!-- v12.229 (2026-11-18): 전 탭 점검 — 지연 로딩 조각 버전(LAZY.ver)을 shards.json과 일치시켜 오프라인 미리받기 적중·옛 조각 잔존 방지, AI 업무 지도 조각 미리받기 목록에 추가. -->
 <!-- v12.228 (2026-11-18): 산업 탐색에서 산업을 보면 '1. 산업 생태계 고르기'를 자동으로 접고 접기·펴기 버튼 추가(직무 탐색과 통일). -->
 <!-- v12.226 (2026-11-18): 직무 탐색에서 직무를 보면 '1. 직무대영역 고르기'를 자동으로 접고, 접기·펴기 버튼 추가. -->
@@ -4256,26 +4257,9 @@ function newsFoldHtml(code, d) {
   const foot = d && d.generated ? '<p class="news-note">' + (wide ? '기사가 적어 기간을 48시간으로 넓혔어요. ' : '') + '기준: ' + newsMd(d.window.from) + ' ~ ' + newsMd(d.window.to) + ' (한국시간). 제목과 링크만 보여 주며 저작권은 각 언론사에 있어요. 관련 없는 기사가 섞일 수 있어요.</p>' : '';
   return '<details class="news-fold"><summary>📰 오늘의 기사 · ' + esc(nm) + (list.length ? ' ' + list.length + '건' : '') + '</summary>' + body + foot + '</details>';
 }
-function renderNews() {
-  const box = $('newsBox'); if (!box) return;
-  const code = $('planIndustrySelect') ? $('planIndustrySelect').value : '';
-  if (!code || !INDUSTRY_BY[code]) { box.innerHTML = ''; return; }
-  loadNews().then(function (d) { if ($('planIndustrySelect').value === code) box.innerHTML = newsFoldHtml(code, d); });
-}
 /* 산업 탐색 상세 화면의 기사 카드 */
 function renderIndustryNews(code) {
   loadNews().then(function (d) { const el = document.querySelector('#industryDetail [data-news]'); if (el && STATE.industryCode === code) el.innerHTML = newsFoldHtml(code, d); });
-}
-/* 진로 결정: 찜한 산업의 기사 모아 보기(산업당 최대 2건) */
-function renderLikedNews() {
-  const box = $('likedNews'); if (!box) return;
-  const ci = newsLikedCodes('IND', 99), cj = newsLikedCodes('JOB', 99), cp = newsLikedCodes('PUB', 99), tot = ci.length + cj.length + cp.length;
-  if (!tot) { box.innerHTML = ''; return; }
-  newsAll().then(function (r) {
-    const rows = ci.map(function (c) { return newsGroupHtml(r, 'IND', c, '산업', 2); }).concat(cj.map(function (c) { return newsGroupHtml(r, 'JOB', c, '직무', 2); }), cp.map(function (c) { return newsGroupHtml(r, 'PUB', c, '공공기관', 2); })).join('');
-    if (r.d && r.d.generated && !rows) { box.innerHTML = ''; return; }
-    box.innerHTML = '<details class="news-fold"><summary>📰 찜한 항목 기사 (항목당 2건)</summary>' + (r.d && r.d.generated ? rows + newsFootHtml(r.d) : '<p class="news-note">기사 목록을 아직 불러오지 못했어요.</p>') + '</details>';
-  });
 }
 /* v12.201 새 기사 → 앱 아이콘 배지(숫자만, 소리·알림 없음). 앱을 닫은 동안은 서비스워커(periodicsync)가 같은 규칙으로 새 기사 수를 계산해 배지를 올림(안드로이드 설치형 앱 기준) */
 const NEWS_META_CACHE = 'helpertom-meta', NEWS_META_URL = './__news-meta';
