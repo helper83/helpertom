@@ -41,6 +41,7 @@
 <!-- v12.167 (2026-11-14): 진로 결정 하단 "수업 나눔 · 강사에게 보내기" 제목을 "내 선택 공유하기"로 변경, 안내 문구 제거 -->
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
+<!-- v12.225 (2026-11-18): 업무 구간 이름 'AI 맡김'을 'AI 활용'으로 변경(가능성으로 읽히도록). -->
 <!-- v12.224 (2026-11-18): AI 시대 업무 지도를 BOK·Anthropic·WEF 자료와 대조해 검증, 21개 업무 구간 수정, 근거 등급 표기. -->
 <!-- v12.223 (2026-11-18): AI 시대 업무 지도를 110개 직무로 확대(J81·J111 제외), 자격직무 책임 문구 5개 추가. -->
 <!-- v12.222 (2026-11-18): 직무 상세에 'AI 시대 업무 지도'(시범 10개 직무: 회계·세무, 소프트웨어개발, 마케팅·브랜드, 인사, 고객서비스, 간호, 법무, 데이터분석, 통번역, 상담·진로) — 주요·신입 업무를 AI 맡김/함께/지시·책임으로 구분, data/ai/roles.js 지연 로딩, sw.js v117 -->
@@ -1900,8 +1901,8 @@ function ensureIndustry(code) {
     return pkg;
   });
 }
-/* v12.222: AI 시대 업무 지도 — 직무의 주요·신입 업무를 AI 맡김(A)·사람과 함께(B)·지시·검증·책임(C)으로 나눠 보여준다(data/ai/roles.js, 시범 10개 직무) */
-const AI_ZONE = { A: ['AI 맡김', 'zA'], B: ['함께', 'zB'], C: ['지시·책임', 'zC'] };
+/* v12.222: AI 시대 업무 지도 — 직무의 주요·신입 업무를 AI 활용(A)·사람과 함께(B)·지시·검증·책임(C)으로 나눠 보여준다(data/ai/roles.js, 시범 10개 직무) */
+const AI_ZONE = { A: ['AI 활용', 'zA'], B: ['함께', 'zB'], C: ['지시·책임', 'zC'] };
 const AI_EVL = { H: '문서·정보처리형 (AI 고노출 직군)', M: '혼합형 (문서·판단·현장 혼재)', C: '대면·자격·돌봄형 (AI 보완도 높은 직군)', F: '현장·신체형 (AI 저노출 직군)' };
 const AI_LICENSED = { J09: '회계·세무 판단과 신고의 책임은 사람에게 있습니다.', J14: '법적 판단과 최종 책임은 변호사 등 자격자에게 있습니다.', J66: '면허가 필요한 간호 행위와 환자 안전 책임은 사람에게 있습니다.', J64: '진단·치료 결정과 의료 행위의 법적 책임은 의사에게 있습니다.', J65: '조제·복약지도와 약물 안전 책임은 약사에게 있습니다.', J67: '면허가 필요한 검사·촬영 행위와 환자 안전 책임은 사람에게 있습니다.', J68: '면허가 필요한 치료 행위와 환자 안전 책임은 사람에게 있습니다.', J103: '법률 판단과 최종 책임은 변호사·변리사·법무사 등 자격자에게 있습니다.' };
 function aiRoleHtml(job, d) {
@@ -1910,15 +1911,15 @@ function aiRoleHtml(job, d) {
   const cnt = function (z) { const o = { A: 0, B: 0, C: 0 }; z.split('').forEach(function (k) { o[k]++; }); return o; };
   const ce = cnt(d.e), cm = cnt(d.m);
   const rows = function (ts, z) { return '<div class="ai-rows">' + ts.map(function (t, i) { const m = AI_ZONE[z.charAt(i)]; return '<div><span class="zc ' + m[1] + '">' + m[0] + '</span><span>' + esc(t) + '</span></div>'; }).join('') + '</div>'; };
-  let h = '<details class="more ai-role"><summary><span>AI 시대 업무 지도</span><span class="muted small">신입 업무 ' + en.length + '개 중 AI 맡김 ' + ce.A + '</span></summary><div class="in">';
-  h += '<p class="small muted" style="margin:0 0 6px">신입이 맡는 업무 ' + en.length + '개 중</p><div class="ai-bar" role="img" aria-label="신입 업무 구간: AI 맡김 ' + ce.A + ', 함께 ' + ce.B + ', 지시·책임 ' + ce.C + '">';
+  let h = '<details class="more ai-role"><summary><span>AI 시대 업무 지도</span><span class="muted small">신입 업무 ' + en.length + '개 중 AI 활용 ' + ce.A + '</span></summary><div class="in">';
+  h += '<p class="small muted" style="margin:0 0 6px">신입이 맡는 업무 ' + en.length + '개 중</p><div class="ai-bar" role="img" aria-label="신입 업무 구간: AI 활용 ' + ce.A + ', 함께 ' + ce.B + ', 지시·책임 ' + ce.C + '">';
   ['A', 'B', 'C'].forEach(function (k) { if (ce[k]) h += '<div class="' + AI_ZONE[k][1] + '" style="flex:' + ce[k] + '">' + AI_ZONE[k][0] + ' ' + ce[k] + '</div>'; });
-  h += '</div><p class="small muted" style="margin:4px 0 10px">주요 업무 ' + mj.length + '개 중 AI 맡김 ' + cm.A + ' · 함께 ' + cm.B + ' · 지시·책임 ' + cm.C + '</p>';
+  h += '</div><p class="small muted" style="margin:4px 0 10px">주요 업무 ' + mj.length + '개 중 AI 활용 ' + cm.A + ' · 함께 ' + cm.B + ' · 지시·책임 ' + cm.C + '</p>';
   h += '<b class="small">신입 업무</b>' + rows(en, d.e) + '<b class="small" style="display:block;margin-top:10px">주요 업무</b>' + rows(mj, d.m);
   h += '<div class="ask" style="margin:12px 0 0"><b>신입 업무는 이렇게 바뀝니다</b><p class="small" style="margin:4px 0 0">' + esc(d.chg) + '</p></div>';
   h += '<b class="small" style="display:block;margin-top:10px">AI를 지휘하려면</b>' + listHtml(d.sk);
   if (AI_LICENSED[job.code]) h += '<p class="small" style="margin:8px 0 0"><b>자격·책임</b> ' + esc(AI_LICENSED[job.code]) + '</p>';
-  h += '<p class="small muted" style="margin:10px 0 0">근거 등급: <b>' + esc((AI_EVL[d.t] || AI_EVL.M)) + '</b><br>한국은행 BOK 이슈노트(2025-30·2026-25), Anthropic(2026.3), 세계경제포럼 WEF(2025·2026) 자료와 대조해 검증했습니다(' + esc((window.__AI_ROLES_VER || '2026-11-18')) + '). 업무별 공식 판정이 아니라 직업군 단위 근거에 맞춘 분류입니다. “AI 맡김”은 가능성이며 이미 도입된 수준을 뜻하지 않습니다. 기관·직급·AI 도입 수준에 따라 달라집니다.</p></div></details>';
+  h += '<p class="small muted" style="margin:10px 0 0">근거 등급: <b>' + esc((AI_EVL[d.t] || AI_EVL.M)) + '</b><br>한국은행 BOK 이슈노트(2025-30·2026-25), Anthropic(2026.3), 세계경제포럼 WEF(2025·2026) 자료와 대조해 검증했습니다(' + esc((window.__AI_ROLES_VER || '2026-11-18')) + '). 업무별 공식 판정이 아니라 직업군 단위 근거에 맞춘 분류입니다. “AI 활용”은 AI를 쓸 수 있는 가능성이며, 이미 도입된 수준을 뜻하지 않습니다. 기관·직급·AI 도입 수준에 따라 달라집니다.</p></div></details>';
   return h;
 }
 function fillAiRole(code) {
