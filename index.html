@@ -42,6 +42,7 @@
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
 <!-- v12.227 (2026-11-18): AI 업무 지도 카드 상단에 구역 설명(AI 활용·함께·지시·책임) 한 줄 추가. -->
+<!-- v12.234 (2026-11-24): 홈 아래쪽 '오늘의 기사'(찜한 항목 기사) 블록 숨김. 기사는 위쪽 '오늘의 기사' 행(기사 탭)에서 확인, 기사 탭을 열면 새 기사 배지 해제. -->
 <!-- v12.233 (2026-11-24): 오늘의 기사 — 기준을 한국시간 06:00 기준 하루 전(어제 06:00~오늘 06:00)으로 하고, 기사가 0건일 때만 2일 전까지 확장(수집기 MIN_OK=1). 확장 시 기준 시각 표기도 2일 범위로 맞춤. -->
 <!-- v12.232 (2026-11-24): 오늘의 발견 팝업에 '날씨' 탭을 기사 왼쪽에 추가(산업·공공·직무·챌린지·날씨·기사), 홈 목록도 같은 순서·항목(오늘의 기사 행 추가)으로 맞춤. 날씨 팝업에서도 같은 탭으로 이동. -->
 <!-- v12.231 (2026-11-24): 오늘의 발견에 '오늘의 날씨' 추가 — 학생이 고른 지역(30곳, 위치 권한 없음) 날씨·미세먼지·3일 예보를 Open-Meteo(CC BY 4.0)에서 받아 보여 주고, 실패 시 마지막 정보 표시. -->
@@ -4355,29 +4356,19 @@ function renderPushBox() {
 }
 /* v12.164 홈 탭의 오늘의 기사: 찜한 산업·직무·공공기관(각 최대 3개) 기사 2건씩. 찜이 없으면 목표 산업 → 기사 많은 산업 */
 function renderHomeNews() {
-  const box = $('homeNews'); if (!box) return;
-  newsAll().then(function (r) {
-    const d = r.d, has = d && d.generated && d.items;
-    const ci = newsLikedCodes('IND', 3), cj = newsLikedCodes('JOB', 3), cp = newsLikedCodes('PUB', 3);
-    let rows = '', basis = ci.length || cj.length || cp.length ? '찜한 항목' : '';
-    if (has) {
-      rows = ci.map(function (c) { return newsGroupHtml(r, 'IND', c, '산업', 2); }).concat(cj.map(function (c) { return newsGroupHtml(r, 'JOB', c, '직무', 2); }), cp.map(function (c) { return newsGroupHtml(r, 'PUB', c, '공공기관', 2); })).join('');
-      if (!rows) {
-        let codes = [], g = $('planIndustrySelect') ? $('planIndustrySelect').value : '';
-        if (g && INDUSTRY_BY[g]) { codes = [g]; basis = '목표 산업'; }
-        else { codes = Object.keys(d.items).filter(function (c) { return INDUSTRY_BY[c] && d.items[c].length; }).sort(function (a, b) { return d.items[b].length - d.items[a].length; }).slice(0, 3); basis = '오늘 기사가 많은 산업'; }
-        rows = codes.map(function (c) { return newsGroupHtml(r, 'IND', c, '산업', 2); }).join('');
-      }
-    }
-    const body = !has ? '<p class="news-note">기사 목록을 아직 불러오지 못했어요. 매일 오전 6시(한국시간) 이후 갱신돼요.</p>' : (rows || '<p class="news-note">오늘 수집된 기사가 아직 없어요.</p>');
-    const foot = has ? newsFootHtml(d).replace('</p>', (basis ? ' · ' + esc(basis) + ' 기준' : '') + '</p>') : '';
-    box.innerHTML = '<div class="hsec">오늘의 기사</div><details class="news-fold" open><summary>📰 ' + (basis ? esc(basis) + ' 기사' : '오늘의 기사') + '</summary>' + body + foot + '</details>';
-    /* v12.201 홈에 기사를 보여 주는 순간 '본 것'으로 처리하고 아이콘 배지를 지움 */
-    try { renderPushBox(); } catch (e) { }
-    try { if (has && document.visibilityState === 'visible') { const g = $('planIndustrySelect') ? $('planIndustrySelect').value : ''; newsBadgeMarkSeen(r, ci, cj, cp, g && INDUSTRY_BY[g] ? g : ''); } } catch (e) { }
-  });
+  /* v12.234 홈 아래쪽 "오늘의 기사" 블록은 숨김(위쪽 '오늘의 기사' 행 → 기사 탭에서 확인). 알림 버튼만 갱신 */
+  const box = $('homeNews'); if (box) box.innerHTML = '';
+  try { renderPushBox(); } catch (e) { }
 }
-window.__HT_NEWS = { all: newsAll, group: newsGroupHtml, foot: newsFootHtml, liked: newsLikedCodes };
+function newsMarkSeenNow(r) {
+  /* 기사 탭을 열어 본 순간 '본 것'으로 처리하고 아이콘 배지를 지움 */
+  try {
+    if (!r || !r.d || !r.d.generated || document.visibilityState !== 'visible') return;
+    const g = $('planIndustrySelect') ? $('planIndustrySelect').value : '';
+    newsBadgeMarkSeen(r, newsLikedCodes('IND', 3), newsLikedCodes('JOB', 3), newsLikedCodes('PUB', 3), g && INDUSTRY_BY[g] ? g : '');
+  } catch (e) { }
+}
+window.__HT_NEWS = { seen: newsMarkSeenNow, all: newsAll, group: newsGroupHtml, foot: newsFootHtml, liked: newsLikedCodes };
 function updateGoalSummary() {
   const v = readPlanInput();
   const box = $('goalSummary');
@@ -6657,6 +6648,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
         N.liked(a[0], 3).forEach(function (c) { if (seen[a[0] + c]) return; lk += N.group(r, a[0], c, a[1], 2); });
       });
       if (lk) h += '<div class="disc-pt">' + lk + '</div>';
+      try { if (N.seen) N.seen(r); } catch (e) { }
       box.innerHTML = h ? h + N.foot(d) : '<p class="muted small">지금은 보여 드릴 기사가 없어요. 매일 오전 6시(한국시간) 이후 갱신돼요.</p>';
     });
   }
