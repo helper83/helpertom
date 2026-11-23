@@ -2,10 +2,10 @@
 """헬퍼탐 오늘의 기사 수집기 (GitHub Actions 매일 06:00 KST 실행)
 - 산업(F01~F60)별로 기사 제목·언론사·시각·링크만 모아 data/news/latest.json 에 저장 (본문은 저장하지 않음)
 - 직무(J01~)와 중앙 공공기관(C001~)은 data/news/extra.json 에 따로 저장 (기사가 있는 항목만, 항목당 최대 3건)
-- 기준 기간: 오늘 06:00(KST) 직전 24시간
+- 기준 기간: 오늘 06:00(KST) 직전 24시간 = 어제 06:00 ~ 오늘 06:00 (하루 전 기사)
 - 출처: Google News RSS(키 불필요) + 네이버 뉴스 검색 API(NAVER_CLIENT_ID/SECRET 이 있을 때만)
 - 산업당 최대 5건, 같은 언론사 최대 2건, 제목 중복 제거
-- 24시간 기준 2건 이하인 산업은 48시간으로 넓혀 다시 선정(결과의 ext 목록)
+- 하루 전 기사가 0건인 산업·직무·기관에 한해서만 2일 전(48시간)까지 넓혀 다시 선정(결과의 ext 목록)
 - 산업별 검색어(q)·제목 매칭어(m)·제외어(x)는 tools/news_keywords.json 에서 관리
 """
 import json, os, re, sys, time, html, email.utils, urllib.request, urllib.parse
@@ -14,7 +14,7 @@ from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KST = timezone(timedelta(hours=9))
-MAX_PER_IND, MAX_PER_PRESS, MIN_OK = 5, 2, 3
+MAX_PER_IND, MAX_PER_PRESS, MIN_OK = 5, 2, 1   # MIN_OK=1: 하루 전 기사가 없을 때(0건)만 2일 전까지 확장
 UA = 'Mozilla/5.0 (compatible; HelperTomNewsBot/1.0; +https://helper83.github.io/helpertom/)'
 NID, NSEC = os.environ.get('NAVER_CLIENT_ID', ''), os.environ.get('NAVER_CLIENT_SECRET', '')
 
@@ -185,7 +185,7 @@ def collect_extra(entities, terms_fn, match_fn, ctx, start, end, limit=3, bad=()
         terms, keys = terms_fn(name)
         g = [x for x in google_items(terms, (), ctx) if match_fn(x['t'], keys) and not any(b in x['t'] for b in bad)]
         sel = pick(g, [], start, end, limit)
-        if len(sel) < 2:
+        if len(sel) < MIN_OK:   # 하루 전 기사가 없을 때만 2일 전까지 확장
             wide = pick(g, [], start - timedelta(days=1), end, limit)
             if len(wide) > len(sel):
                 sel = wide
@@ -207,7 +207,7 @@ def main():
         g = [x for x in google_items(terms, kw.get('x', [])) if relevant(x['t'], kw, gx)]
         n = [x for x in naver_items(terms) if relevant(x['t'], kw, gx)]
         sel = pick(g, n, start, end)
-        if len(sel) < MIN_OK:   # 24시간 안에 2건 이하 → 48시간으로 확장
+        if len(sel) < MIN_OK:   # 하루 전 기사가 없을 때만 → 48시간으로 확장
             wide = pick(g, n, start - timedelta(days=1), end)
             if len(wide) > len(sel):
                 sel = wide; ext.append(code)
