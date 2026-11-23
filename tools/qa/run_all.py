@@ -38,11 +38,11 @@ try:
     if not ind: fail('산업 목록을 읽지 못함')
     job=pg.evaluate("DB.jobs.map(j=>j.code)"); pg.evaluate("openPage('industryPage')")
     for c in ind:
-        r=pg.evaluate("async(c)=>{try{showIndustry(c);await new Promise(r=>setTimeout(r,250));return document.getElementById('industryDetail').innerText.length}catch(e){return -1}}",c)
+        r=pg.evaluate("async(c)=>{try{showIndustry(c);const el=document.getElementById('industryDetail');for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,100));if(el.innerText.length>=200)break}return el.innerText.length}catch(e){return -1}}",c)
         if r<200: fail('산업 %s 상세 렌더 이상(%s)'%(c,r))
     pg.evaluate("openPage('jobPage')")
     for c in job:
-        r=pg.evaluate("async(c)=>{try{showJob(c);await new Promise(r=>setTimeout(r,120));return document.getElementById('jobDetail').innerText.length}catch(e){return -1}}",c)
+        r=pg.evaluate("async(c)=>{try{showJob(c);const el=document.getElementById('jobDetail');for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,60));if(el.innerText.length>=200)break}return el.innerText.length}catch(e){return -1}}",c)
         if r<200: fail('직무 %s 상세 렌더 이상(%s)'%(c,r))
         # ③ 코드 링크
         for h in set(pg.evaluate("[...document.getElementById('jobDetail').querySelectorAll('[onclick]')].map(e=>e.getAttribute('onclick'))")):
