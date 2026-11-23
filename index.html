@@ -42,6 +42,7 @@
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
 <!-- v12.227 (2026-11-18): AI 업무 지도 카드 상단에 구역 설명(AI 활용·함께·지시·책임) 한 줄 추가. -->
+<!-- v12.232 (2026-11-24): 오늘의 발견 팝업에 '날씨' 탭을 기사 왼쪽에 추가(산업·공공·직무·챌린지·날씨·기사), 홈 목록도 같은 순서·항목(오늘의 기사 행 추가)으로 맞춤. 날씨 팝업에서도 같은 탭으로 이동. -->
 <!-- v12.231 (2026-11-24): 오늘의 발견에 '오늘의 날씨' 추가 — 학생이 고른 지역(30곳, 위치 권한 없음) 날씨·미세먼지·3일 예보를 Open-Meteo(CC BY 4.0)에서 받아 보여 주고, 실패 시 마지막 정보 표시. -->
 <!-- v12.230 (2026-11-18): 화면 요소가 없어 동작하지 않던 뉴스 함수(renderNews·renderLikedNews) 정리. -->
 <!-- v12.229 (2026-11-18): 전 탭 점검 — 지연 로딩 조각 버전(LAZY.ver)을 shards.json과 일치시켜 오프라인 미리받기 적중·옛 조각 잔존 방지, AI 업무 지도 조각 미리받기 목록에 추가. -->
@@ -5968,6 +5969,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   var QTAB = { k: 'QUIZ', label: '퀴즈', letter: '퀴', tc: '--t4' };
   var CTAB = { k: 'CHAL', label: '챌린지', letter: '챌', tc: '--t5' };   /* v12.161: 퀴즈 탭 → 챌린지 탭(퀴즈·밸런스·짝짓기) */
   var NTAB = { k: 'NEWS', label: '기사', letter: '기', tc: '--t1' };
+  var WXTAB = { k: 'WX', label: '날씨', letter: '날', tc: '--t0' };   /* v12.232: 팝업 탭 순서 = 산업·공공·직무·챌린지·날씨·기사 (홈 목록도 같은 순서) */
   var BOOKTAB = { k: 'BOOK', label: '퍼즐', letter: '퍼', tc: '--t5' };
   var STAR = { IND: 'INDUSTRY', PUB: 'PUBLIC', JOB: 'JOB' };
   var POOL = null, PSET = null, NG = null, TODAY = null, ACTIVE = 'IND', VIEW = 'DAY', OFF = 0, NEW = {}, LAST_FOCUS = null;
@@ -6585,8 +6587,9 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       var c = card(t.k, code);
       return row(t.k, t.tc, t.letter, t.label + '(' + c.name + ')', clip(c.line, 60));
     }).join('');
-    h += row('WX', '--t0', '날', '오늘의 날씨', window.__wx ? window.__wx.sub() : '지역을 골라 오늘 날씨를 확인해요');
     h += row('CHAL', GMTC, '챌', '오늘의 챌린지', chHomeSub(q));
+    h += row('WX', WXTAB.tc, WXTAB.letter, '오늘의 날씨', window.__wx ? window.__wx.sub() : '지역을 골라 오늘 날씨를 확인해요');
+    h += row('NEWS', NTAB.tc, NTAB.letter, '오늘의 기사', '산업·직무·공공 기사와 찜한 항목 기사를 모아 봐요');
     var pr = pzSync(), pcur = pr.z.cur;
     h += row('BOOK', BOOKTAB.tc, BOOKTAB.letter, '내 퍼즐', pcur ? PUZ_BY[pcur.t].e + ' ' + PUZ_BY[pcur.t].n + ' · 조각 ' + Math.min(pr.p, pzNeed(pcur.w)) + '/' + pzNeed(pcur.w) + ' · 완성 ' + pr.z.done.length + '개' : '새 퍼즐을 골라 보세요 · 모은 조각 ' + pr.p + '개');
     list.innerHTML = h;
@@ -6599,7 +6602,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   /* ---- 팝업 ---- */
   function modal() { return document.getElementById('discModal'); }
   function tabHtml() {
-    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat(OFF > 0 ? [] : [CTAB, NTAB]).map(function (x) {
+    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat(OFF > 0 ? [] : [CTAB, WXTAB, NTAB]).map(function (x) {
       return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x.tc + ')" data-disc-tab="' + x.k + '" aria-selected="' + (x.k === ACTIVE || (x.k === 'CHAL' && ACTIVE === 'QUIZ')) + '"' + (x.short ? ' aria-label="' + x.label + '"' : '') + '>' + (x.short || x.label) + '</button>';
     }).join('') + '</div>';
   }
@@ -6751,7 +6754,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     m.addEventListener('click', function (e) {
       var t = e.target;
       if (t === m || t.closest('[data-disc-close]')) { close(); return; }
-      var tab = t.closest('[data-disc-tab]'); if (tab) { if (tab.getAttribute('data-disc-tab') === 'CHAL') { close(); chOpen(); return; } VIEW = 'DAY'; showTab(tab.getAttribute('data-disc-tab')); return; }
+      var tab = t.closest('[data-disc-tab]'); if (tab) { if (tab.getAttribute('data-disc-tab') === 'CHAL') { close(); chOpen(); return; } if (tab.getAttribute('data-disc-tab') === 'WX') { close(); if (window.__wx) window.__wx.open(); return; } VIEW = 'DAY'; showTab(tab.getAttribute('data-disc-tab')); return; }
       var ans = t.closest('[data-disc-ans]'); if (ans) { answer(Number(ans.getAttribute('data-disc-ans')), ans.getAttribute('data-b') === '1'); return; }
       if (t.closest('[data-disc-book]')) { open('BOOK'); return; }
       var past = t.closest('[data-disc-past]');
@@ -6937,7 +6940,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
   }
   /* v12.165: 챌린지 화면에서도 위쪽 탭(산업·기관·직무·챌린지·기사)을 보이게 한다 */
   function gmTabs() {
-    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat([CTAB, NTAB]).map(function (x) {
+    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TYPES.concat([CTAB, WXTAB, NTAB]).map(function (x) {
       return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x.tc + ')" data-gm-tab="' + x.k + '" aria-selected="' + (x.k === 'CHAL') + '"' + (x.short ? ' aria-label="' + x.label + '"' : '') + '>' + (x.short || x.label) + '</button>';
     }).join('') + '</div>';
   }
@@ -7141,6 +7144,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     logBump('view'); touch();
     GV = 'CH'; GS = null; render2(); gmShow();
   }
+  window.__disc = { open: open, chOpen: chOpen };
   function chGo(n) {   /* 0 퀴즈 · 1 밸런스 · 2 짝짓기 — 순서 없이 선택 */
     if (n === 0) { GV = 'CQ'; GS = null; render2(); gmShow(); }
     else if (n === 1) { startB(3, true); render2(); gmShow(); }
@@ -7168,7 +7172,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       var t = e.target; if (t === m) { gmClose(); return; }
       if (t.closest('[data-star]')) { return; }
       var gt = t.closest('[data-gm-tab]');
-      if (gt) { var gk = gt.getAttribute('data-gm-tab'); if (gk === 'CHAL') { GV = 'CH'; GS = null; render2(); gmShow(); } else { gmClose(); open(gk); } return; }
+      if (gt) { var gk = gt.getAttribute('data-gm-tab'); if (gk === 'CHAL') { GV = 'CH'; GS = null; render2(); gmShow(); } else if (gk === 'WX') { gmClose(); if (window.__wx) window.__wx.open(); } else { gmClose(); open(gk); } return; }
       var b = t.closest('[data-gm]'); if (!b) return; var a = b.getAttribute('data-gm');
       if (a === 'close') gmClose();
       else if (a === 'hub') { GV = 'HUB'; GS = null; render2(); gmShow(); }
@@ -7336,11 +7340,15 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var o2 = document.getElementById('wxOut'); if (o2) o2.innerHTML = '<p class="muted small">날씨를 불러오는 중…</p>';
     get(id, force).then(function (res) { if (document.getElementById('wxSel') && document.getElementById('wxSel').value === id) show(res, id); setHomeSub(); }, fail);
   }
+  var TABS = [['IND', '산업', '--t1'], ['PUB', '공공', '--t2'], ['JOB', '직무', '--t3'], ['CHAL', '챌린지', '--t5'], ['WX', '날씨', '--t0'], ['NEWS', '기사', '--t1']];
+  function tabs() {
+    return '<div class="disc-tabs" role="tablist" aria-label="오늘의 발견 종류">' + TABS.map(function (x) { return '<button type="button" role="tab" class="disc-tab" style="--tc:var(' + x[2] + ')" data-wx-tab="' + x[0] + '" aria-selected="' + (x[0] === 'WX') + '">' + x[1] + '</button>'; }).join('') + '</div>';
+  }
   function modal() { return document.getElementById('wxModal'); }
   function open() {
     var m = modal(); if (!m) return; var s = load();
     if (m.classList.contains('hidden')) LAST = document.activeElement;
-    m.innerHTML = '<div class="disc-card" style="--tc:var(--t0)" role="document"><div class="disc-band"><div class="grow"><h2 id="wxTitle" tabindex="-1">오늘의 날씨</h2><small>내가 고른 지역의 날씨</small></div><button type="button" class="disc-x" data-wx="close" aria-label="닫기">✕</button></div><div class="disc-body">' + body(s.id) +
+    m.innerHTML = '<div class="disc-card" style="--tc:var(--t0)" role="document"><div class="disc-band"><div class="grow"><h2 id="wxTitle" tabindex="-1">오늘의 날씨</h2><small>내가 고른 지역의 날씨</small></div><button type="button" class="disc-x" data-wx="close" aria-label="닫기">✕</button></div>' + tabs() + '<div class="disc-body" role="tabpanel">' + body(s.id) +
       '<p class="small muted" style="margin:14px 0 0">날씨 자료: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a> (CC BY 4.0) · 위치 권한은 쓰지 않아요</p></div></div>';
     m.classList.remove('hidden'); document.body.classList.add('disc-open');
     var t = document.getElementById('wxTitle'); if (t) t.focus();
@@ -7355,6 +7363,8 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
     var m = modal(); if (!m) return;
     m.addEventListener('click', function (e) {
       if (e.target === m) { close(); return; }
+      var tb = e.target.closest('[data-wx-tab]');
+      if (tb) { var tk = tb.getAttribute('data-wx-tab'); if (tk === 'WX') return; close(); if (window.__disc) { if (tk === 'CHAL') window.__disc.chOpen(); else window.__disc.open(tk); } return; }
       var b = e.target.closest('[data-wx]'); if (!b) return; var k = b.getAttribute('data-wx');
       if (k === 'close') close(); else if (k === 'retry') { var s = document.getElementById('wxSel'); if (s && s.value) run(s.value, true); }
     });
