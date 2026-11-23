@@ -42,6 +42,7 @@
 <!-- v12.166 (2026-11-14): 오늘의 기사에서 기사가 없는 항목(산업·직무·공공기관)은 숨김 -->
 <!-- v12.218 (2026-11-17): 학과 탐색 — 추천 상위 목록을 산업그룹·직무군당 최대 2개로 분산, 다른 그룹의 연결 항목을 '다른 산업·직무로 넓혀 보기' 접기 목록(각 최대 6개)으로 추가, sw.js v113 -->
 <!-- v12.227 (2026-11-18): AI 업무 지도 카드 상단에 구역 설명(AI 활용·함께·지시·책임) 한 줄 추가. -->
+<!-- v12.231 (2026-11-24): 오늘의 발견에 '오늘의 날씨' 추가 — 학생이 고른 지역(30곳, 위치 권한 없음) 날씨·미세먼지·3일 예보를 Open-Meteo(CC BY 4.0)에서 받아 보여 주고, 실패 시 마지막 정보 표시. -->
 <!-- v12.230 (2026-11-18): 화면 요소가 없어 동작하지 않던 뉴스 함수(renderNews·renderLikedNews) 정리. -->
 <!-- v12.229 (2026-11-18): 전 탭 점검 — 지연 로딩 조각 버전(LAZY.ver)을 shards.json과 일치시켜 오프라인 미리받기 적중·옛 조각 잔존 방지, AI 업무 지도 조각 미리받기 목록에 추가. -->
 <!-- v12.228 (2026-11-18): 산업 탐색에서 산업을 보면 '1. 산업 생태계 고르기'를 자동으로 접고 접기·펴기 버튼 추가(직무 탐색과 통일). -->
@@ -6584,10 +6585,12 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       var c = card(t.k, code);
       return row(t.k, t.tc, t.letter, t.label + '(' + c.name + ')', clip(c.line, 60));
     }).join('');
+    h += row('WX', '--t0', '날', '오늘의 날씨', window.__wx ? window.__wx.sub() : '지역을 골라 오늘 날씨를 확인해요');
     h += row('CHAL', GMTC, '챌', '오늘의 챌린지', chHomeSub(q));
     var pr = pzSync(), pcur = pr.z.cur;
     h += row('BOOK', BOOKTAB.tc, BOOKTAB.letter, '내 퍼즐', pcur ? PUZ_BY[pcur.t].e + ' ' + PUZ_BY[pcur.t].n + ' · 조각 ' + Math.min(pr.p, pzNeed(pcur.w)) + '/' + pzNeed(pcur.w) + ' · 완성 ' + pr.z.done.length + '개' : '새 퍼즐을 골라 보세요 · 모은 조각 ' + pr.p + '개');
     list.innerHTML = h;
+    if (window.__wx) window.__wx.refresh();
   }
   function row(k, tc, letter, title, sub) {
     return '<button type="button" class="hrow" style="--tc:var(' + tc + ')" data-disc="' + k + '"><span class="hic"><b style="font-size:18px">' + letter + '</b></span><span class="hx"><b>' + esc(title) + '</b><span>' + esc(sub) + '</span></span><span class="hgo" aria-hidden="true">›</span></button>';
@@ -6786,7 +6789,7 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
       }
     });
     var list = document.getElementById('discList');
-    if (list) list.addEventListener('click', function (e) { var b = e.target.closest('[data-disc]'); if (!b) return; var dk = b.getAttribute('data-disc'); if (dk === 'CHAL') chOpen(); else if (dk === 'GAME') gmOpen(); else open(dk); });
+    if (list) list.addEventListener('click', function (e) { var b = e.target.closest('[data-disc]'); if (!b) return; var dk = b.getAttribute('data-disc'); if (dk === 'WX') { if (window.__wx) window.__wx.open(); } else if (dk === 'CHAL') chOpen(); else if (dk === 'GAME') gmOpen(); else open(dk); });
   }
 
   /* ---- v12.128 게임: 직무 밸런스 · 업무 짝짓기 (판을 끝내면 퍼즐 조각 +1, 게임당 하루 1개) ---- */
@@ -7247,8 +7250,121 @@ if(document.readyState!=='loading')try{build()}catch(e){}else document.addEventL
 })();
 </script>
 <div id="discModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="discTitle"></div>
+<div id="wxModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="wxTitle"></div>
 <div id="gameModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="gmTitle"></div>
 <div id="lookModal" class="disc-modal hidden no-print" role="dialog" aria-modal="true" aria-labelledby="lookTitle"></div>
+<script>
+/* v12.231: 오늘의 발견 — 오늘의 날씨. 학생이 고른 지역(위치 권한 없음)의 날씨를 Open-Meteo(무료·키 없음·CC BY 4.0)에서 받아 보여 준다.
+   선택 지역·마지막 날씨는 이 기기(localStorage)에만 저장하고, 요청에는 도시 좌표만 담긴다. 실패해도 앱은 그대로 동작하며 마지막으로 받은 날씨를 보여 준다. */
+(function () {
+  var KEY = 'visionhr_wx_v1', TTL = 30 * 60 * 1000;
+  var REG = [['seoul', '서울', 37.5665, 126.978], ['busan', '부산', 35.1796, 129.0756], ['daegu', '대구', 35.8714, 128.6014], ['incheon', '인천', 37.4563, 126.7052], ['gwangju', '광주', 35.1595, 126.8526], ['daejeon', '대전', 36.3504, 127.3845], ['ulsan', '울산', 35.5384, 129.3114], ['sejong', '세종', 36.48, 127.289],
+    ['suwon', '수원', 37.2636, 127.0286], ['seongnam', '성남', 37.42, 127.1267], ['goyang', '고양', 37.6584, 126.832], ['yongin', '용인', 37.2411, 127.1776], ['chuncheon', '춘천', 37.8813, 127.7298], ['wonju', '원주', 37.3422, 127.9202], ['gangneung', '강릉', 37.7519, 128.8761],
+    ['cheongju', '청주', 36.6424, 127.489], ['cheonan', '천안', 36.8151, 127.1139], ['jeonju', '전주', 35.8242, 127.148], ['gunsan', '군산', 35.9676, 126.7369], ['mokpo', '목포', 34.8118, 126.3922], ['yeosu', '여수', 34.7604, 127.6622], ['suncheon', '순천', 34.9506, 127.4872],
+    ['pohang', '포항', 36.019, 129.3435], ['andong', '안동', 36.5684, 128.7294], ['gumi', '구미', 36.1195, 128.3446], ['changwon', '창원', 35.2279, 128.6811], ['gimhae', '김해', 35.2285, 128.8894], ['jinju', '진주', 35.18, 128.1076], ['jeju', '제주', 33.4996, 126.5312], ['seogwipo', '서귀포', 33.2541, 126.5601]];
+  var WMO = { 0: ['맑음', '☀️'], 1: ['대체로 맑음', '🌤️'], 2: ['구름 조금', '⛅'], 3: ['흐림', '☁️'], 45: ['안개', '🌫️'], 48: ['안개', '🌫️'], 51: ['약한 이슬비', '🌦️'], 53: ['이슬비', '🌦️'], 55: ['강한 이슬비', '🌦️'], 56: ['얼어붙는 이슬비', '🌧️'], 57: ['얼어붙는 이슬비', '🌧️'], 61: ['약한 비', '🌧️'], 63: ['비', '🌧️'], 65: ['강한 비', '🌧️'], 66: ['얼어붙는 비', '🌧️'], 67: ['얼어붙는 비', '🌧️'], 71: ['약한 눈', '🌨️'], 73: ['눈', '🌨️'], 75: ['강한 눈', '❄️'], 77: ['싸락눈', '🌨️'], 80: ['약한 소나기', '🌦️'], 81: ['소나기', '🌧️'], 82: ['강한 소나기', '⛈️'], 85: ['약한 눈소나기', '🌨️'], 86: ['눈소나기', '❄️'], 95: ['뇌우', '⛈️'], 96: ['뇌우·우박', '⛈️'], 99: ['뇌우·우박', '⛈️'] };
+  var LAST = null, BUSY = false;
+  function esc2(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) { } }
+  function reg(id) { for (var i = 0; i < REG.length; i++) if (REG[i][0] === id) return REG[i]; return null; }
+  function wmo(c) { return WMO[c] || ['날씨 정보', '🌡️']; }
+  function r(n) { return n == null || isNaN(n) ? '–' : Math.round(n); }
+  function pmLabel(v) { if (v == null) return ''; return v <= 30 ? '좋음' : v <= 80 ? '보통' : v <= 150 ? '나쁨' : '매우 나쁨'; }
+  function tip(d) {
+    var c = d.cur || {}, t = d.days && d.days[0] || {}, rain = t.pop, hi = t.max, lo = t.min, p = d.pm25;
+    if (c.code >= 95) return '뇌우 예보예요. 이동은 시간 여유를 두고, 실외 일정은 미루는 것도 방법이에요.';
+    if (rain >= 50 || (c.code >= 51 && c.code <= 67) || (c.code >= 80 && c.code <= 82)) return '비 소식이 있어요. 우산을 챙기고, 면접·설명회장에는 20~30분 일찍 출발해요.';
+    if (c.code >= 71 && c.code <= 77) return '눈이 와요. 미끄럼에 주의하고 이동 시간을 넉넉히 잡아요.';
+    if (p != null && p > 75) return '초미세먼지가 나빠요. 마스크를 챙기고 이동 후 정돈할 시간을 남겨요.';
+    if (hi != null && hi >= 28) return '더운 날이에요. 면접 복장은 땀 대비 여벌 셔츠를 챙기면 좋아요.';
+    if (lo != null && lo <= 3) return '쌀쌀해요. 방한 겉옷을 입고, 면접장 도착 전에 벗어 단정하게 입장해요.';
+    if (hi != null && lo != null && hi - lo >= 10) return '일교차가 커요. 겉옷을 챙기면 아침·저녁 모두 편해요.';
+    return '이동하기 무난한 날씨예요. 면접·설명회 일정이 있다면 여유 있게 준비해요.';
+  }
+  function parse(a, b) {
+    var cu = a.current || {}, dl = a.daily || {}, days = [];
+    for (var i = 0; i < (dl.time || []).length && i < 3; i++) days.push({ date: dl.time[i], code: (dl.weather_code || [])[i], max: (dl.temperature_2m_max || [])[i], min: (dl.temperature_2m_min || [])[i], pop: (dl.precipitation_probability_max || [])[i] });
+    var air = b && b.current || {};
+    return { cur: { code: cu.weather_code, temp: cu.temperature_2m, feel: cu.apparent_temperature, wind: cu.wind_speed_10m, time: cu.time }, days: days, pm10: air.pm10 == null ? null : air.pm10, pm25: air.pm2_5 == null ? null : air.pm2_5 };
+  }
+  function fetchJson(url) { return fetch(url).then(function (x) { if (!x.ok) throw 0; return x.json(); }); }
+  function get(id, force) {
+    var g = reg(id); if (!g) return Promise.reject(0);
+    var s = load();
+    if (!force && s.id === id && s.d && Date.now() - s.t < TTL) return Promise.resolve({ d: s.d, t: s.t, fresh: true });
+    var q = 'latitude=' + g[2] + '&longitude=' + g[3] + '&timezone=Asia%2FSeoul';
+    var f = fetchJson('https://api.open-meteo.com/v1/forecast?' + q + '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3');
+    var a = fetchJson('https://air-quality-api.open-meteo.com/v1/air-quality?' + q + '&current=pm10,pm2_5').catch(function () { return null; });
+    return Promise.all([f, a]).then(function (res) {
+      var d = parse(res[0], res[1]), t = Date.now(); save({ id: id, t: t, d: d }); return { d: d, t: t, fresh: true };
+    }).catch(function () {
+      if (s.id === id && s.d) return { d: s.d, t: s.t, fresh: false };
+      throw 0;
+    });
+  }
+  function ago(t) { var m = Math.max(0, Math.round((Date.now() - t) / 60000)); return m < 1 ? '방금' : m < 60 ? m + '분 전' : m < 1440 ? Math.round(m / 60) + '시간 전' : Math.round(m / 1440) + '일 전'; }
+  function homeSub() {
+    var s = load(), g = reg(s.id); if (!g) return '지역을 골라 오늘 날씨를 확인해요';
+    if (!s.d) return g[1] + ' · 눌러서 날씨 보기';
+    var w = wmo(s.d.cur.code), t = s.d.days[0] || {};
+    return g[1] + ' · ' + w[0] + ' ' + r(s.d.cur.temp) + '° (' + r(t.min) + '°/' + r(t.max) + '°)';
+  }
+  function setHomeSub() { var el = document.querySelector('#discList [data-disc="WX"] .hx span'); if (el) el.textContent = homeSub(); }
+  function refreshHome() {
+    var s = load(); if (!reg(s.id) || (s.d && Date.now() - s.t < TTL)) { setHomeSub(); return; }
+    get(s.id).then(setHomeSub, function () { });
+  }
+  function body(id) {
+    var g = reg(id), opts = '<option value="">지역을 선택하세요</option>' + REG.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === id ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('');
+    var h = '<label class="label" for="wxSel">지역</label><select id="wxSel" style="font-size:16px;min-height:44px;width:100%">' + opts + '</select><div id="wxOut" aria-live="polite" style="margin-top:12px">' + (g ? '<p class="muted small">날씨를 불러오는 중…</p>' : '<p class="muted small">면접·설명회 일정이 있는 지역을 골라 보세요. 선택한 지역은 이 기기에만 저장돼요.</p>') + '</div>';
+    return h;
+  }
+  function show(res, id) {
+    var out = document.getElementById('wxOut'); if (!out) return;
+    var d = res.d, w = wmo(d.cur.code), pm = d.pm25 != null ? '초미세먼지 ' + r(d.pm25) + '㎍/㎥ (' + pmLabel(d.pm25) + ')' : '';
+    var days = d.days.map(function (x, i) { var q = wmo(x.code); return '<tr><td>' + (i === 0 ? '오늘' : i === 1 ? '내일' : '모레') + '</td><td>' + q[1] + ' ' + q[0] + '</td><td>' + r(x.min) + '° / ' + r(x.max) + '°</td><td>' + (x.pop == null ? '–' : x.pop + '%') + '</td></tr>'; }).join('');
+    out.innerHTML = '<div class="disc-name" style="margin-top:0">' + w[1] + ' ' + r(d.cur.temp) + '° <span class="disc-tag">' + esc2(w[0]) + ' · 체감 ' + r(d.cur.feel) + '° · 바람 ' + r(d.cur.wind) + 'km/h</span></div>' +
+      (pm ? '<p class="small muted" style="margin:2px 0 0">' + esc2(pm) + (d.pm10 != null ? ' · 미세먼지 ' + r(d.pm10) + '㎍/㎥ (' + pmLabel(d.pm10) + ')' : '') + '</p>' : '') +
+      '<div class="ask" style="margin:10px 0"><b>오늘의 한 줄</b><p class="small" style="margin:4px 0 0">' + esc2(tip(d)) + '</p></div>' +
+      '<div class="tbl-wrap" style="overflow-x:auto"><table class="tbl" style="width:100%"><thead><tr><th>날짜</th><th>날씨</th><th>최저/최고</th><th>강수확률</th></tr></thead><tbody>' + days + '</tbody></table></div>' +
+      '<p class="small muted" style="margin:8px 0 0">' + (res.fresh ? '갱신 ' + ago(res.t) : '⚠️ 인터넷에 연결되지 않아 ' + ago(res.t) + ' 정보를 보여 줘요') + ' · 예보는 바뀔 수 있어요</p>';
+  }
+  function fail() { var out = document.getElementById('wxOut'); if (out) out.innerHTML = '<p class="warn">날씨를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.</p><button type="button" class="btn ghost" data-wx="retry">다시 시도</button>'; }
+  function run(id, force) {
+    if (!id) { var o = document.getElementById('wxOut'); if (o) o.innerHTML = '<p class="muted small">지역을 선택하면 날씨를 보여 드려요.</p>'; return; }
+    var o2 = document.getElementById('wxOut'); if (o2) o2.innerHTML = '<p class="muted small">날씨를 불러오는 중…</p>';
+    get(id, force).then(function (res) { if (document.getElementById('wxSel') && document.getElementById('wxSel').value === id) show(res, id); setHomeSub(); }, fail);
+  }
+  function modal() { return document.getElementById('wxModal'); }
+  function open() {
+    var m = modal(); if (!m) return; var s = load();
+    if (m.classList.contains('hidden')) LAST = document.activeElement;
+    m.innerHTML = '<div class="disc-card" style="--tc:var(--t0)" role="document"><div class="disc-band"><div class="grow"><h2 id="wxTitle" tabindex="-1">오늘의 날씨</h2><small>내가 고른 지역의 날씨</small></div><button type="button" class="disc-x" data-wx="close" aria-label="닫기">✕</button></div><div class="disc-body">' + body(s.id) +
+      '<p class="small muted" style="margin:14px 0 0">날씨 자료: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo.com</a> (CC BY 4.0) · 위치 권한은 쓰지 않아요</p></div></div>';
+    m.classList.remove('hidden'); document.body.classList.add('disc-open');
+    var t = document.getElementById('wxTitle'); if (t) t.focus();
+    if (s.id) run(s.id, false);
+  }
+  function close() {
+    var m = modal(); if (!m || m.classList.contains('hidden')) return;
+    m.classList.add('hidden'); m.innerHTML = ''; document.body.classList.remove('disc-open');
+    try { if (LAST && LAST.focus) LAST.focus(); } catch (e) { } setHomeSub();
+  }
+  function bind() {
+    var m = modal(); if (!m) return;
+    m.addEventListener('click', function (e) {
+      if (e.target === m) { close(); return; }
+      var b = e.target.closest('[data-wx]'); if (!b) return; var k = b.getAttribute('data-wx');
+      if (k === 'close') close(); else if (k === 'retry') { var s = document.getElementById('wxSel'); if (s && s.value) run(s.value, true); }
+    });
+    m.addEventListener('change', function (e) { if (e.target.id !== 'wxSel') return; var id = e.target.value; var s = load(); if (id) save({ id: id, t: 0, d: s.id === id ? s.d : null }); run(id, true); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal() && !modal().classList.contains('hidden')) close(); });
+  }
+  window.__wx = { open: open, sub: homeSub, refresh: refreshHome };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
+})();
+</script>
 <div id="wishModal" class="wish-modal hidden" role="dialog" aria-modal="true" aria-labelledby="wishTitle">
   <div class="wish-card">
     <div class="wish-head"><h2 id="wishTitle">의견 보내기</h2><button type="button" class="btn ghost sm" onclick="closeWish()" aria-label="닫기">닫기 ✕</button></div>
